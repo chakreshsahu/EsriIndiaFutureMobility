@@ -1,4 +1,4 @@
-# Geo intelligent site suitablity for EV Charging Station
+# Geo intelligent site suitability for EV Charging Station
 
 Electric vehicle technology is evolving, more in terms of fuel efficiency, cost effectiveness and quick charging options. For mass adaptation of this technology, facilitating charging infrastructure to public places would be one of the key component for success. The vehicle users should able to easily locate and reach nearby charging stations based on the type of vehicles and congestion.
 
