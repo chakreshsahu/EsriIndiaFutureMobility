@@ -18,10 +18,10 @@
       "useLogo": false
     }
   },
-  "portalUrl": "http://3104-h7-esri.in.niit-tech.com/arcgis",
+  "portalUrl": "https://esriindia1.centralindia.cloudapp.azure.com/portal/",
   "appId": "",
   "authorizedCrossOriginDomains": [],
-  "title": "Abhiyokta Station Manchitra",
+  "title": "Smart Charge",
   "subtitle": "",
   "keepAppState": true,
   "logo": "images/app-logo.png",
@@ -225,7 +225,7 @@
       "right": 0,
       "bottom": 0
     },
-    "itemId": "9d98f7113f9b469c8c302b210db7b922",
+    "itemId": "bfbdfffd2f5d47f795dbab1ac4bde384",
     "mapOptions": {
       "extent": {
         "type": "extent",
@@ -239,7 +239,7 @@
       }
     },
     "id": "map",
-    "portalUrl": "https://3104-h7-esri.in.niit-tech.com/arcgis/"
+    "portalUrl": "https://esriindia1.centralindia.cloudapp.azure.com/portal/"
   },
   "widgetPool": {
     "panel": {
