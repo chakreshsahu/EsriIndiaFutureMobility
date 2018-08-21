@@ -1,5 +1,6 @@
 #main-loading{
-	background-color:#508dca;
+	background:url('images/loadingbackground.jpg');
+    background-size:cover;
 	position:relative;
 }
 #main-loading #app-loading{
@@ -11,11 +12,11 @@
 }
 #main-loading #loading-gif{
 	position: absolute;
-	background-image: url('images/predefined_loading_1.gif');
+	background-image: url('images/Wedges-3s-70px.gif');
 	background-repeat: no-repeat;
-	width:58px;
-	height:29px;
-	top: 50%;
+	width:70px;
+	height:70px;
+	top: 30%;
 	left: 50%;
 	transform: translate(-50%, -50%);
 }
