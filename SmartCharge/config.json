@@ -259,13 +259,6 @@
         "id": "widgets_Legend_Widget_18",
         "name": "Legend",
         "index": 0
-      },
-      {
-        "uri": "widgets/LayerList/Widget",
-        "version": "2.8",
-        "id": "widgets_LayerList_Widget_19",
-        "name": "LayerList",
-        "index": 1
       }
     ]
   },
