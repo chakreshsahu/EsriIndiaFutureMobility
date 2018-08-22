@@ -265,7 +265,15 @@
         "uri": "widgets/LocateRoute/Widget",
         "index": 7,
         "id": "widgets_LocateRoute_Widget_22"
+      },
+	  {
+        "name": "Site Suitability Assessment",
+        "version": "2.9",
+        "uri": "widgets/sitesuitabilityassessment/Widget",
+        "index": 8,
+        "id": "widgets_sitesuitabilityassessment_Widget_23"
       }
+	  
     ]
   },
   "mobileLayout": {
