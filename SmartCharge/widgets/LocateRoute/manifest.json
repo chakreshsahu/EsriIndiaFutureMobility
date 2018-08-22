@@ -1,0 +1,14 @@
+{
+  "name": "LocateRoute",
+  "platform": "HTML",
+  "version": "2.9",
+  "wabVersion": "2.9",
+  "author": "Raghav",
+  "description": "This is the widget used for locating EV stations and finding route between them",
+  "copyright": "",
+  "license": "http://www.apache.org/licenses/LICENSE-2.0",
+  "featureActions": [{
+    "name": "ShowVertex",
+    "uri": "ShowVertexFeatureAction"
+  }]
+}
