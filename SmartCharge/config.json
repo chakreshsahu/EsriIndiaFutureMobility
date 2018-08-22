@@ -307,7 +307,16 @@
     "useProxy": true,
     "alwaysUseProxy": false,
     "url": "",
-    "rules": []
+    "rules": [
+      {
+        "urlPrefix": "https://esriindia1.centralindia.cloudapp.azure.com/portal/sharing/rest",
+        "proxyUrl": "https://esriindia1.centralindia.cloudapp.azure.com/proxy/proxy.ashx"
+      },
+      {
+        "urlPrefix": "https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services",
+        "proxyUrl": "https://esriindia1.centralindia.cloudapp.azure.com/proxy/proxy.ashx"
+      }
+    ]
   },
   "dataSource": {
     "dataSources": {},
