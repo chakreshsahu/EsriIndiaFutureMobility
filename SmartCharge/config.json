@@ -263,7 +263,6 @@
         "name": "Locate and Route",
         "version": "2.9",
         "uri": "widgets/LocateRoute/Widget",
-        "config": "configs/Masterplan Management/config_widgets_Masterplan Management_Widget_22.json",
         "index": 7,
         "id": "widgets_LocateRoute_Widget_22"
       }
