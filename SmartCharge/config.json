@@ -228,11 +228,10 @@
     "itemId": "bfbdfffd2f5d47f795dbab1ac4bde384",
     "mapOptions": {
       "extent": {
-        "type": "extent",
-        "xmin": 8573643.557761742,
-        "ymin": 3308171.9316629996,
-        "xmax": 8610562.64242343,
-        "ymax": 3329612.5180969625,
+        "xmin": 8570624.295144482,
+        "ymin": 3304655.828361886,
+        "xmax": 8607543.37980617,
+        "ymax": 3326096.414795849,
         "spatialReference": {
           "wkid": 102100
         }
