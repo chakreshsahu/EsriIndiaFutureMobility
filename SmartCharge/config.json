@@ -253,13 +253,6 @@
     },
     "widgets": [
       {
-        "uri": "widgets/Legend/Widget",
-        "version": "2.8",
-        "id": "widgets_Legend_Widget_18",
-        "name": "Legend",
-        "index": 0
-      },
-      {
         "name": "Site Suitability Assessment",
         "version": "2.9",
         "uri": "widgets/sitesuitabilityassessment/Widget",
@@ -281,6 +274,13 @@
         "config": "configs/SiteSuitabilityGrid/config_widgets_SiteSuitabilityGrid_Widget_21.json",
         "index": 8,
         "id": "widgets_SiteSuitabilityGrid_Widget_21"
+      },
+      {
+        "uri": "widgets/Legend/Widget",
+        "version": "2.8",
+        "id": "widgets_Legend_Widget_18",
+        "name": "Legend",
+        "index": 9
       }
     ]
   },
