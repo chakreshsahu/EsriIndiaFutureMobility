@@ -260,20 +260,28 @@
         "index": 0
       },
       {
+        "name": "Site Suitability Assessment",
+        "version": "2.9",
+        "uri": "widgets/sitesuitabilityassessment/Widget",
+        "index": 8,
+        "id": "widgets_sitesuitabilityassessment_Widget_23"
+      },
+      {
         "name": "Locate and Route",
         "version": "2.9",
         "uri": "widgets/LocateRoute/Widget",
         "index": 7,
         "id": "widgets_LocateRoute_Widget_22"
       },
-	  {
-        "name": "Site Suitability Assessment",
-        "version": "2.9",
-        "uri": "widgets/sitesuitabilityassessment/Widget",
-        "index": 8,
-        "id": "widgets_sitesuitabilityassessment_Widget_23"
+      {
+        "name": "SiteSuitabilityGrid",
+        "version": "0.0.1",
+        "IsController": false,
+        "uri": "widgets/SiteSuitabilityGrid/Widget",
+        "config": "configs/SiteSuitabilityGrid/config_widgets_SiteSuitabilityGrid_Widget_21.json",
+        "index": 6,
+        "id": "widgets_SiteSuitabilityGrid_Widget_21"
       }
-	  
     ]
   },
   "mobileLayout": {
