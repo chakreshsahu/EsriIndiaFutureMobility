@@ -17,6 +17,8 @@ define(['dojo/_base/declare',
         "esri/symbols/SimpleMarkerSymbol",
         "esri/symbols/SimpleLineSymbol",
         "esri/graphic",
+        "esri/tasks/query",
+        "esri/layers/FeatureLayer",
         "esri/geometry/geometryEngine",
         "esri/geometry/webMercatorUtils",
         "esri/tasks/Geoprocessor",
@@ -24,7 +26,7 @@ define(['dojo/_base/declare',
         'dojo/on',
         'jimu/BaseWidget'
     ],
-    function(declare, lang, html, Search, LocateButton, Color, Point, Locator, SimpleFillSymbol, SimpleMarkerSymbol, SimpleLineSymbol, Graphic, geometryEngine, webMercatorUtils, Geoprocessor, SpatialReference, on, BaseWidget) {
+    function(declare, lang, html, Search, LocateButton, Color, Point, Locator, SimpleFillSymbol, SimpleMarkerSymbol, SimpleLineSymbol, Graphic, Query, FeatureLayer, geometryEngine, webMercatorUtils, Geoprocessor, SpatialReference, on, BaseWidget) {
         //To create a widget, you need to derive from BaseWidget.
         return declare([BaseWidget], {
 
@@ -36,6 +38,12 @@ define(['dojo/_base/declare',
             gp: null,
             search: null,
             locate: null,
+            existingEVStations: null,
+            existingEVStationsCount: null,
+            potentialEVStations: null,
+            potentialEVStationsCount: null,
+            existingEVlayerURL: null,
+            potentialEVlayerURL: null,
             // this property is set by the framework when widget is loaded.
             // name: 'sitesuitabilityassessment',
             // add additional properties here
@@ -65,6 +73,9 @@ define(['dojo/_base/declare',
                 // on(this.locate, "locate", lang.hitch(this, this.onLocate));
                 this.own(on(this.locate, 'locate', lang.hitch(this, this.onLocate)));
                 on(this.search, 'search-results', lang.hitch(this, this.onSearchComplete));
+                this.existingEVlayerURL = "https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/ExistingEVStations/FeatureServer/0";
+                this.potentialEVlayerURL = "https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/PotentialEVSites/MapServer/0";
+
                 console.log('sitesuitabilityassessment::onOpen');
             },
 
@@ -185,14 +196,39 @@ define(['dojo/_base/declare',
 
             createBuffer: function() {
                 var mapPoint = new Point(this.inputX, this.inputY, new SpatialReference({ wkid: 4326 }));
-                var bufferPolygon = geometryEngine.geodesicBuffer(mapPoint, 3, 9036);
+                var bufferPolygon = geometryEngine.geodesicBuffer(mapPoint, 1.5, 9036);
                 var fill = new SimpleFillSymbol();
                 fill.setColor(new Color([255, 167, 127, 0.25]));
                 var gra = new Graphic(bufferPolygon, fill);
                 this.map.graphics.add(gra);
                 var extent = bufferPolygon.getExtent();
                 this.map.setExtent(extent);
-                //  geometryEngine.buffer(geometry, distance, unit, unionResults?)
+                this.existingEVStations = new FeatureLayer(this.existingEVlayerURL, {
+                    mode: FeatureLayer.MODE_ONDEMAND,
+                    outFields: ["*"],
+                    id: "existingEVStations"
+                });
+                var query = new Query();
+                query.where = "1=1";
+                query.geometry = extent;
+                this.existingEVStations.queryFeatures(query, lang.hitch(this, function(response) {
+                    this.existingEVStationsCount = response.features.length;
+                    document.getElementById('evCount').innerHTML = this.existingEVStationsCount;
+                }));
+
+                this.potentialEVStations = new FeatureLayer(this.potentialEVlayerURL, {
+                    mode: FeatureLayer.MODE_ONDEMAND,
+                    outFields: ["*"],
+                    id: "potentialEVStations"
+                });
+
+                this.potentialEVStations.queryFeatures(query, lang.hitch(this, function(response) {
+                    this.potentialEVStationsCount = response.features.length;
+                    document.getElementById('potentialevCount').innerHTML = this.potentialEVStationsCount;
+                }));
+
+
+
             }
 
 
