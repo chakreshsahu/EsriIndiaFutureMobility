@@ -13,6 +13,7 @@ define(['dojo/_base/declare',
         "esri/Color",
         "esri/geometry/Point",
         "esri/tasks/locator",
+        "esri/symbols/SimpleFillSymbol",
         "esri/symbols/SimpleMarkerSymbol",
         "esri/symbols/SimpleLineSymbol",
         "esri/graphic",
@@ -23,7 +24,7 @@ define(['dojo/_base/declare',
         'dojo/on',
         'jimu/BaseWidget'
     ],
-    function(declare, lang, html, Search, LocateButton, Color, Point, Locator, SimpleMarkerSymbol, SimpleLineSymbol, Graphic, geometryEngine, webMercatorUtils, Geoprocessor, SpatialReference, on, BaseWidget) {
+    function(declare, lang, html, Search, LocateButton, Color, Point, Locator, SimpleFillSymbol, SimpleMarkerSymbol, SimpleLineSymbol, Graphic, geometryEngine, webMercatorUtils, Geoprocessor, SpatialReference, on, BaseWidget) {
         //To create a widget, you need to derive from BaseWidget.
         return declare([BaseWidget], {
 
@@ -117,6 +118,7 @@ define(['dojo/_base/declare',
             },
 
             locationAdressComplete: function(evt) {
+                this.map.graphics.clear();
                 if (evt.address.address) {
                     var address = evt.address.address;
                     this.inputX = evt.address.location.x;
@@ -142,35 +144,55 @@ define(['dojo/_base/declare',
             },
 
             _onMapClick: function(evt) {
+                this.map.graphics.clear();
                 var mp = webMercatorUtils.webMercatorToGeographic(evt.mapPoint);
                 this.inputX = mp.x;
                 this.inputY = mp.y;
+                var mapClickPoint = new Point(this.inputX, this.inputY);
+                var simpleMarkerSymbol = new SimpleMarkerSymbol();
+                simpleMarkerSymbol.setSize(12);
+                simpleMarkerSymbol.setColor(new Color([255, 0, 0, 1]));
+                var graphic = new Graphic(mapClickPoint, simpleMarkerSymbol);
+                this.map.graphics.add(graphic);
+                this.map.centerAndZoom(mapClickPoint, 12);
             },
 
 
             executeModel: function() {
                 this.createBuffer();
-                if (this.inputX === null || this.inputY === null) {
-                    alert('Please select location !');
-                } else {
-                    this.gp = new Geoprocessor("https://spgv.southindia.cloudapp.azure.com/server/rest/services/TransAnalyst/TowerScheduleModel/GPServer/TSModel_7Feb");
-                    this.gp.setOutputSpatialReference({ wkid: 102100 });
-                    var params = {
-                        "X": this.inputX,
-                        "Y": this.inputY
-                    };
+                var ID = this.generateID();
+                // if (this.inputX === null || this.inputY === null) {
+                //     alert('Please select location !');
+                // } else {
+                //     this.gp = new Geoprocessor("https://spgv.southindia.cloudapp.azure.com/server/rest/services/TransAnalyst/TowerScheduleModel/GPServer/TSModel_7Feb");
+                //     this.gp.setOutputSpatialReference({ wkid: 102100 });
+                //     var params = {
+                //         "X": this.inputX,
+                //         "Y": this.inputY
+                //     };
 
-                    this.gp.submitJob(params, lang.hitch(this, this.getModelOutput), lang.hitch(this, this.gpJobStatus), lang.hitch(this, this.cancelJobTS));
-                }
+                //     this.gp.submitJob(params, lang.hitch(this, this.getModelOutput), lang.hitch(this, this.gpJobStatus), lang.hitch(this, this.cancelJobTS));
+                // }
             },
 
             onSearchComplete: function() {
                 this.map.graphics.clear();
             },
 
+            generateID: function() {
+                return '_' + Math.random().toString(36).substr(2, 9);
+            },
+
             createBuffer: function() {
                 var mapPoint = new Point(this.inputX, this.inputY, new SpatialReference({ wkid: 4326 }));
-                //  geometryEngine.
+                var bufferPolygon = geometryEngine.geodesicBuffer(mapPoint, 3, 9036);
+                var fill = new SimpleFillSymbol();
+                fill.setColor(new Color([255, 167, 127, 0.25]));
+                var gra = new Graphic(bufferPolygon, fill);
+                this.map.graphics.add(gra);
+                var extent = bufferPolygon.getExtent();
+                this.map.setExtent(extent);
+                //  geometryEngine.buffer(geometry, distance, unit, unionResults?)
             }
 
 
