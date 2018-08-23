@@ -369,7 +369,7 @@
         "id": "widgets_LocateRoute_Widget_22"
       },
       {
-        "name": "SiteSuitabilityGrid",
+        "name": "Site Suitability Grid",
         "version": "0.0.1",
         "IsController": false,
         "uri": "widgets/SiteSuitabilityGrid/Widget",
