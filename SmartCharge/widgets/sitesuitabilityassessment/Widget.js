@@ -8,6 +8,7 @@
 define(['dojo/_base/declare',
         'dojo/_base/lang',
         'dojo/_base/html',
+        'dojo/dom',
         "esri/dijit/Search",
         "esri/dijit/LocateButton",
         "esri/Color",
@@ -17,6 +18,7 @@ define(['dojo/_base/declare',
         "esri/symbols/SimpleMarkerSymbol",
         "esri/symbols/SimpleLineSymbol",
         'jimu/dijit/TabContainer3',
+        "jimu/dijit/LoadingShelter",
         "esri/graphic",
         "esri/tasks/query",
         "esri/layers/FeatureLayer",
@@ -24,10 +26,14 @@ define(['dojo/_base/declare',
         "esri/geometry/webMercatorUtils",
         "esri/tasks/Geoprocessor",
         "esri/SpatialReference",
+        'jimu/LayerInfos/LayerInfos',
+        "dojo/dom-construct",
         'dojo/on',
+        './NlsStrings',
+        './LayerListView',
         'jimu/BaseWidget'
     ],
-    function(declare, lang, html, Search, LocateButton, Color, Point, Locator, SimpleFillSymbol, SimpleMarkerSymbol, SimpleLineSymbol, TabContainer3, Graphic, Query, FeatureLayer, geometryEngine, webMercatorUtils, Geoprocessor, SpatialReference, on, BaseWidget) {
+    function(declare, lang, html, dom, Search, LocateButton, Color, Point, Locator, SimpleFillSymbol, SimpleMarkerSymbol, SimpleLineSymbol, TabContainer3, LoadingShelter, Graphic, Query, FeatureLayer, geometryEngine, webMercatorUtils, Geoprocessor, SpatialReference, LayerInfos, domConstruct, on, NlsStrings, LayerListView, BaseWidget) {
         //To create a widget, you need to derive from BaseWidget.
         return declare([BaseWidget], {
 
@@ -56,6 +62,11 @@ define(['dojo/_base/declare',
             postCreate: function() {
                 this.inherited(arguments);
                 console.log('sitesuitabilityassessment::postCreate');
+                this.shelter = new LoadingShelter({
+                    hidden: true
+                });
+                this.shelter.placeAt(this.evSitePanel);
+                this.shelter.startup();
                 this._initializeTab();
             },
 
@@ -72,6 +83,25 @@ define(['dojo/_base/declare',
                 this.locate.startup();
                 this.locator = new Locator("https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer");
                 this.own(on(this.map, 'click', lang.hitch(this, this._onMapClick)));
+
+                if (this.map.itemId) {
+                    LayerInfos.getInstance(this.map, this.map.itemInfo)
+                        .then(lang.hitch(this, function(operLayerInfos) {
+                            this.operLayerInfos = operLayerInfos;
+                            this.showLayers(this.operLayerInfos);
+                            // this.bindEvents();
+                            //  dom.setSelectable(this.layersSection, false);
+                        }));
+                } else {
+                    var itemInfo = this._obtainMapLayers();
+                    LayerInfos.getInstance(this.map, itemInfo)
+                        .then(lang.hitch(this, function(operLayerInfos) {
+                            this.operLayerInfos = operLayerInfos;
+                            this.showLayers(this.operLayerInfos);
+                            //   this.bindEvents();
+                            dom.setSelectable(this.layersSection, false);
+                        }));
+                }
             },
 
             onOpen: function() {
@@ -112,9 +142,38 @@ define(['dojo/_base/declare',
                 console.log('sitesuitabilityassessment::resize');
             },
 
+            showLayers: function(operLayerInfos) {
+                // summary:
+                //    create a LayerListView module used to draw layers list in browser.
+                this.operLayerInfos = operLayerInfos;
+                var div = domConstruct.create("div", { style: { cursor: "pointer" } }, this.exploreMapTabNode);
+                for (var i = 0; i < this.config.queries.length; i++) {
+                    var cell = domConstruct.create('tr', null, div);
+                    cell = domConstruct.create('td', null, div);
+                    cell.innerHTML = "<img src=" + this.config.queries[i].Layer[i].image + ">";
+                    cell = domConstruct.create('td', null, div);
+                    cell.innerHTML = this.config.queries[i].Layer[i].name;
+                    cell = domConstruct.create('td', null, div);
+                    cell.innerHTML = "<input type='checkbox'  value= '" + this.config.queries[i].Layer[i].url + "' class= 'checkBoxes' title='Show layer'/>";
+                    cell.onClick = lang.hitch(this, this.displayLayer);
+                }
+
+            },
+
+
+            displayLayer: function() {
+                console.log("Test");
+            },
+
+
             _initializeTab: function() {
 
                 try {
+
+                    var exploreMapTab = {
+                        title: "Explore Map",
+                        content: this.exploreMapTabNode
+                    };
 
                     var selectSiteTab = {
                         title: "Select Site",
@@ -126,7 +185,7 @@ define(['dojo/_base/declare',
                         content: this.resultTabNode
                     };
 
-                    var tabs = [selectSiteTab, resultsTab];
+                    var tabs = [exploreMapTab, selectSiteTab, resultsTab];
 
                     this.tab = new TabContainer3({
                         tabs: tabs,
@@ -217,17 +276,19 @@ define(['dojo/_base/declare',
 
 
             executeModel: function() {
+                this.shelter.show();
                 this.createBuffer();
-                // var ID = this.generateID();
+                var ID = this.generateID();
                 if (this.inputX === null || this.inputY === null) {
                     alert('Please select location !');
                 } else {
+                    //this.gp = new Geoprocessor("https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/SiteSuitabilityModel/GPServer/SiteSuitabilityModel");
                     this.gp = new Geoprocessor("https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/SiteSuitability/GPServer/SiteSuitability");
                     this.gp.setOutputSpatialReference({ wkid: 102100 });
                     var params = {
                         "_inputX": this.inputX,
                         "_inputY": this.inputY,
-                        "_inputConditionValue": 1,
+                        "_inputConditionValue": ID,
                         "_sdefileName": "F:/SiteSuitabilityModel/gisdb@localhost.sde"
 
                     };
@@ -238,7 +299,7 @@ define(['dojo/_base/declare',
 
 
             getModelOutput: function(resultFeatures) {
-                this.gp.getResultData(resultFeatures.jobId, "_finalAvgScore", lang.hitch(this, this.displayData));
+                this.gp.getResultData(resultFeatures.jobId, "outputAvgScore", lang.hitch(this, this.displayData));
             },
 
             displayData: function(result) {
@@ -252,7 +313,7 @@ define(['dojo/_base/declare',
             },
 
             generateID: function() {
-                return '_' + Math.random().toString(36).substr(2, 9);
+                return Math.random().toString(36).substr(2, 9);
             },
 
             createBuffer: function() {
@@ -300,6 +361,7 @@ define(['dojo/_base/declare',
                 this.tab.tabs[1].content.style.display = "inline-block";
                 this.tab.tabTr.children[0].setAttribute('class', "tab-item-td jimu-state-deactive");
                 this.tab.tabTr.children[1].setAttribute('class', "tab-item-td jimu-state-active");
+                this.shelter.hide();
             }
 
         });
