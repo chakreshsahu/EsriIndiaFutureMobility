@@ -258,9 +258,24 @@ define(['dojo/_base/declare',
         query.geometry = extent;
         this.existingEVStations.queryFeatures(query, lang.hitch(this, function (response) {
 
+          var features = [];
           this.evGraphicsLayer.clear();
           this.bufferResultTable.innerHTML = "";
           array.forEach(response.features, lang.hitch(this, function (feature) {
+
+            features.push(feature.attributes);
+
+            var geom2 = feature.geometry;
+
+            var aerialDistance = geometryEngine.distance(this.mapPoint, geom2, 9036);
+
+            feature.attributes.aerialDistance = aerialDistance.toFixed(2);
+           
+          }));
+          
+          lang.hitch(this,this.sortStationsAerialDist(features, 'aerialDistance'));
+
+          array.forEach(features, lang.hitch(this, function (feature) {
 
             var graphic = new Graphic(feature.geometry);
             this.evGraphicsLayer.add(graphic);
@@ -268,35 +283,31 @@ define(['dojo/_base/declare',
             var div = domConstruct.create("div", { style: { cursor: "pointer" } }, this.bufferResultTable);
             var cell = domConstruct.create('tr', null, div);
 
-            cell.innerHTML = "<b>Station Name :</b>" + feature.attributes.name;
+            cell.innerHTML = "<b>Station Name :</b>" + feature.name;
 
             cell = domConstruct.create('tr', null, div);
-            cell.innerHTML += "<b>Charging Type:</b>" + feature.attributes.type_of_station;
+            cell.innerHTML += "<b>Charging Type:</b>" + feature.type_of_station;
 
             cell = domConstruct.create('tr', null, div);
-            cell.innerHTML += "<b>Connector Type:</b>" + feature.attributes.connector_type;
+            cell.innerHTML += "<b>Connector Type:</b>" + feature.connector_type;
 
             cell = domConstruct.create('tr', null, div);
-            cell.innerHTML += "<b>Network/Operator:</b>" + feature.attributes.network_operator;
+            cell.innerHTML += "<b>Network/Operator:</b>" + feature.network_operator;
 
             cell = domConstruct.create('tr', null, div);
-            cell.innerHTML += "<b>Usage:</b>" + feature.attributes.usage;
+            cell.innerHTML += "<b>Usage:</b>" + feature.usage;
 
             cell = domConstruct.create('tr', null, div);
-            cell.innerHTML += "<b>Max voltage:</b>" + feature.attributes.max__voltage;
+            cell.innerHTML += "<b>Max voltage:</b>" + feature.max__voltage;
 
             cell = domConstruct.create('tr', null, div);
-            cell.innerHTML += "<b>Max Current:</b>" + feature.attributes.max__current;
+            cell.innerHTML += "<b>Max Current:</b>" + feature.max__current;
 
             cell = domConstruct.create('tr', null, div);
-            cell.innerHTML += "<b>Max Power (kw):</b>" + feature.attributes.max__power_kw_;
-
-            var geom2 = feature.geometry;
-
-            var aerialdistance = geometryEngine.distance(this.mapPoint, geom2, 9036);
+            cell.innerHTML += "<b>Max Power (kw):</b>" + feature.max__power_kw_;
 
             cell = domConstruct.create('tr', null, div);
-            cell.innerHTML += "<b>Aerial Distance (KM):</b>" + aerialdistance.toFixed(2);
+            cell.innerHTML += "<b>Aerial Distance (KM):</b>" + feature.aerialDistance;
 
             domConstruct.create("br", null, this.bufferResultTable);
             this._switchView(1);
@@ -304,10 +315,15 @@ define(['dojo/_base/declare',
         }));
 
       },
-
-      _locateRoute: function () {
-        alert("Bingo");
-      },
+      sortStationsAerialDist: function (json_object, key_to_sort_by) {
+        function sortByKey(a, b) {
+            var x = a[key_to_sort_by];
+            var y = b[key_to_sort_by];
+            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        }
+    
+        json_object.sort(sortByKey);
+    },
 
       onClose: function () {
         this.map.graphics.clear();
