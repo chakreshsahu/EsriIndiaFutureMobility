@@ -4,7 +4,6 @@
 
 .jimu-widget-locateroute .locateroute-tab-header{
   position: absolute;
-  /* display: inline-block; */
   width: 100%;
   height: 30px;
   left: 0;
@@ -16,23 +15,6 @@
 .jimu-widget-locateroute .search-node.default-width-for-openAtStart{
 	width: 274px;
 }
-
-.searchLocate{
-  display: inline-block; 
-}
-.arcgisSearch{
-  float: left!important;
-}
-.LocateButton{
-  float: right!important;
-  margin-left: 10px;
-  margin-top: 1px;
-}
-
-.dijitSlider{
-  margin-top: 50px!important;
-}
-
 .headrow {
   background-color: #1d528b;
 }

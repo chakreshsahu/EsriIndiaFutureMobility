@@ -1,82 +1,60 @@
 define(['dojo/_base/declare',
     'dojo/_base/html',
     "dojo/_base/lang",
+    "dojo/on",
     'dojo/_base/config',
     'dojo/_base/array',
-    "dojo/dom",
-    "dojo/store/Memory",
-    "dijit/form/FilteringSelect",
-    "dijit/form/HorizontalSlider",
-    "dojo/on",
+    "dojo/dom-construct",
     //esri
-    "esri/tasks/RouteTask",
-    "esri/tasks/RouteParameters",
-    "esri/tasks/FeatureSet",
     "esri/Color",
     "esri/geometry/Point",
     "esri/tasks/locator",
-    "esri/SpatialReference",
-    "esri/tasks/query",
-    "esri/layers/FeatureLayer",
-    "esri/layers/GraphicsLayer",
-    "esri/geometry/geometryEngine",
-    "esri/symbols/SimpleFillSymbol",
     "esri/symbols/SimpleMarkerSymbol",
     "esri/symbols/SimpleLineSymbol",
-    "esri/symbols/PictureMarkerSymbol",
-    "esri/renderers/SimpleRenderer",
-    "esri/geometry/webMercatorUtils",
     "esri/graphic",
+    "esri/geometry/webMercatorUtils",
+    "esri/layers/GraphicsLayer",
+    "esri/tasks/RouteTask",
+    "esri/symbols/PictureMarkerSymbol",
     "esri/geometry/Polyline",
-    "esri/units",
-    "dojo/dom-construct",
+    "esri/geometry/geometryEngine",
     //esri dijits
     "esri/dijit/Search",
     "esri/dijit/LocateButton",
-    'dijit/_WidgetsInTemplateMixin',
-    "jimu/dijit/Message",
+    "esri/tasks/RouteParameters",
+    "esri/tasks/FeatureSet",
+    "esri/units",
     'jimu/BaseWidget',
     'jimu/dijit/ViewStack'
   ],
   function (declare,
     html,
     lang,
+    on,
     dojoConfig,
     array,
-    dom,
-    Memory,
-    FilteringSelect,
-    HorizontalSlider,
-    on,
-    RouteTask,
-    RouteParameters,
-    FeatureSet,
+    domConstruct,
     Color,
     Point,
     Locator,
-    SpatialReference,
-    Query,
-    FeatureLayer,
-    GraphicsLayer,
-    geometryEngine,
-    SimpleFillSymbol,
     SimpleMarkerSymbol,
     SimpleLineSymbol,
-    PictureMarkerSymbol,
-    SimpleRenderer,
-    webMercatorUtils,
     Graphic,
+    webMercatorUtils,
+    GraphicsLayer,
+    RouteTask,
+    PictureMarkerSymbol,
     Polyline,
-    Units,
-    domConstruct,
+    geometryEngine,
     Search,
     LocateButton,
-    _WidgetsInTemplateMixin,
-    Message,
+    RouteParameters,
+    FeatureSet,
+    Units,
     BaseWidget,
     ViewStack) {
     //To create a widget, you need to derive from BaseWidget.
-    return declare([BaseWidget, _WidgetsInTemplateMixin], {
+    return declare([BaseWidget], {
 
       //please note that this property is be set by the framework when widget is loaded.
       //templateString: template,
@@ -86,26 +64,18 @@ define(['dojo/_base/declare',
       locate: null,
       currentLoc: null,
       locator: null,
-      evGraphicsLayer: null,
       routeParams: null,
-      firstRouteSymbol: null,
-      secondRouteSymbol: null,
-      thirdRouteSymbol: null,
-      existingEVlayerURL: "https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/ExistingEVStations/FeatureServer/0",
 
       postCreate: function () {
         this.inherited(arguments);
         console.log('postCreate');
-
-        //Viewstack to switch views
-
+        //create view stack for flip the page
         this.viewStack = new ViewStack({
           viewType: 'dom',
-          views: [this.tabHeader, this.bufferResult, this.allrouteresult]
+          views: [this.tabHeader, this.allrouteresult]
         });
         html.place(this.viewStack.domNode, this.widgetContent);
         this._switchView(0);
-
         this.startSymbol = new PictureMarkerSymbol('widgets/LocateRoute/images/Start.png', 15, 21);
         this.routeParams = new RouteParameters();
         this.routeParams.stops = new FeatureSet();
@@ -122,97 +92,12 @@ define(['dojo/_base/declare',
         this.secondRouteSymbol = new SimpleLineSymbol().setColor(new Color([102, 195, 0, 1])).setWidth(5);
         this.thirdRouteSymbol = new SimpleLineSymbol().setColor(new Color([192, 183, 0, 1])).setWidth(5);
 
-
-        this.existingEVStations = new FeatureLayer(this.existingEVlayerURL, {
-          mode: FeatureLayer.MODE_ONDEMAND,
-          outFields: ["*"],
-          id: "existingEVStations"
-        });
-        //Symbol for Graphics layer
-        var symbol = new SimpleMarkerSymbol(
-          SimpleMarkerSymbol.STYLE_CIRCLE,
-          12,
-          new SimpleLineSymbol(
-            SimpleLineSymbol.STYLE_NULL,
-            new Color([247, 34, 101, 0.9]),
-            1
-          ),
-          new Color([207, 34, 171, 0.5])
-        );
-        var evRenderer = new SimpleRenderer(symbol);
-        this.evGraphicsLayer = new GraphicsLayer();
-        this.evGraphicsLayer.setRenderer(evRenderer);
-        this.map.addLayer(this.evGraphicsLayer);
       },
-      _switchView: function (idx) {
-        this.currentStack = idx;
-        this.viewStack.switchView(idx);
-      },
-
 
       startup: function () {
         this.inherited(arguments);
-
-
-
-        this.map.on("click", lang.hitch(this, this.onMapClick));
-
-        var dojoStore = new Memory({
-          data: [{
-              id: 1,
-              name: "Select",
-              label: "<b>Select</b>"
-            },
-            {
-              id: 2,
-              name: "IEC 60309",
-              label: "<b>IEC 60309</b> <img src ='./widgets/LocateRoute/images/IEC_60309.png' style='width:50px;height:50px;' />"
-            },
-            {
-              id: 3,
-              name: "IEC 62196",
-              label: "<b>IEC 62196</b> <img src='./widgets/LocateRoute/images/IEC_62196.png' style='width:50px;height:50px;'/>"
-            },
-            {
-              id: 4,
-              name: "CHAdeMO",
-              label: "<b>CHAdeMO</b> <img src='./widgets/LocateRoute/images/CHAdeMO.png' style='width:50px;height:50px;'/>"
-            },
-            {
-              id: 5,
-              name: "CCS",
-              label: "<b>CCS</b> <img src='./widgets/LocateRoute/images/CCS.png' style='width:50px;height:50px;'/>"
-            },
-            {
-              id: 6,
-              name: "GB/T",
-              label: "<b>GB/T</b> <img src='./widgets/LocateRoute/images/GBT.png' style='width:50px;height:50px;'/>"
-            }
-          ]
-        });
-
-        var fs = new FilteringSelect({
-          required: true,
-          value: 1,
-          store: dojoStore,
-          searchAttr: "name",
-          labelAttr: "label",
-          labelType: "html"
-        }, dom.byId("connectorType")).startup();
-
-        var slider = new HorizontalSlider({
-          name: "slider",
-          value: 3,
-          minimum: 0,
-          maximum: 10,
-          pageIncrement: 1,
-          intermediateChanges: false,
-          style: "width:300px;",
-          onChange: function (value) {
-            dom.byId("sliderValue").innerText = value.toFixed(2);
-          }
-        }, "slider").startup()
-
+        //  this.mapIdNode.innerHTML = 'map id:' + this.map.id;
+        console.log('startup');
         this.search = new Search({
           map: this.map
         }, "search");
@@ -221,21 +106,17 @@ define(['dojo/_base/declare',
           map: this.map
         }, "locatebtn");
         this.locate.startup();
-
         this.locator = new Locator("https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer");
       },
 
       onOpen: function () {
         console.log('onOpen');
         this.locate.locate();
+        this.stopsLayer = new GraphicsLayer({
+          id: "stopsLayer"
+        });
+        this.map.addLayer(this.stopsLayer);
         on(this.locate, "locate", lang.hitch(this, this.onLocate));
-        on(this.search, 'search-results', lang.hitch(this, this.onSearchResult));
-        on(this.locator, "location-to-address-complete", lang.hitch(this, this.locationAdressComplete));
-      },
-
-      onMapClick: function (evt) {
-        this.locator.locationToAddress(webMercatorUtils.webMercatorToGeographic(evt.mapPoint), 100);
-        this.map.infoWindow.hide();
       },
 
       onLocate: function (evt) {
@@ -247,6 +128,7 @@ define(['dojo/_base/declare',
             longitude: evt.position.coords.longitude
           });
           this.locator.locationToAddress(this.currentLoc, 100);
+          this.locator.on("location-to-address-complete", lang.hitch(this, this.locationAdressComplete));
         }
 
       },
@@ -258,181 +140,46 @@ define(['dojo/_base/declare',
       locationAdressComplete: function (evt) {
         if (evt.address.address) {
           var address = evt.address.address;
-          this.map.graphics.clear();
-          var pictureMarkerSymbol = new PictureMarkerSymbol('./widgets/LocateRoute/images/search_pointer.png', 36, 36);
-          if (address.Address === "")
+          var symbol = new SimpleMarkerSymbol(
+            SimpleMarkerSymbol.STYLE_CIRCLE,
+            12,
+            new SimpleLineSymbol(
+              SimpleLineSymbol.STYLE_NULL,
+              new Color([247, 34, 101, 0.9]),
+              1
+            ),
+            new Color([207, 34, 171, 0.5])
+          );
+          if (address.Address == "")
             this.search.set('value', evt.address.address.City);
           else {
             this.search.set('value', evt.address.address.Address);
           }
-          var graphic = new Graphic(webMercatorUtils.geographicToWebMercator(evt.address.location), pictureMarkerSymbol);
+          var graphic = new Graphic(evt.address.location, symbol);
           this.map.graphics.add(graphic);
         }
-        var point = new Point(evt.address.location.x, evt.address.location.y);
-        var sPoint = webMercatorUtils.project(point, this.map.spatialReference);
-        this.startPoint = new Graphic(sPoint, this.startSymbol);
-        this.startPoint.attributes = {
-          'name': 'Start Point'
-        };
-      },
 
-      _backPress: function () {
-        this._switchView(0);
-      },
-
-      onSearchResult: function (evt) {
-        this.map.graphics.clear();
-        this.startPoint = new Graphic(evt.results[0][0].feature.geometry, this.startSymbol);
-        this.startPoint.attributes = {
-          'name': 'Start Point'
-        };
-      },
-
-      _locateStation: function () {
-        if (this.firstRouteLyr) {
-          this.map.removeLayer(this.firstRouteLyr);
-          this.firstRouteLyr.clear();
-        } else {
-          this.firstRouteLyr = new GraphicsLayer({
-            id: "routeLayer"
-          });
-        }
-        if (this.secondRouteLyr) {
-          this.map.removeLayer(this.secondRouteLyr);
-          this.secondRouteLyr.clear();
-        } else {
-          this.secondRouteLyr = new GraphicsLayer({
-            id: "secondRouteLayer"
-          });
-        }
-        if (this.thirdRouteLyr) {
-          this.map.removeLayer(this.thirdRouteLyr);
-          this.thirdRouteLyr.clear();
-        } else {
-          this.thirdRouteLyr = new GraphicsLayer({
-            id: "thirdRouteLayer"
-          });
-        }
-        var connector_type = dijit.byId("connectorType");
-        var type_of_station = dijit.byId("chargerType");
-        if (this.search.get('value') == ""){ 
-                new Message({
-                  titleLabel: "Locate and Route Module",
-                  message: "Please Select Location either by clicking on map or by searching or enable your current location to search EV station"
-          });
-         
-        } 
-        if (connector_type.item.name.trim() == "Select") {
-          connector_type.set("state", "Error");          
-        }
-        if (type_of_station.value.trim() == "Select") {
-          type_of_station.set("state", "Error");
-          return;
-        }
-             
-        this.mapPoint = this.map.graphics.graphics[0].geometry;
-        var bufferDistance = dom.byId("sliderValue").innerText;
-        var bufferPolygon = geometryEngine.geodesicBuffer(this.mapPoint, bufferDistance, 9036);
-        
-        var extent = bufferPolygon.getExtent();
-        this.map.setExtent(extent);
-        var query = new Query();
-
-        query.where = "connector_type = '" + connector_type.item.name.trim() + "' and type_of_station = '" + type_of_station.value.trim() + "'";
-        query.outFields = ["*"];
-        query.geometry = extent;
-        this.existingEVStations.queryFeatures(query, lang.hitch(this, function (response) {
-
-          var features = [];
-          this.evGraphicsLayer.clear();
-          this.bufferResultTable.innerHTML = "";
-          array.forEach(response.features, lang.hitch(this, function (feature) {
-
-            features.push(feature.attributes);
-
-            var geom2 = feature.geometry;
-
-            var aerialDistance = geometryEngine.distance(this.mapPoint, geom2, 9036);
-
-            feature.attributes.aerialDistance = aerialDistance.toFixed(2);
-           
-          }));
-          
-          lang.hitch(this,this.sortStationsAerialDist(features, 'aerialDistance'));
-
-          array.forEach(features, lang.hitch(this, function (feature) {
-
-            var graphic = new Graphic(feature.geometry);
-            this.evGraphicsLayer.add(graphic);
-
-            var div = domConstruct.create("div", { style: { cursor: "pointer" } }, this.bufferResultTable);
-            div.onclick = lang.hitch(this, this.getCurrentStation);
-            var cell = domConstruct.create('tr', null, div);
-
-            cell.innerHTML = "<b>Station Name :</b><span>" + feature.name + "</span>";
-
-            cell = domConstruct.create('tr', null, div);
-            cell.innerHTML += "<b>Charging Type:</b>" + feature.type_of_station;
-
-            cell = domConstruct.create('tr', null, div);
-            cell.innerHTML += "<b>Connector Type:</b>" + feature.connector_type;
-
-            cell = domConstruct.create('tr', null, div);
-            cell.innerHTML += "<b>Network/Operator:</b>" + feature.network_operator;
-
-            cell = domConstruct.create('tr', null, div);
-            cell.innerHTML += "<b>Usage:</b>" + feature.usage;
-
-            cell = domConstruct.create('tr', null, div);
-            cell.innerHTML += "<b>Max voltage:</b>" + feature.max__voltage;
-
-            cell = domConstruct.create('tr', null, div);
-            cell.innerHTML += "<b>Max Current:</b>" + feature.max__current;
-
-            cell = domConstruct.create('tr', null, div);
-            cell.innerHTML += "<b>Max Power (kw):</b>" + feature.max__power_kw_;
-
-            cell = domConstruct.create('tr', null, div);
-            cell.innerHTML += "<b>Aerial Distance (KM):</b>" + feature.aerialDistance;
-
-            domConstruct.create("br", null, this.bufferResultTable);
-            this._switchView(1);
-          }));
-        }));
-
-      },
-      sortStationsAerialDist: function (json_object, key_to_sort_by) {
-        function sortByKey(a, b) {
-            var x = a[key_to_sort_by];
-            var y = b[key_to_sort_by];
-            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-        }
-    
-        json_object.sort(sortByKey);
-    },
-
-      getCurrentStation: function (evt) {
-        console.log(evt);
-        var query = new Query();
-        query.where = "name='" + evt.currentTarget.children[0].children[1].innerText + "'";
-        query.returnGeometry = true;
-        query.outFields = ["*"];
-        this.existingEVStations.queryFeatures(query, lang.hitch(this, function (response) {
-          this.endPoint = new Graphic(response.features[0].geometry, this.endSymbol);
-          this.endPoint.attributes = {
-            'name': 'End Point'
+        if (this.routeParams.stops.features.length === 0) {
+          var point = new Point(evt.address.location.x, evt.address.location.y);
+          var sPoint = webMercatorUtils.project(point, this.map.spatialReference);
+          this.startPoint = new Graphic(sPoint, this.startSymbol);
+          this.startPoint.attributes = {
+            'name': 'Start Point'
           };
-          this.routeParams.stops.features = [];
+          this.stopsLayer.add(this.startPoint);
           this.routeParams.stops.features.push(this.startPoint);
-          this.routeParams.stops.features.push(this.endPoint);
-          lang.hitch(this, this.fetchRoute());
-          this.shelter.show();
-        }));
-
-      },
-
-      _locateRoute: function () {
-        alert("Bingo");
+        } else if (this.routeParams.stops.features.length === 1) {
+          if (this.routeParams.stops.features[0].attributes.name === "Start Point") {
+            var pt = new Point(77.3178, 28.4089);
+            var ePoint = webMercatorUtils.project(pt, this.map.spatialReference);
+            this.endPoint = new Graphic(ePoint, this.endSymbol);
+            this.endPoint.attributes = {
+              'name': 'End Point'
+            };
+            this.stopsLayer.add(this.endPoint);
+            this.routeParams.stops.features.push(this.endPoint);
+          }
+        }
       },
       addRouteAsBarrier: function (routeResult, val, pathArray) {
         var addFeatures = [];
@@ -470,50 +217,25 @@ define(['dojo/_base/declare',
         }
       },
       fetchRoute: function () {
-        //this.endSymbol = new PictureMarkerSymbol('widgets/LocateRoute/images/Start.png', 15, 21);
-        //var graphic = new Graphic(evt.address.location, pictureMarkerSymbol);
-        if (this.firstRouteLyr) {
-          this.map.removeLayer(this.firstRouteLyr);
-          this.firstRouteLyr.clear();
-        } else {
-          this.firstRouteLyr = new GraphicsLayer({
-            id: "routeLayer"
-          });
-        }
-        if (this.secondRouteLyr) {
-          this.map.removeLayer(this.secondRouteLyr);
-          this.secondRouteLyr.clear();
-        } else {
-          this.secondRouteLyr = new GraphicsLayer({
-            id: "secondRouteLayer"
-          });
-        }
-        if (this.thirdRouteLyr) {
-          this.map.removeLayer(this.thirdRouteLyr);
-          this.thirdRouteLyr.clear();
-        } else {
-          this.thirdRouteLyr = new GraphicsLayer({
-            id: "thirdRouteLayer"
-          });
-        }
-        this.secondtimeRouteError = false;
-        this.secondRouteError = false;
-        this.thirdRouteThirdError = false;
-        this.thirdRouteSecondError = false;
-        this.thirdRouteError = false;
-        this.firstRouteSymbol = new SimpleLineSymbol().setColor(new Color([4, 68, 118, 1])).setWidth(5);
-        this.highlightedSegmentSymbol = new SimpleLineSymbol().setColor(new Color([0, 255, 255, 1])).setWidth(5);
-        this.secondRouteSymbol = new SimpleLineSymbol().setColor(new Color([102, 195, 0, 1])).setWidth(5);
-        this.thirdRouteSymbol = new SimpleLineSymbol().setColor(new Color([192, 183, 0, 1])).setWidth(5);
 
+        this.firstRouteLyr = new GraphicsLayer({
+          id: "routeLayer"
+        });
         this.firstRoutereduceDown = new GraphicsLayer({
           id: "routeLayerDown"
         });
-
+        this.secondRouteLyr = new GraphicsLayer({
+          id: "secondRouteLayer"
+        });
         this.secondRoutereduceDown = new GraphicsLayer({
           id: "secondRouteLayerDown"
         });
-        this.routeParams.polylineBarriers = new FeatureSet();
+        this.thirdRouteLyr = new GraphicsLayer({
+          id: "thirdRouteLayer"
+        });
+        this.thirdRouteLyrDown = new GraphicsLayer({
+          id: "thirdRouteLayerDown"
+        });
         this.routeTask = new RouteTask("https://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World");
         this.routeTask.solve(this.routeParams);
         this.firstRouteSolveEvent = this.routeTask.on("solve-complete", lang.hitch(this, function (evt) {
@@ -627,10 +349,10 @@ define(['dojo/_base/declare',
         }
         this.routeTask.solve(this.routeParams);
         this.secondRouteSolveEvent = this.routeTask.on("solve-complete", lang.hitch(this, this.showSecondRoute));
-        this.secondRouteErrorHandler = this.routeTask.on("error", lang.hitch(this, this.secondRouteErrorRoute));
+        this.secondRouteErrorHandler = this.routeTask.on("error", lang.hitch(this, this.secondRouteErrorHandler));
 
       },
-      secondRouteErrorRoute: function () {
+      secondRouteErrorHandler: function () {
         this.secondRouteSolveEvent.remove();
         this.secondRouteErrorHandler.remove();
         if (this.secondtimeRouteError === true) {
@@ -707,6 +429,7 @@ define(['dojo/_base/declare',
         this.routeParams.stops = new FeatureSet();
         this.routeParams.stops.features.push(this.startPoint);
         this.routeParams.stops.features.push(this.endPoint);
+        this.routeParams.stops.features.push(this.startPoint);
         this.routeParams.returnDirections = true;
         this.routeParams.directionsOutputType = 'esriDOTComplete';
         this.routeParams.directionsStyleName = 'NA Navigation';
@@ -786,7 +509,7 @@ define(['dojo/_base/declare',
         }
         this.routeTask.solve(this.routeParams);
         this.thirdRouteSolveEvent = this.routeTask.on("solve-complete", lang.hitch(this, this.showThirdRoute));
-        this.thirdRouteErrorHandler = this.routeTask.on("error", lang.hitch(this, this.thirdRouteErrorRoute));
+        this.thirdRouteErrorHandler = this.routeTask.on("error", lang.hitch(this, this.thirdRouteErrorHandler));
       },
       showThirdRoute: function (data) {
         this.thirdRouteSolveEvent.remove();
@@ -835,10 +558,9 @@ define(['dojo/_base/declare',
         this.thirdRoute = this.thirdRouteLyr;
         this.thirdBarrier = routeResult;
         this.map.addLayer(this.thirdRouteLyr);
-        this._switchView(2);
-        this.shelter.hide();
+        this._switchView(1);
       },
-      thirdRouteErrorRoute: function (err) {
+      thirdRouteErrorHandler: function (err) {
         this.thirdRouteSolveEvent.remove();
         this.thirdRouteErrorHandler.remove();
         if (this.thirdRouteThirdError === true) {} else if (this.thirdRouteSecondError === true) {
@@ -1009,26 +731,16 @@ define(['dojo/_base/declare',
           this.map.graphics.add(graphic);
         }
       },
-      _backPressData: function () {
-        this._switchView(1);
-
+      /**
+       * flip the page
+       * @param {object} idx viewid
+       */
+      _switchView: function (idx) {
+        this.currentStack = idx;
+        this.viewStack.switchView(idx);
       },
-
       onClose: function () {
-        this.map.graphics.clear();
-        this.evGraphicsLayer.clear();
-        if (this.mapClickEvent !== null) {
-          this.mapClickEvent.remove();
-        }
-        if (this.locateEvent !== null) {
-          this.locateEvent.remove();
-        }
-        if (this.searchEvent !== null) {
-          this.searchEvent.remove();
-        }
-        if (this.reverseGeoCodeEvent !== null) {
-          this.reverseGeoCodeEvent.remove();
-        }
+        console.log('onClose');
       },
 
       onMinimize: function () {
