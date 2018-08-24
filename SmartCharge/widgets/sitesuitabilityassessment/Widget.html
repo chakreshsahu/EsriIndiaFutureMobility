@@ -1,9 +1,34 @@
 <div>
-    <div data-dojo-attach-point="search" id="search" class="search-node"></div>
-    <div data-dojo-attach-point="locatebtn" id="locatebtn"></div>
-    <p>Click on map to locate site</p>
-    <button type="button" id="goBackBtn" class='jimu-btn submitBtn' style="margin:5px; width: 70%;" data-dojo-attach-event="click: executeModel">Get Suitability</button>
-    <div><span class="fa fa-star checked"></span>
+    <div data-dojo-attach-point="evSitePanel">
+        <div data-dojo-attach-point="selectSiteTabNode">
+            <div data-dojo-attach-point="searchbar" id="searchbar" class="search-node"></div>
+            <div data-dojo-attach-point="locatebuton" id="locatebuton"></div>
+            <p>Click on map to locate site</p>
+            <button type="button" id="goBackBtn" class='jimu-btn submitBtn' style="margin:5px; width: 70%;" data-dojo-attach-event="click: executeModel">Get Suitability</button>
+        </div>
+        <div data-dojo-attach-point="resultTabNode">
+            <div id="results">
+                <table border="1" cellspacing="0px">
+                    <tr>
+                        <td colspan="2"> Site Suitability Details</td>
+                    </tr>
+                    <tr>
+                        <td> Existing EV Stations (within 3 km)</td>
+                        <td><label id="evCount"></label></td>
+                    </tr>
+                    <tr>
+                        <td> Potential EV Stations (within 3 km)</td>
+                        <td><label id="potentialevCount"></label></td>
+                    </tr>
+                    <tr>
+                        <td> Site Suitability Score </td>
+                        <td><label id="score"></label></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <!--<div><span class="fa fa-star checked"></span>
         <span class="fa fa-star checked"></span>
-        <span class="fa fa-star checked"></span></div>
+        <span class="fa fa-star checked"></span></div>-->
+    </div>
 </div>

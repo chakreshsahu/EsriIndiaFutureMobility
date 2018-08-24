@@ -16,6 +16,7 @@ define(['dojo/_base/declare',
         "esri/symbols/SimpleFillSymbol",
         "esri/symbols/SimpleMarkerSymbol",
         "esri/symbols/SimpleLineSymbol",
+        'jimu/dijit/TabContainer3',
         "esri/graphic",
         "esri/tasks/query",
         "esri/layers/FeatureLayer",
@@ -26,7 +27,7 @@ define(['dojo/_base/declare',
         'dojo/on',
         'jimu/BaseWidget'
     ],
-    function(declare, lang, html, Search, LocateButton, Color, Point, Locator, SimpleFillSymbol, SimpleMarkerSymbol, SimpleLineSymbol, Graphic, Query, FeatureLayer, geometryEngine, webMercatorUtils, Geoprocessor, SpatialReference, on, BaseWidget) {
+    function(declare, lang, html, Search, LocateButton, Color, Point, Locator, SimpleFillSymbol, SimpleMarkerSymbol, SimpleLineSymbol, TabContainer3, Graphic, Query, FeatureLayer, geometryEngine, webMercatorUtils, Geoprocessor, SpatialReference, on, BaseWidget) {
         //To create a widget, you need to derive from BaseWidget.
         return declare([BaseWidget], {
 
@@ -44,6 +45,9 @@ define(['dojo/_base/declare',
             potentialEVStationsCount: null,
             existingEVlayerURL: null,
             potentialEVlayerURL: null,
+            selectSiteTabNode: null,
+            resultTabNode: null,
+            evSitePanel: null,
             // this property is set by the framework when widget is loaded.
             // name: 'sitesuitabilityassessment',
             // add additional properties here
@@ -52,6 +56,7 @@ define(['dojo/_base/declare',
             postCreate: function() {
                 this.inherited(arguments);
                 console.log('sitesuitabilityassessment::postCreate');
+                this._initializeTab();
             },
 
             startup: function() {
@@ -59,11 +64,11 @@ define(['dojo/_base/declare',
                 console.log('sitesuitabilityassessment::startup');
                 this.search = new Search({
                     map: this.map
-                }, "search");
+                }, "searchbar");
 
                 this.locate = new LocateButton({
                     map: this.map
-                }, "locatebtn");
+                }, "locatebuton");
                 this.locate.startup();
                 this.locator = new Locator("https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer");
                 this.own(on(this.map, 'click', lang.hitch(this, this._onMapClick)));
@@ -105,6 +110,48 @@ define(['dojo/_base/declare',
 
             resize: function() {
                 console.log('sitesuitabilityassessment::resize');
+            },
+
+            _initializeTab: function() {
+
+                try {
+
+                    var selectSiteTab = {
+                        title: "Select Site",
+                        content: this.selectSiteTabNode
+                    };
+
+                    var resultsTab = {
+                        title: "Results",
+                        content: this.resultTabNode
+                    };
+
+                    var tabs = [selectSiteTab, resultsTab];
+
+                    this.tab = new TabContainer3({
+                        tabs: tabs,
+                        selected: this.nls.NewSetting
+                    });
+
+                    this.own(on(this.tab, 'tabChanged', lang.hitch(this, function(evt) {
+                        var event = evt;
+                        if (evt === 'Select Site') {
+                            document.getElementById('results').style.display = 'none';
+                        }
+                        // if (this.tab.tabTr.children[1].innerText === this.nls.NewSetting) {
+                        //     //this._resetData();
+                        //     this.Submit.innerText = this.nls.Submit;
+                        //     this.Submit.style.display = "inline-block";
+                        //     this.reset.style.display = "inline-block";
+
+                        //     this.editPOIbtn.style.display = "none";
+                        // }
+                    })));
+
+                    this.tab.placeAt(this.evSitePanel);
+                } catch (ex) {
+                    console.log(ex.message);
+                }
             },
 
 
@@ -171,19 +218,33 @@ define(['dojo/_base/declare',
 
             executeModel: function() {
                 this.createBuffer();
-                var ID = this.generateID();
-                // if (this.inputX === null || this.inputY === null) {
-                //     alert('Please select location !');
-                // } else {
-                //     this.gp = new Geoprocessor("https://spgv.southindia.cloudapp.azure.com/server/rest/services/TransAnalyst/TowerScheduleModel/GPServer/TSModel_7Feb");
-                //     this.gp.setOutputSpatialReference({ wkid: 102100 });
-                //     var params = {
-                //         "X": this.inputX,
-                //         "Y": this.inputY
-                //     };
+                // var ID = this.generateID();
+                if (this.inputX === null || this.inputY === null) {
+                    alert('Please select location !');
+                } else {
+                    this.gp = new Geoprocessor("https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/SiteSuitability/GPServer/SiteSuitability");
+                    this.gp.setOutputSpatialReference({ wkid: 102100 });
+                    var params = {
+                        "_inputX": this.inputX,
+                        "_inputY": this.inputY,
+                        "_inputConditionValue": 1,
+                        "_sdefileName": "F:/SiteSuitabilityModel/gisdb@localhost.sde"
 
-                //     this.gp.submitJob(params, lang.hitch(this, this.getModelOutput), lang.hitch(this, this.gpJobStatus), lang.hitch(this, this.cancelJobTS));
-                // }
+                    };
+
+                    this.gp.submitJob(params, lang.hitch(this, this.getModelOutput));
+                }
+            },
+
+
+            getModelOutput: function(resultFeatures) {
+                this.gp.getResultData(resultFeatures.jobId, "_finalAvgScore", lang.hitch(this, this.displayData));
+            },
+
+            displayData: function(result) {
+                var finalScore = result.value;
+                document.getElementById('score').innerHTML = finalScore;
+                this.showResults();
             },
 
             onSearchComplete: function() {
@@ -195,6 +256,8 @@ define(['dojo/_base/declare',
             },
 
             createBuffer: function() {
+
+                // this.showResults();
                 var mapPoint = new Point(this.inputX, this.inputY, new SpatialReference({ wkid: 4326 }));
                 var bufferPolygon = geometryEngine.geodesicBuffer(mapPoint, 1.5, 9036);
                 var fill = new SimpleFillSymbol();
@@ -211,6 +274,7 @@ define(['dojo/_base/declare',
                 var query = new Query();
                 query.where = "1=1";
                 query.geometry = extent;
+                document.getElementById('results').style.display = 'block';
                 this.existingEVStations.queryFeatures(query, lang.hitch(this, function(response) {
                     this.existingEVStationsCount = response.features.length;
                     document.getElementById('evCount').innerHTML = this.existingEVStationsCount;
@@ -229,9 +293,14 @@ define(['dojo/_base/declare',
 
 
 
+            },
+
+            showResults: function() {
+                this.tab.tabs[0].content.style.display = "none";
+                this.tab.tabs[1].content.style.display = "inline-block";
+                this.tab.tabTr.children[0].setAttribute('class', "tab-item-td jimu-state-deactive");
+                this.tab.tabTr.children[1].setAttribute('class', "tab-item-td jimu-state-active");
             }
-
-
 
         });
 
