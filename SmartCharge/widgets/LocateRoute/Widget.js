@@ -349,7 +349,10 @@ define(['dojo/_base/declare',
           array.forEach(response.features, lang.hitch(this, function (feature) {
 
             features.push(feature.attributes);
-
+			
+			var graphic = new Graphic(feature.geometry);
+            this.evGraphicsLayer.add(graphic);
+			
             var geom2 = feature.geometry;
 
             var aerialDistance = geometryEngine.distance(this.mapPoint, geom2, 9036);
@@ -361,9 +364,6 @@ define(['dojo/_base/declare',
           lang.hitch(this,this.sortStationsAerialDist(features, 'aerialDistance'));
 
           array.forEach(features, lang.hitch(this, function (feature) {
-
-            var graphic = new Graphic(feature.geometry);
-            this.evGraphicsLayer.add(graphic);
 
             var div = domConstruct.create("div", { style: { cursor: "pointer" } }, this.bufferResultTable);
             div.onclick = lang.hitch(this, this.getCurrentStation);
