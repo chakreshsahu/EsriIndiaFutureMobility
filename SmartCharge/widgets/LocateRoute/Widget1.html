@@ -1,55 +1,15 @@
 <div>
   <div data-dojo-attach-point="widgetContent">
     <div class="locateroute-tab-header" data-dojo-attach-point="tabHeader">
-
-      <div>
-        <div data-dojo-attach-point="search" id="search"></div>
-        <div data-dojo-attach-point="locatebtn" id="locatebtn"></div>
-        <br>
-      </div>
-
-      <div id="slider"></div>
-      <div id="sliderLabel">
-        <div style="float: left; margin-left: 11px;">0</div>
-        <div style="float: right;margin-right: 41px;">10</div>
-        <br>
-        <div style="text-align: center;">
-          <p>Showing Results within <label id="sliderValue">3</label> Km</p>
-        </div>
-      </div>
-      <div>
-        <br>
-        <span class="formlabel">${nls.ChargerType}</span>
-        <br>
-        <br>
-        <select name="chargerType" id="chargerType" data-dojo-attach-point="chargerType" data-dojo-type="dijit/form/Select">
-          <option value="Select" selected="selected">Select</option>
-          <option value="AC">AC</option>
-          <option value="Level 1 DC">Level 1 DC</option>
-          <option value="Level 2 DC">Level 2 DC</option>
-        </select>
-        <br>
-      </div>
-      <div>
-        <br>
-        <span class="formlabel">${nls.ConnectorType}</span>
-        <br>
-        <br>
-        <input id="connectorType" data-dojo-attach-point="connectorType" />
-      </div>
-      <br>
-      <div class='jimu-btn' data-dojo-attach-point='locateStation' id='locateStation' data-dojo-attach-event="onclick: _locateStation">${nls.LocateStation}</div>
+      <!-- <div class="masterplanmanagement-tab-item jimu-ellipsis jimu-float-leading selected" data-dojo-attach-point="label1" title="${nls.label1}">${nls.label1}</div>
+      <div class="masterplanmanagement-tab-item jimu-ellipsis jimu-float-trailing" data-dojo-attach-point="label2" title="${nls.label2}">${nls.label2}</div> -->
+      <div data-dojo-attach-point="search" id="search" class="search-node"></div>
+      <div data-dojo-attach-point="locatebtn" id="locatebtn"></div>
+      <button type="submit" style="margin-top: 100px" class="jimu-btn" data-dojo-attach-point='getRouteBtn' data-dojo-attach-event='click:fetchRoute'>Generate Route</button>
     </div>
-    <div data-dojo-attach-point='bufferResult'>
-        <img style="width: 15px; height: 15px; cursor:pointer;" data-dojo-attach-point='backBtn' src='./widgets/LocateRoute/images/back.jpg'
-        alt='back to grid' title='Back to grid' data-dojo-attach-event="onclick: _backPress" />
-      <table data-dojo-attach-point="bufferResultTable"></table>
-       
-    </div>
+
 
     <div data-dojo-attach-point="allrouteresult">
-        <img style="width: 15px; height: 15px; cursor:pointer;" data-dojo-attach-point='backBtn' src='./widgets/LocateRoute/images/back.jpg'
-        alt='back to grid' title='Back to grid' data-dojo-attach-event="onclick: _backPressData" />
       <table style="margin-top:2px; width: 100%; border-collapse:collapse;">
         <tr class="headrow">
           <td class="headdatalabel">Suggested Routes</td>
@@ -120,6 +80,5 @@
         <table data-dojo-attach-point='directionsRouteThirdTable' style="width:100%;border-collapse:collapse;"></table>
       </div>
     </div>
-    <div data-dojo-attach-point="shelter" data-dojo-type="jimu/dijit/LoadingShelter" data-dojo-props='hidden:true'></div>
   </div>
 </div>
