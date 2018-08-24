@@ -28,12 +28,13 @@ define(['dojo/_base/declare',
         "esri/SpatialReference",
         'jimu/LayerInfos/LayerInfos',
         "dojo/dom-construct",
+        'jimu/loaderplugins/jquery-loader!https://code.jquery.com/jquery-git1.min.js',
         'dojo/on',
         './NlsStrings',
         './LayerListView',
         'jimu/BaseWidget'
     ],
-    function(declare, lang, html, dom, Search, LocateButton, Color, Point, Locator, SimpleFillSymbol, SimpleMarkerSymbol, SimpleLineSymbol, TabContainer3, LoadingShelter, Graphic, Query, FeatureLayer, geometryEngine, webMercatorUtils, Geoprocessor, SpatialReference, LayerInfos, domConstruct, on, NlsStrings, LayerListView, BaseWidget) {
+    function(declare, lang, html, dom, Search, LocateButton, Color, Point, Locator, SimpleFillSymbol, SimpleMarkerSymbol, SimpleLineSymbol, TabContainer3, LoadingShelter, Graphic, Query, FeatureLayer, geometryEngine, webMercatorUtils, Geoprocessor, SpatialReference, LayerInfos, domConstruct, $, on, NlsStrings, LayerListView, BaseWidget) {
         //To create a widget, you need to derive from BaseWidget.
         return declare([BaseWidget], {
 
@@ -158,6 +159,20 @@ define(['dojo/_base/declare',
                     cell.onClick = lang.hitch(this, this.displayLayer);
                 }
 
+                $('.checkBoxes').change(lang.hitch(this, function(evt) {
+                    var checkedChkBox = document.getElementsByClassName('checkBoxes');
+                    lang.hitch(this, this.checkBoxClick(checkedChkBox, evt, null));
+
+                }));
+
+            },
+
+            checkBoxClick: function(checkedChkBox, evt, paginationFlag) {
+                if (evt.target.checked) {
+                    var layerURL = evt.target.value;
+                    var dynamicMSLayer = new FeatureLayer(layerURL);
+                    this.map.addLayer(dynamicMSLayer);
+                }
             },
 
 
@@ -290,7 +305,6 @@ define(['dojo/_base/declare',
                         "_inputY": this.inputY,
                         "_inputConditionValue": ID,
                         "_sdefileName": "F:/SiteSuitabilityModel/gisdb@localhost.sde"
-
                     };
 
                     this.gp.submitJob(params, lang.hitch(this, this.getModelOutput));
@@ -304,7 +318,8 @@ define(['dojo/_base/declare',
 
             displayData: function(result) {
                 var finalScore = result.value;
-                document.getElementById('score').innerHTML = finalScore;
+                var score = Number(finalScore);
+                document.getElementById('score').innerHTML = score.toFixed(2);
                 this.showResults();
             },
 
@@ -358,9 +373,11 @@ define(['dojo/_base/declare',
 
             showResults: function() {
                 this.tab.tabs[0].content.style.display = "none";
-                this.tab.tabs[1].content.style.display = "inline-block";
+                this.tab.tabs[1].content.style.display = "none";
+                this.tab.tabs[2].content.style.display = "inline-block";
                 this.tab.tabTr.children[0].setAttribute('class', "tab-item-td jimu-state-deactive");
-                this.tab.tabTr.children[1].setAttribute('class', "tab-item-td jimu-state-active");
+                this.tab.tabTr.children[1].setAttribute('class', "tab-item-td jimu-state-deactive");
+                this.tab.tabTr.children[2].setAttribute('class', "tab-item-td jimu-state-active");
                 this.shelter.hide();
             }
 
