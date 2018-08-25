@@ -14,7 +14,8 @@
         <div style="float: right;margin-right: 41px;">10</div>
         <br>
         <div style="text-align: center;">
-          <p>Showing Results within <label id="sliderValue">3</label> Km</p>
+          <p>Showing Results within
+            <label id="sliderValue">3</label> Km</p>
         </div>
       </div>
       <div>
@@ -41,14 +42,14 @@
       <div class='jimu-btn' data-dojo-attach-point='locateStation' id='locateStation' data-dojo-attach-event="onclick: _locateStation">${nls.LocateStation}</div>
     </div>
     <div data-dojo-attach-point='bufferResult'>
-        <img style="width: 15px; height: 15px; cursor:pointer;" data-dojo-attach-point='backBtn' src='./widgets/LocateRoute/images/back.jpg'
+      <img style="width: 15px; height: 15px; cursor:pointer;" data-dojo-attach-point='backBtn' src='./widgets/LocateRoute/images/back.jpg'
         alt='back to grid' title='Back to grid' data-dojo-attach-event="onclick: _backPress" />
       <table data-dojo-attach-point="bufferResultTable"></table>
-       
+
     </div>
 
     <div data-dojo-attach-point="allrouteresult">
-        <img style="width: 15px; height: 15px; cursor:pointer;" data-dojo-attach-point='backBtn' src='./widgets/LocateRoute/images/back.jpg'
+      <img style="width: 15px; height: 15px; cursor:pointer;" data-dojo-attach-point='backBtn' src='./widgets/LocateRoute/images/back.jpg'
         alt='back to grid' title='Back to grid' data-dojo-attach-event="onclick: _backPressData" />
       <table style="margin-top:2px; width: 100%; border-collapse:collapse;">
         <tr class="headrow">
@@ -65,11 +66,21 @@
           </div>
         </div>
         <div class="uproutebox1">
+          <div class="routecolor">
+          </div>
           <div class="distancebox">
             <span class="distance" data-dojo-attach-point="firstUpLength">3.70 km</span>
           </div>
           <div class="timebox">
             <span class="time" data-dojo-attach-point="firstUpTime">12.00 mins</span>
+          </div>
+          <div class="togglebox">
+            <span class="smalllabel">${nls.View}</span>
+            <label class="switch">
+              <input type='checkbox' class='routecheckbox' id='firstRouteUpCheckBox' checked data-dojo-attach-point='firstRouteUpCheckBox'
+              />
+              <span class="slider round"></span>
+            </label>
           </div>
         </div>
       </div>
@@ -85,12 +96,22 @@
             <span class="navbuttontitle">directions</span>
           </div>
         </div>
-        <div class="uproutebox1">
+        <div class="uproutebox2">
+          <div class="routecolor">
+          </div>
           <div class="distancebox">
             <span class="distance" data-dojo-attach-point="secondUpLength">3.70 km</span>
           </div>
           <div class="timebox">
             <span class="time" data-dojo-attach-point="secondUpTime">12.00 mins</span>
+          </div>
+          <div class="togglebox">
+            <span class="smalllabel">${nls.View}</span>
+            <label class="switch">
+              <input type='checkbox' class='routecheckbox' id='secondRouteUpCheckBox' checked data-dojo-attach-point='secondRouteUpCheckBox'
+              />
+              <span class="slider round"></span>
+            </label>
           </div>
         </div>
       </div>
@@ -107,12 +128,22 @@
             <span class="navbuttontitle">directions</span>
           </div>
         </div>
-        <div class="uproutebox1">
+        <div class="uproutebox3">
+          <div class="routecolor">
+          </div>
           <div class="distancebox">
             <span class="distance" data-dojo-attach-point="thirdUpLength">3.70 km</span>
           </div>
           <div class="timebox">
             <span class="time" data-dojo-attach-point="thirdUpTime">12.00 mins</span>
+          </div>
+          <div class="togglebox">
+            <span class="smalllabel">${nls.View}</span>
+            <label class="switch">
+              <input type='checkbox' class='routecheckbox' id='thirdRouteUpCheckBox' checked data-dojo-attach-point='thirdRouteUpCheckBox'
+              />
+              <span class="slider round"></span>
+            </label>
           </div>
         </div>
       </div>

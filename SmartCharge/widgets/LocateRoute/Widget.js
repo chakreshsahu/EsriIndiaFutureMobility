@@ -1,43 +1,45 @@
-define(['dojo/_base/declare',
-    'dojo/_base/html',
-    "dojo/_base/lang",
-    'dojo/_base/config',
-    'dojo/_base/array',
-    "dojo/dom",
-    "dojo/store/Memory",
-    "dijit/form/FilteringSelect",
-    "dijit/form/HorizontalSlider",
-    "dojo/on",
-    //esri
-    "esri/tasks/RouteTask",
-    "esri/tasks/RouteParameters",
-    "esri/tasks/FeatureSet",
-    "esri/Color",
-    "esri/geometry/Point",
-    "esri/tasks/locator",
-    "esri/SpatialReference",
-    "esri/tasks/query",
-    "esri/layers/FeatureLayer",
-    "esri/layers/GraphicsLayer",
-    "esri/geometry/geometryEngine",
-    "esri/symbols/SimpleFillSymbol",
-    "esri/symbols/SimpleMarkerSymbol",
-    "esri/symbols/SimpleLineSymbol",
-    "esri/symbols/PictureMarkerSymbol",
-    "esri/renderers/SimpleRenderer",
-    "esri/geometry/webMercatorUtils",
-    "esri/graphic",
-    "esri/geometry/Polyline",
-    "esri/units",
-    "dojo/dom-construct",
-    //esri dijits
-    "esri/dijit/Search",
-    "esri/dijit/LocateButton",
-    'dijit/_WidgetsInTemplateMixin',
-    "jimu/dijit/Message",
-    'jimu/BaseWidget',
-    'jimu/dijit/ViewStack'
-  ],
+define([
+  'dojo/_base/declare',
+  'dojo/_base/html',
+  "dojo/_base/lang",
+  'dojo/_base/config',
+  'dojo/_base/array',
+  "dojo/dom",
+  "dojo/store/Memory",
+  "dijit/form/FilteringSelect",
+  "dijit/form/HorizontalSlider",
+  "dojo/on",
+  //esri
+  "esri/tasks/RouteTask",
+  "esri/tasks/RouteParameters",
+  "esri/tasks/FeatureSet",
+  "esri/Color",
+  "esri/geometry/Point",
+  "esri/tasks/locator",
+  "esri/SpatialReference",
+  "esri/tasks/query",
+  "esri/layers/FeatureLayer",
+  "esri/layers/GraphicsLayer",
+  "esri/layers/ArcGISDynamicMapServiceLayer",
+  "esri/geometry/geometryEngine",
+  "esri/symbols/SimpleFillSymbol",
+  "esri/symbols/SimpleMarkerSymbol",
+  "esri/symbols/SimpleLineSymbol",
+  "esri/symbols/PictureMarkerSymbol",
+  "esri/renderers/SimpleRenderer",
+  "esri/geometry/webMercatorUtils",
+  "esri/graphic",
+  "esri/geometry/Polyline",
+  "esri/units",
+  "dojo/dom-construct",
+  //esri dijits
+  "esri/dijit/Search",
+  "esri/dijit/LocateButton",
+  'dijit/_WidgetsInTemplateMixin',
+  "jimu/dijit/Message",
+  'jimu/BaseWidget',
+  'jimu/dijit/ViewStack'
+],
   function (declare,
     html,
     lang,
@@ -58,6 +60,7 @@ define(['dojo/_base/declare',
     Query,
     FeatureLayer,
     GraphicsLayer,
+    ArcGISDynamicMapServiceLayer,
     geometryEngine,
     SimpleFillSymbol,
     SimpleMarkerSymbol,
@@ -74,30 +77,44 @@ define(['dojo/_base/declare',
     _WidgetsInTemplateMixin,
     Message,
     BaseWidget,
-    ViewStack) {
-    //To create a widget, you need to derive from BaseWidget.
-    return declare([BaseWidget, _WidgetsInTemplateMixin], {
+    ViewStack
+  ) {
 
-      //please note that this property is be set by the framework when widget is loaded.
-      //templateString: template,
+    return declare([BaseWidget, _WidgetsInTemplateMixin], {
 
       baseClass: 'jimu-widget-locateroute',
       search: null,
       locate: null,
       currentLoc: null,
       locator: null,
+      mapClickEvent: null,
+      locateEvent: null,
+      searchEvent: null,
+      reverseGeoCodeEvent: null,
       evGraphicsLayer: null,
+      mapPoint: null,
+      evGraphicsLayer: null,
+      bufferGraphicsLayer: null,
       routeParams: null,
       firstRouteSymbol: null,
       secondRouteSymbol: null,
       thirdRouteSymbol: null,
+      totalTimeOne: null,
+      totalTimeTwo: null,
+      totalTimeThree: null,
+      totalDistanceOne: null,
+      totalDistanceTwo: null,
+      totalDistanceThree: null,
+      viewFirstRoute: false,
+      viewSecondRoute: false,
+      viewThirdRoute: false,
+      trafficLayer: null,
       existingEVlayerURL: "https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/ExistingEVStations/FeatureServer/0",
+      trafficLayerURL: "http://traffic.arcgis.com/arcgis/rest/services/World/Traffic/MapServer",
+
 
       postCreate: function () {
         this.inherited(arguments);
-        console.log('postCreate');
-
-        //Viewstack to switch views
 
         this.viewStack = new ViewStack({
           viewType: 'dom',
@@ -105,8 +122,7 @@ define(['dojo/_base/declare',
         });
         html.place(this.viewStack.domNode, this.widgetContent);
         this._switchView(0);
-
-        this.startSymbol = new PictureMarkerSymbol('widgets/LocateRoute/images/Start.png', 15, 21);
+        this.directionGraphicsLayer = new GraphicsLayer();
         this.routeParams = new RouteParameters();
         this.routeParams.stops = new FeatureSet();
         this.routeParams.returnDirections = true;
@@ -122,7 +138,8 @@ define(['dojo/_base/declare',
         this.secondRouteSymbol = new SimpleLineSymbol().setColor(new Color([102, 195, 0, 1])).setWidth(5);
         this.thirdRouteSymbol = new SimpleLineSymbol().setColor(new Color([192, 183, 0, 1])).setWidth(5);
 
-
+        this.endSymbol = new PictureMarkerSymbol('widgets/LocateRoute/images/endpoint.png', 50, 50);
+        this.startSymbol = new PictureMarkerSymbol('widgets/LocateRoute/images/startpoint.png', 50, 50);
         this.existingEVStations = new FeatureLayer(this.existingEVlayerURL, {
           mode: FeatureLayer.MODE_ONDEMAND,
           outFields: ["*"],
@@ -141,53 +158,57 @@ define(['dojo/_base/declare',
         );
         var evRenderer = new SimpleRenderer(symbol);
         this.evGraphicsLayer = new GraphicsLayer();
+        this.bufferGraphicsLayer = new GraphicsLayer();
         this.evGraphicsLayer.setRenderer(evRenderer);
         this.map.addLayer(this.evGraphicsLayer);
+        this.map.addLayer(this.bufferGraphicsLayer);
+        //traffic Layer
+        this.trafficLayer = new ArcGISDynamicMapServiceLayer(this.trafficLayerURL, {
+          id: 'trafficID'
+        }
+        );
       },
       _switchView: function (idx) {
         this.currentStack = idx;
         this.viewStack.switchView(idx);
+
       },
 
 
       startup: function () {
         this.inherited(arguments);
 
-
-
-        this.map.on("click", lang.hitch(this, this.onMapClick));
-
         var dojoStore = new Memory({
           data: [{
-              id: 1,
-              name: "Select",
-              label: "<b>Select</b>"
-            },
-            {
-              id: 2,
-              name: "IEC 60309",
-              label: "<b>IEC 60309</b> <img src ='./widgets/LocateRoute/images/IEC_60309.png' style='width:50px;height:50px;' />"
-            },
-            {
-              id: 3,
-              name: "IEC 62196",
-              label: "<b>IEC 62196</b> <img src='./widgets/LocateRoute/images/IEC_62196.png' style='width:50px;height:50px;'/>"
-            },
-            {
-              id: 4,
-              name: "CHAdeMO",
-              label: "<b>CHAdeMO</b> <img src='./widgets/LocateRoute/images/CHAdeMO.png' style='width:50px;height:50px;'/>"
-            },
-            {
-              id: 5,
-              name: "CCS",
-              label: "<b>CCS</b> <img src='./widgets/LocateRoute/images/CCS.png' style='width:50px;height:50px;'/>"
-            },
-            {
-              id: 6,
-              name: "GB/T",
-              label: "<b>GB/T</b> <img src='./widgets/LocateRoute/images/GBT.png' style='width:50px;height:50px;'/>"
-            }
+            id: 1,
+            name: "Select",
+            label: "<b>Select</b>"
+          },
+          {
+            id: 2,
+            name: "IEC 60309",
+            label: "<b>IEC 60309</b> <img src ='./widgets/LocateRoute/images/IEC_60309.png' style='width:50px;height:50px;' />"
+          },
+          {
+            id: 3,
+            name: "IEC 62196",
+            label: "<b>IEC 62196</b> <img src='./widgets/LocateRoute/images/IEC_62196.png' style='width:50px;height:50px;'/>"
+          },
+          {
+            id: 4,
+            name: "CHAdeMO",
+            label: "<b>CHAdeMO</b> <img src='./widgets/LocateRoute/images/CHAdeMO.png' style='width:50px;height:50px;'/>"
+          },
+          {
+            id: 5,
+            name: "CCS",
+            label: "<b>CCS</b> <img src='./widgets/LocateRoute/images/CCS.png' style='width:50px;height:50px;'/>"
+          },
+          {
+            id: 6,
+            name: "GB/T",
+            label: "<b>GB/T</b> <img src='./widgets/LocateRoute/images/GBT.png' style='width:50px;height:50px;'/>"
+          }
           ]
         });
 
@@ -226,11 +247,17 @@ define(['dojo/_base/declare',
       },
 
       onOpen: function () {
-        console.log('onOpen');
+        this.bindEvents();
+      },
+
+      bindEvents: function () {
         this.locate.locate();
-        on(this.locate, "locate", lang.hitch(this, this.onLocate));
-        on(this.search, 'search-results', lang.hitch(this, this.onSearchResult));
-        on(this.locator, "location-to-address-complete", lang.hitch(this, this.locationAdressComplete));
+
+        this.mapClickEvent = on(this.map, 'click', lang.hitch(this, this.onMapClick));
+        this.locateEvent = on(this.locate, "locate", lang.hitch(this, this.onLocate));
+        this.searchEvent = on(this.search, 'search-results', lang.hitch(this, this.onSearchResult));
+        this.reverseGeoCodeEvent = on(this.locator, "location-to-address-complete", lang.hitch(this, this.locationAdressComplete));
+
       },
 
       onMapClick: function (evt) {
@@ -278,6 +305,15 @@ define(['dojo/_base/declare',
 
       _backPress: function () {
         this._switchView(0);
+        this.map.graphics.clear();
+        if (this.evGraphicsLayer) {
+          this.evGraphicsLayer.clear();
+          this.bufferGraphicsLayer.clear();
+        }
+        if (this.directionGraphicsLayer) {
+          this.map.removeLayer(this.directionGraphicsLayer);
+          this.directionGraphicsLayer.clear();
+        }
       },
 
       onSearchResult: function (evt) {
@@ -289,51 +325,32 @@ define(['dojo/_base/declare',
       },
 
       _locateStation: function () {
-        if (this.firstRouteLyr) {
-          this.map.removeLayer(this.firstRouteLyr);
-          this.firstRouteLyr.clear();
-        } else {
-          this.firstRouteLyr = new GraphicsLayer({
-            id: "routeLayer"
-          });
-        }
-        if (this.secondRouteLyr) {
-          this.map.removeLayer(this.secondRouteLyr);
-          this.secondRouteLyr.clear();
-        } else {
-          this.secondRouteLyr = new GraphicsLayer({
-            id: "secondRouteLayer"
-          });
-        }
-        if (this.thirdRouteLyr) {
-          this.map.removeLayer(this.thirdRouteLyr);
-          this.thirdRouteLyr.clear();
-        } else {
-          this.thirdRouteLyr = new GraphicsLayer({
-            id: "thirdRouteLayer"
-          });
-        }
+
         var connector_type = dijit.byId("connectorType");
         var type_of_station = dijit.byId("chargerType");
-        if (this.search.get('value') == ""){ 
-                new Message({
-                  titleLabel: "Locate and Route Module",
-                  message: "Please Select Location either by clicking on map or by searching or enable your current location to search EV station"
+        if (this.search.get('value') === "") {
+          new Message({
+            titleLabel: "Locate and Route Module",
+            message: "Please Select Location either by clicking on map or by searching or enable your current location to search EV station"
           });
-         
-        } 
-        if (connector_type.item.name.trim() == "Select") {
-          connector_type.set("state", "Error");          
+
         }
-        if (type_of_station.value.trim() == "Select") {
+        if (connector_type.item.name.trim() === "Select") {
+          connector_type.set("state", "Error");
+        }
+        if (type_of_station.value.trim() === "Select") {
           type_of_station.set("state", "Error");
           return;
         }
-             
+
         this.mapPoint = this.map.graphics.graphics[0].geometry;
         var bufferDistance = dom.byId("sliderValue").innerText;
         var bufferPolygon = geometryEngine.geodesicBuffer(this.mapPoint, bufferDistance, 9036);
-        
+        var fill = new SimpleFillSymbol();
+        fill.setColor(new Color([255, 167, 127, 0.25]));
+        var gra = new Graphic(bufferPolygon, fill);
+        this.bufferGraphicsLayer.add(gra);
+        //this.map.graphics.add(gra);
         var extent = bufferPolygon.getExtent();
         this.map.setExtent(extent);
         var query = new Query();
@@ -349,23 +366,30 @@ define(['dojo/_base/declare',
           array.forEach(response.features, lang.hitch(this, function (feature) {
 
             features.push(feature.attributes);
-			
-			var graphic = new Graphic(feature.geometry);
+            var graphic = new Graphic(feature.geometry);
             this.evGraphicsLayer.add(graphic);
-			
+            //this.evGraphicsLayer.redraw();
             var geom2 = feature.geometry;
 
             var aerialDistance = geometryEngine.distance(this.mapPoint, geom2, 9036);
 
             feature.attributes.aerialDistance = aerialDistance.toFixed(2);
-           
+
           }));
-          
-          lang.hitch(this,this.sortStationsAerialDist(features, 'aerialDistance'));
+
+          lang.hitch(this, this.sortStationsAerialDist(features, 'aerialDistance'));
 
           array.forEach(features, lang.hitch(this, function (feature) {
 
-            var div = domConstruct.create("div", { style: { cursor: "pointer" } }, this.bufferResultTable);
+            // var graphic = new Graphic(feature.geometry);
+            // this.evGraphicsLayer.add(graphic);
+            // this.evGraphicsLayer.redraw();
+
+            var div = domConstruct.create("div", {
+              style: {
+                cursor: "pointer"
+              }
+            }, this.bufferResultTable);
             div.onclick = lang.hitch(this, this.getCurrentStation);
             var cell = domConstruct.create('tr', null, div);
 
@@ -403,15 +427,16 @@ define(['dojo/_base/declare',
       },
       sortStationsAerialDist: function (json_object, key_to_sort_by) {
         function sortByKey(a, b) {
-            var x = a[key_to_sort_by];
-            var y = b[key_to_sort_by];
-            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+          var x = a[key_to_sort_by];
+          var y = b[key_to_sort_by];
+          return ((x < y) ? -1 : ((x > y) ? 1 : 0));
         }
-    
+
         json_object.sort(sortByKey);
-    },
+      },
 
       getCurrentStation: function (evt) {
+        this.shelter.show();
         console.log(evt);
         var query = new Query();
         query.where = "name='" + evt.currentTarget.children[0].children[1].innerText + "'";
@@ -422,6 +447,9 @@ define(['dojo/_base/declare',
           this.endPoint.attributes = {
             'name': 'End Point'
           };
+          this.map.graphics.clear();
+          this.map.graphics.add(this.endPoint);
+          this.map.graphics.add(this.startPoint);
           this.routeParams.stops.features = [];
           this.routeParams.stops.features.push(this.startPoint);
           this.routeParams.stops.features.push(this.endPoint);
@@ -470,8 +498,12 @@ define(['dojo/_base/declare',
         }
       },
       fetchRoute: function () {
-        //this.endSymbol = new PictureMarkerSymbol('widgets/LocateRoute/images/Start.png', 15, 21);
-        //var graphic = new Graphic(evt.address.location, pictureMarkerSymbol);
+        if (this.directionGraphicsLayer) {
+          this.directionGraphicsLayer.clear();
+        }
+        this.directionsFirstRouteContent.style.display = 'none';
+        this.directionsSecondRouteContent.style.display = 'none';
+        this.directionsThirdRouteContent.style.display = 'none';
         if (this.firstRouteLyr) {
           this.map.removeLayer(this.firstRouteLyr);
           this.firstRouteLyr.clear();
@@ -505,6 +537,12 @@ define(['dojo/_base/declare',
         this.highlightedSegmentSymbol = new SimpleLineSymbol().setColor(new Color([0, 255, 255, 1])).setWidth(5);
         this.secondRouteSymbol = new SimpleLineSymbol().setColor(new Color([102, 195, 0, 1])).setWidth(5);
         this.thirdRouteSymbol = new SimpleLineSymbol().setColor(new Color([192, 183, 0, 1])).setWidth(5);
+        this.firstRouteUpCheckBox.checked = true;
+        this.secondRouteUpCheckBox.checked = true;
+        this.thirdRouteUpCheckBox.checked = true;
+        on(this.firstRouteUpCheckBox, 'click', lang.hitch(this, this.clickRouteCheckbox));
+        on(this.secondRouteUpCheckBox, 'click', lang.hitch(this, this.clickRouteCheckbox));
+        on(this.thirdRouteUpCheckBox, 'click', lang.hitch(this, this.clickRouteCheckbox));
 
         this.firstRoutereduceDown = new GraphicsLayer({
           id: "routeLayerDown"
@@ -520,6 +558,56 @@ define(['dojo/_base/declare',
           this.routeDisplay(evt);
           this.firstRouteSolveEvent.remove();
         }));
+      },
+      clickRouteCheckbox: function (evt) {
+
+        switch (evt.currentTarget.id) {
+          case 'firstRouteUpCheckBox':
+
+
+            if (this.firstRouteLyr) {
+              this.map.removeLayer(this.firstRouteLyr);
+            }
+            if (evt.currentTarget.checked === true) {
+              this.map.addLayer(this.firstRouteLyr);
+            } else {
+              this.map.removeLayer(this.firstRouteLyr);
+              if (this.map.getLayer('firstPointLayer')) {
+                this.map.removeLayer(this.pointLayer);
+              }
+            }
+            break;
+          case 'secondRouteUpCheckBox':
+
+            if (this.secondRouteLyr) {
+              this.map.removeLayer(this.secondRouteLyr);
+            }
+            if (evt.currentTarget.checked === true) {
+              this.map.addLayer(this.secondRouteLyr);
+            } else {
+              this.map.removeLayer(this.secondRouteLyr);
+              if (this.map.getLayer('secondPointLayer')) {
+                this.map.removeLayer(this.pointLayerSecond);
+              }
+            }
+            break;
+          case 'thirdRouteUpCheckBox':
+
+            if (this.thirdRouteLyr) {
+              this.map.removeLayer(this.thirdRouteLyr);
+            }
+            if (evt.currentTarget.checked === true) {
+              this.map.addLayer(this.thirdRouteLyr);
+            } else {
+              this.map.removeLayer(this.thirdRouteLyr);
+              if (this.map.getLayer('thirdPointLayer')) {
+                this.map.removeLayer(this.pointLayerThird);
+              }
+            }
+            break;
+          default:
+            break;
+        }
       },
       routeDisplay: function (data) {
         var routeResult = data.result.routeResults[0].route;
@@ -555,7 +643,8 @@ define(['dojo/_base/declare',
           }
           this.directionTextFirst.push([this.directions.features[b].attributes.text, this.directions.features[b].geometry, length, eachtime]);
         }
-        this.firstUpLength.innerHTML = "Distance: " + this.totalLength.toFixed(2) + "km";
+        this.totalDistanceOne = this.totalLength.toFixed(2);
+        //this.firstUpLength.innerHTML = "Distance: " + this.totalLength.toFixed(2) + "km";
         var decreaseBarrier;
         if (this.directions.features.length % 2 === 0) {
           decreaseBarrier = this.directions.features.length / 2;
@@ -570,11 +659,12 @@ define(['dojo/_base/declare',
         var time = this.totalTime;
         time = parseInt(time, 10);
         lang.hitch(this, this.calculateTime(time));
-        this.firstUpTime.innerHTML = "Time: " + this.totalTime;
+        this.totalTimeOne = this.totalTime;
+        //this.firstUpTime.innerHTML = "Time: " + this.totalTime;
 
         this.firstBarrier = routeResult;
         lang.hitch(this, this.generateSecondRoute());
-        this.map.addLayer(this.firstRouteLyr);
+
       },
       generateSecondRoute: function () {
         this.routeTask = new RouteTask("https://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World");
@@ -683,7 +773,8 @@ define(['dojo/_base/declare',
           }
           this.directionTextSecond.push([this.directions.features[k].attributes.text, this.directions.features[k].geometry, length, eachtime]);
         }
-        this.secondUpLength.innerHTML = "Distance: " + this.totalLength.toFixed(2) + "km";
+        this.totalDistanceTwo = this.totalLength.toFixed(2);
+        //this.secondUpLength.innerHTML = "Distance: " + this.totalLength.toFixed(2) + "km";
         var decreaseBarrier;
         if (this.directions.features.length % 2 === 0) {
           decreaseBarrier = this.directions.features.length / 2;
@@ -697,9 +788,10 @@ define(['dojo/_base/declare',
         var time = this.totalTime;
         time = parseInt(time, 10);
         lang.hitch(this, this.calculateTime(time));
-        this.secondUpTime.innerHTML = "Time: " + this.totalTime;
+        this.totalTimeTwo = this.totalTime;
+        // this.secondUpTime.innerHTML = "Time: " + this.totalTime;
         this.secondBarrier = routeResult;
-        this.map.addLayer(this.secondRouteLyr);
+
         lang.hitch(this, this.generateThirdRoute());
       },
       generateThirdRoute: function () {
@@ -827,21 +919,107 @@ define(['dojo/_base/declare',
           this.directionTextThird.push([this.directions.features[k].attributes.text, this.directions.features[k].geometry, length, eachtime]);
 
         }
-        this.thirdUpLength.innerHTML = "Distance: " + this.totalLength.toFixed(2) + "km";
+        this.totalDistanceThree = this.totalLength.toFixed(2);
+        //this.thirdUpLength.innerHTML = "Distance: " + this.totalLength.toFixed(2) + "km";
         var time = this.totalTime;
         time = parseInt(time, 10);
         lang.hitch(this, this.calculateTime(time));
-        this.thirdUpTime.innerHTML = "Time: " + this.totalTime;
+        this.totalTimeThree = this.totalTime;
+        // this.thirdUpTime.innerHTML = "Time: " + this.totalTime;
         this.thirdRoute = this.thirdRouteLyr;
         this.thirdBarrier = routeResult;
-        this.map.addLayer(this.thirdRouteLyr);
+
+        this.showAllLayer();
         this._switchView(2);
+        this.map.removeLayer(this.bufferGraphicsLayer);
         this.shelter.hide();
+      },
+      showAllLayer: function () {
+        var timeDistanceOne;
+        var timeDistanceTwo;
+        var timeDistanceThree;
+        var secDist;
+        var thirdDist;
+        this.directionFirst;
+        this.directionSecond;
+        this.directionThird;
+        this.totalDistanceOne = parseFloat(this.totalDistanceOne);
+        this.totalDistanceTwo = parseFloat(this.totalDistanceTwo);
+        this.totalDistanceThree = parseFloat(this.totalDistanceThree);
+        var bigDist = this.totalDistanceOne > this.totalDistanceTwo ? (this.totalDistanceOne > this.totalDistanceThree ? this.totalDistanceOne : this.totalDistanceThree) : (this.totalDistanceTwo > this.totalDistanceThree ? this.totalDistanceTwo : this.totalDistanceThree);
+        if (bigDist === this.totalDistanceOne) {
+          timeDistanceOne = this.totalTimeOne;
+          this.directionFirst = this.directionTextFirst;
+          secDist = this.totalDistanceTwo > this.totalDistanceThree ? this.totalDistanceTwo : this.totalDistanceThree;
+
+          if (secDist === this.totalDistanceTwo) {
+            thirdDist = this.totalDistanceThree;
+            timeDistanceTwo = this.totalTimeTwo;
+            timeDistanceThree = this.totalTimeThree;
+            this.directionSecond = this.directionTextSecond;
+            this.directionThree = this.directionTextThird;
+          } else {
+            thirdDist = this.totalDistanceTwo;
+            timeDistanceTwo = this.totalTimeThree;
+            timeDistanceThree = this.totalTimeTwo;
+            this.directionSecond = this.directionTextThird;
+            this.directionThree = this.directionTextSecond;
+          }
+        }
+        if (bigDist === this.totalDistanceTwo) {
+          timeDistanceOne = this.totalTimeTwo;
+          this.directionFirst = this.directionTextSecond;
+          secDist = this.totalDistanceOne > this.totalDistanceThree ? this.totalDistanceOne : this.totalDistanceThree;
+          if (secDist === this.totalDistanceOne) {
+            thirdDist = this.totalDistanceThree;
+            timeDistanceTwo = this.totalTimeOne;
+            timeDistanceThree = this.totalTimeThree;
+            this.directionSecond = this.directionTextFirst;
+            this.directionThree = this.directionTextThird;
+          } else {
+            thirdDist = this.totalDistanceOne;
+            timeDistanceTwo = this.totalTimeThree;
+            timeDistanceThree = this.totalTimeOne;
+            this.directionSecond = this.directionTextThird;
+            this.directionThree = this.directionTextFirst;
+
+          }
+        }
+        if (bigDist === this.totalDistanceThree) {
+          timeDistanceOne = this.totalTimeThree;
+          this.directionFirst = this.directionTextThird;
+          secDist = this.totalDistanceTwo > this.totalDistanceOne ? this.totalDistanceTwo : this.totalDistanceOne;
+          if (secDist === this.totalDistanceTwo) {
+            thirdDist = this.totalDistanceOne;
+            timeDistanceTwo = this.totalTimeTwo;
+            timeDistanceThree = this.totalTimeOne;
+            this.directionSecond = this.directionTextSecond;
+            this.directionThree = this.directionTextFirst;
+          } else {
+            thirdDist = this.totalDistanceTwo;
+            timeDistanceTwo = this.totalTimeOne;
+            timeDistanceThree = this.totalTimeOne;
+            this.directionSecond = this.directionTextFirst;
+            this.directionThree = this.directionTextSecond;
+          }
+        }
+        this.secondUpLength.innerHTML = "Distance: " + secDist + "km";
+        this.firstUpLength.innerHTML = "Distance: " + thirdDist + "km";
+        this.thirdUpLength.innerHTML = "Distance: " + bigDist + "km";
+        this.thirdUpTime.innerHTML = "Time: " + timeDistanceOne;
+        this.secondUpTime.innerHTML = "Time: " + timeDistanceTwo;
+        this.firstUpTime.innerHTML = "Time: " + timeDistanceThree;
+        this.map.addLayer(this.thirdRouteLyr);
+        this.map.addLayer(this.secondRouteLyr);
+        this.map.addLayer(this.firstRouteLyr);
+        //this.map.addLayer(this.evGraphicsLayer);
+        this.map.addLayer(this.directionGraphicsLayer);
+        //this.map.addLayer(this.endGraphicsLayer,0);
       },
       thirdRouteErrorRoute: function (err) {
         this.thirdRouteSolveEvent.remove();
         this.thirdRouteErrorHandler.remove();
-        if (this.thirdRouteThirdError === true) {} else if (this.thirdRouteSecondError === true) {
+        if (this.thirdRouteThirdError === true) { } else if (this.thirdRouteSecondError === true) {
           this.thirdRouteThirdError = true;
           lang.hitch(this, this.generateThirdRoute());
         } else if (this.thirdRouteError === true) {
@@ -864,10 +1042,91 @@ define(['dojo/_base/declare',
           this.totalTime = time.toFixed(2) + ' mins';
         }
       },
+      switchtoRoute: function (routeCheckBox) {
+
+        switch (routeCheckBox) {
+          case 'firstRouteUpCheckBox':
+            if (this.viewFirstRoute === false) {
+              this.firstRouteUpCheckBox.checked = true;
+              this.secondRouteUpCheckBox.checked = false;
+              this.thirdRouteUpCheckBox.checked = false;
+
+              this.map.removeLayer(this.firstRouteLyr);
+              this.map.removeLayer(this.secondRouteLyr);
+              this.map.removeLayer(this.thirdRouteLyr);
+              this.map.addLayer(this.firstRouteLyr);
+              this.map.addLayer(this.trafficLayer);
+              this.viewFirstRoute = true;
+            }
+            else {
+              this.map.addLayer(this.firstRouteLyr);
+              this.map.addLayer(this.secondRouteLyr);
+              this.map.addLayer(this.thirdRouteLyr);
+              this.viewFirstRoute = false;
+              this.firstRouteUpCheckBox.checked = true;
+              this.secondRouteUpCheckBox.checked = true;
+              this.thirdRouteUpCheckBox.checked = true;
+              this.map.removeLayer(this.trafficLayer);
+            }
+            break;
+          case 'secondRouteUpCheckBox':
+            if (this.viewSecondRoute === false) {
+              this.firstRouteUpCheckBox.checked = false;
+              this.secondRouteUpCheckBox.checked = true;
+              this.thirdRouteUpCheckBox.checked = false;
+
+              this.map.removeLayer(this.firstRouteLyr);
+              this.map.removeLayer(this.secondRouteLyr);
+              this.map.removeLayer(this.thirdRouteLyr);
+              this.map.addLayer(this.secondRouteLyr);
+              this.map.addLayer(this.trafficLayer);
+              this.viewSecondRoute = true;
+            }
+            else {
+              this.map.addLayer(this.firstRouteLyr);
+              this.map.addLayer(this.secondRouteLyr);
+              this.map.addLayer(this.thirdRouteLyr);
+              this.viewSecondRoute = false;
+              this.firstRouteUpCheckBox.checked = true;
+              this.secondRouteUpCheckBox.checked = true;
+              this.thirdRouteUpCheckBox.checked = true;
+              this.map.removeLayer(this.trafficLayer);
+            }
+            break;
+          case 'thirdRouteUpCheckBox':
+            if (this.viewThirdRoute === false) {
+              this.secondRouteUpCheckBox.checked = false;
+              this.firstRouteUpCheckBox.checked = false;
+              this.thirdRouteUpCheckBox.checked = true;
+
+              this.map.removeLayer(this.firstRouteLyr);
+              this.map.removeLayer(this.secondRouteLyr);
+              this.map.removeLayer(this.thirdRouteLyr);
+              this.map.addLayer(this.thirdRouteLyr);
+              this.map.addLayer(this.trafficLayer);
+              this.viewThirdRoute = true;
+            }
+            else {
+              this.map.addLayer(this.firstRouteLyr);
+              this.map.addLayer(this.secondRouteLyr);
+              this.map.addLayer(this.thirdRouteLyr);
+              this.viewThirdRoute = false;
+              this.firstRouteUpCheckBox.checked = true;
+              this.secondRouteUpCheckBox.checked = true;
+              this.thirdRouteUpCheckBox.checked = true;
+              this.map.removeLayer(this.trafficLayer);
+            }
+            break;
+          default:
+            break;
+        }
+      },
       viewFirstRouteDirections: function () {
+
+        this.switchtoRoute('firstRouteUpCheckBox');
         if (this.directionsFirstRouteContent.style.display === 'block') {
           this.directionsFirstRouteContent.style.display = 'none';
-          this.map.graphics.clear();
+          //this.map.graphics.clear();
         } else {
           this.directionsSecondRouteContent.style.display = 'none';
           this.directionsThirdRouteContent.style.display = 'none';
@@ -886,7 +1145,7 @@ define(['dojo/_base/declare',
           row.className = 'driving-row-heading';
           cell.className = 'driving-row-heading-cell';
           var countDown = 0;
-          array.forEach(this.directionTextFirst, lang.hitch(this, function (direction) {
+          array.forEach(this.directionThree, lang.hitch(this, function (direction) {
             var row = domConstruct.create("tr", null, this.routeDirectionsTable);
             var cell = domConstruct.create('td', null, row, "first");
             var slno = countDown + 1;
@@ -906,9 +1165,11 @@ define(['dojo/_base/declare',
         }
       },
       viewSecondRouteDirections: function () {
+
+        this.switchtoRoute('secondRouteUpCheckBox');
         if (this.directionsSecondRouteContent.style.display === 'block') {
           this.directionsSecondRouteContent.style.display = 'none';
-          this.map.graphics.clear();
+          //this.map.graphics.clear();
         } else {
           this.directionsFirstRouteContent.style.display = 'none';
           this.directionsThirdRouteContent.style.display = 'none';
@@ -927,7 +1188,7 @@ define(['dojo/_base/declare',
           row.className = 'driving-row-heading';
           cell.className = 'driving-row-heading-cell';
           var countDown = 0;
-          array.forEach(this.directionTextSecond, lang.hitch(this, function (direction) {
+          array.forEach(this.directionSecond, lang.hitch(this, function (direction) {
             var row = domConstruct.create("tr", null, this.directionsRouteSecondTable);
             var cell = domConstruct.create('td', null, row, "first");
             var slno = countDown + 1;
@@ -947,9 +1208,11 @@ define(['dojo/_base/declare',
         }
       },
       viewThirdRouteDirections: function () {
+
+        this.switchtoRoute('thirdRouteUpCheckBox');
         if (this.directionsThirdRouteContent.style.display === 'block') {
           this.directionsThirdRouteContent.style.display = 'none';
-          this.map.graphics.clear();
+          //this.map.graphics.clear();
         } else {
           this.directionsFirstRouteContent.style.display = 'none';
           this.directionsSecondRouteContent.style.display = 'none';
@@ -968,7 +1231,7 @@ define(['dojo/_base/declare',
           row.className = 'driving-row-heading';
           cell.className = 'driving-row-heading-cell';
           var countDown = 0;
-          array.forEach(this.directionTextThird, lang.hitch(this, function (direction) {
+          array.forEach(this.directionFirst, lang.hitch(this, function (direction) {
             var row = domConstruct.create("tr", null, this.directionsRouteThirdTable);
             var cell = domConstruct.create('td', null, row, "first");
             var slno = countDown + 1;
@@ -989,7 +1252,7 @@ define(['dojo/_base/declare',
       },
       zoomToRouteSegment: function (evt) {
 
-        this.map.graphics.clear();
+        //this.map.graphics.clear();
         var graphic = new Graphic(evt.currentTarget.name);
         if (graphic.geometry === null) {
           graphic.setGeometry(evt.currentTarget.name);
@@ -1002,16 +1265,40 @@ define(['dojo/_base/declare',
         var geom = evt.currentTarget.name;
         if (geom.getExtent !== undefined) {
           this.map.setExtent(geom.getExtent());
-          this.map.graphics.add(graphic);
+          this.directionGraphicsLayer.clear();
+          this.directionGraphicsLayer.add(graphic);
+          this.directionGraphicsLayer.redraw();
         } else {
           var point = new Point(graphic.geometry.paths[0][0][0], graphic.geometry.paths[0][0][1], this.map.spatialReference);
           this.map.centerAndZoom(point, 15);
-          this.map.graphics.add(graphic);
+          this.directionGraphicsLayer.clear();
+          this.directionGraphicsLayer.add(graphic);
+          this.directionGraphicsLayer.redraw();
         }
       },
       _backPressData: function () {
+        this.map.graphics.clear();
+        this.map.addLayer(this.bufferGraphicsLayer);
+        if (this.trafficLayer){
+        this.map.removeLayer(this.trafficLayer);
+        }
         this._switchView(1);
-
+        if (this.firstRouteLyr) {
+          this.map.removeLayer(this.firstRouteLyr);
+          this.firstRouteLyr.clear();
+        }
+        if (this.secondRouteLyr) {
+          this.map.removeLayer(this.secondRouteLyr);
+          this.secondRouteLyr.clear();
+        }
+        if (this.thirdRouteLyr) {
+          this.map.removeLayer(this.thirdRouteLyr);
+          this.thirdRouteLyr.clear();
+        }
+        if (this.directionGraphicsLayer) {
+          this.map.removeLayer(this.directionGraphicsLayer);
+          this.directionGraphicsLayer.clear();
+        }
       },
 
       onClose: function () {
@@ -1029,27 +1316,7 @@ define(['dojo/_base/declare',
         if (this.reverseGeoCodeEvent !== null) {
           this.reverseGeoCodeEvent.remove();
         }
-      },
-
-      onMinimize: function () {
-        console.log('onMinimize');
-      },
-
-      onMaximize: function () {
-        console.log('onMaximize');
-      },
-
-      onSignIn: function (credential) {
-        /* jshint unused:false*/
-        console.log('onSignIn');
-      },
-
-      onSignOut: function () {
-        console.log('onSignOut');
-      },
-
-      showVertexCount: function (count) {
-        this.vertexCount.innerHTML = 'The vertex count is: ' + count;
       }
+
     });
   });

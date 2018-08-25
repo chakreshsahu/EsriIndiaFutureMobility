@@ -34,7 +34,7 @@
 }
 
 .headrow {
-  background-color: #1d528b;
+  background-color: #7f807e;
 }
 .headdatalabel {
   color: #fff;
@@ -81,6 +81,36 @@
 }
 .uproutebox1 > .routecolor {
   background-color: #044476;
+  color: #fff;
+  height: 20px;
+  font-size: 10px;
+  line-height: 20px;
+}
+.uproutebox2 {
+  float: left;
+  height: 100%;
+  width: 61%;
+  border-left: 1px solid #d8d8d8;
+  background-color: #f2f2f2;
+}
+
+.uproutebox2>.routecolor {
+  background-color: #66c300;
+  color: #fff;
+  height: 20px;
+  font-size: 10px;
+  line-height: 20px;
+}
+.uproutebox3 {
+  float: left;
+  height: 100%;
+  width: 61%;
+  border-left: 1px solid #d8d8d8;
+  background-color: #f2f2f2;
+}
+
+.uproutebox3>.routecolor {
+  background-color: #c0b700;
   color: #fff;
   height: 20px;
   font-size: 10px;
@@ -137,3 +167,93 @@
   color: #6b6b6b;
   cursor: pointer;
 }
+.routecheckbox {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  margin-left: 3px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 16px;
+}
+/* Hide default HTML checkbox */
+
+.switch input {
+  display: none;
+}
+
+
+.smalllabel {
+  font-size: 12px;
+  /*float: left;*/
+  margin-top: 2px;
+  margin-left: 40px;
+  margin-right: 10px;
+}
+
+.togglebox {
+  margin-top: 5px;
+  text-align: right;
+  padding-right: 10px;
+}
+
+/* The slider */
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 12px;
+  width: 12px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked+.slider {
+  background-color: #2196F3;
+}
+
+input:focus+.slider {
+  box-shadow: 0 0 1px #2e3192;
+}
+
+input:checked+.slider:before {
+  -webkit-transform: translateX(14px);
+  -ms-transform: translateX(14px);
+  transform: translateX(14px);
+}
+
+/* Rounded sliders */
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.routeLegend {
+  width: 30%;
+  height: 5px;
+  line-height: 34px
+}
+
