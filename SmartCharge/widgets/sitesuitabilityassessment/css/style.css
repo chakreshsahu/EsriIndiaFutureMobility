@@ -1,10 +1,32 @@
-.sitesuitabilityassessment {
-  h3 {
-    font-size: 1.2em;
-  }
-  h3, p {
-    margin-top: 0;
-  }
+.searchLocate {
+    display: inline-block;
 }
+
+.arcgisSearch {
+    float: left!important;
+    padding-bottom: 15px !important;
+}
+
+.LocateButton {
+    float: right!important;
+    margin-left: 10px;
+    margin-top: 1px;
+}
+
+.view {
+    margin-top: 15px !important;
+    padding-bottom: 15px !important;
+}
+
+.searchText {
+    padding-bottom: 15px !important;
+    font-size: medium;
+    text-align: center;
+}
+
+.divContent {
+    margin-left: 15px !important;
+}
+
 
 /* add additional custom styles */

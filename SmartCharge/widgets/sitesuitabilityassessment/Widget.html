@@ -6,11 +6,13 @@
             </div>
         </div>
         <div data-dojo-attach-point="selectSiteTabNode">
+            <p class="searchText">Search location or Click on map to locate a site</p>
             <div data-dojo-attach-point="searchbar" id="searchbar" class="search-node"></div>
             <div data-dojo-attach-point="locatebuton" id="locatebuton"></div>
-            <p>Click on map to locate site</p>
             <button type="button" id="goBackBtn" class='jimu-btn submitBtn' style="margin:5px; width: 70%;" data-dojo-attach-event="click: executeModel">Get Suitability</button>
+            <label id="totalProcess"></label>
         </div>
+
         <div data-dojo-attach-point="resultTabNode">
             <div id="results">
                 <table border="1" cellspacing="0px">
@@ -26,8 +28,12 @@
                         <td><label id="potentialevCount"></label></td>
                     </tr>
                     <tr>
-                        <td> Site Suitability Score </td>
+                        <td> Site Suitability Score out of 5 </td>
                         <td><label id="score"></label></td>
+                    </tr>
+                    <tr>
+                        <td> Site Suitability Score %</td>
+                        <td><label id="scorePercent"></label></td>
                     </tr>
                 </table>
             </div>

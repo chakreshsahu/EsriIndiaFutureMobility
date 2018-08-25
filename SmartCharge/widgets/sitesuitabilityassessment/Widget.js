@@ -9,6 +9,7 @@ define(['dojo/_base/declare',
         'dojo/_base/lang',
         'dojo/_base/html',
         'dojo/dom',
+        "dojox/gfx",
         "esri/dijit/Search",
         "esri/dijit/LocateButton",
         "esri/Color",
@@ -22,19 +23,21 @@ define(['dojo/_base/declare',
         "esri/graphic",
         "esri/tasks/query",
         "esri/layers/FeatureLayer",
+        "esri/layers/ArcGISDynamicMapServiceLayer",
         "esri/geometry/geometryEngine",
         "esri/geometry/webMercatorUtils",
         "esri/tasks/Geoprocessor",
         "esri/SpatialReference",
         'jimu/LayerInfos/LayerInfos',
         "dojo/dom-construct",
+        "esri/symbols/jsonUtils",
         'jimu/loaderplugins/jquery-loader!https://code.jquery.com/jquery-git1.min.js',
         'dojo/on',
         './NlsStrings',
         './LayerListView',
         'jimu/BaseWidget'
     ],
-    function(declare, lang, html, dom, Search, LocateButton, Color, Point, Locator, SimpleFillSymbol, SimpleMarkerSymbol, SimpleLineSymbol, TabContainer3, LoadingShelter, Graphic, Query, FeatureLayer, geometryEngine, webMercatorUtils, Geoprocessor, SpatialReference, LayerInfos, domConstruct, $, on, NlsStrings, LayerListView, BaseWidget) {
+    function(declare, lang, html, dom, gfx, Search, LocateButton, Color, Point, Locator, SimpleFillSymbol, SimpleMarkerSymbol, SimpleLineSymbol, TabContainer3, LoadingShelter, Graphic, Query, FeatureLayer, ArcGISDynamicMapServiceLayer, geometryEngine, webMercatorUtils, Geoprocessor, SpatialReference, LayerInfos, domConstruct, jsonUtils, $, on, NlsStrings, LayerListView, BaseWidget) {
         //To create a widget, you need to derive from BaseWidget.
         return declare([BaseWidget], {
 
@@ -55,6 +58,7 @@ define(['dojo/_base/declare',
             selectSiteTabNode: null,
             resultTabNode: null,
             evSitePanel: null,
+            layer: null,
             // this property is set by the framework when widget is loaded.
             // name: 'sitesuitabilityassessment',
             // add additional properties here
@@ -149,14 +153,39 @@ define(['dojo/_base/declare',
                 this.operLayerInfos = operLayerInfos;
                 var div = domConstruct.create("div", { style: { cursor: "pointer" } }, this.exploreMapTabNode);
                 for (var i = 0; i < this.config.queries.length; i++) {
-                    var cell = domConstruct.create('tr', null, div);
-                    cell = domConstruct.create('td', null, div);
-                    cell.innerHTML = "<img src=" + this.config.queries[i].Layer[i].image + ">";
-                    cell = domConstruct.create('td', null, div);
-                    cell.innerHTML = this.config.queries[i].Layer[i].name;
-                    cell = domConstruct.create('td', null, div);
-                    cell.innerHTML = "<input type='checkbox'  value= '" + this.config.queries[i].Layer[i].url + "' class= 'checkBoxes' title='Show layer'/>";
-                    cell.onClick = lang.hitch(this, this.displayLayer);
+                    var newdiv = domConstruct.create("div", { style: { cursor: "pointer" } }, this.exploreMapTabNode);
+
+                    var cell = domConstruct.create('tr', null, newdiv);
+                    cell = domConstruct.create('td', null, newdiv);
+                    cell.innerHTML = "<input type='checkbox' name= '" + this.config.queries[i].Layer[0].name + "' value= '" + this.config.queries[i].Layer[0].url + "' class= 'checkBoxes' title='Show layer'/>";
+                    cell = domConstruct.create('td', null, newdiv);
+                    cell.innerHTML = this.config.queries[i].Layer[0].name;
+                    cell = domConstruct.create('td', null, newdiv);
+                    cell.innerHTML = "<label class='expand'><i class='fa fa-minus-circle' aria-hidden='true'></i></label>";
+                    var newdiv1 = domConstruct.create("div", { 'class': 'divContent' }, this.exploreMapTabNode);
+                    if (this.config.queries[i].Layer[0].symboltype === "unique") {
+                        for (var j = 0; j < this.config.queries[i].Layer[0].image.length; j++) {
+                            var b = this.config.queries[i].Layer[0].image[j];
+                            var descriptors = jsonUtils.getShapeDescriptors(jsonUtils.fromJson(b.symbol));
+                            cell = domConstruct.create('tr', null, newdiv1);
+                            cell = domConstruct.create('td', null, newdiv1);
+                            cell = domConstruct.create('td', null, newdiv1);
+                            var mySurface = gfx.createSurface(cell, 30, 30);
+                            var shape = mySurface.createShape(descriptors.defaultShape).setFill(descriptors.fill).setStroke(descriptors.stroke);
+                            shape.applyTransform({
+                                dx: 10,
+                                dy: 10
+                            });
+                            cell = domConstruct.create('td', null, newdiv1);
+                            cell.innerHTML = this.config.queries[i].Layer[0].image[j].label;
+                        }
+                    } else {
+                        cell = domConstruct.create('tr', null, newdiv1);
+                        cell = domConstruct.create('td', null, newdiv1);
+                        cell.innerHTML = "<img src=" + this.config.queries[i].Layer[0].image + ">";
+                    }
+
+
                 }
 
                 $('.checkBoxes').change(lang.hitch(this, function(evt) {
@@ -165,13 +194,39 @@ define(['dojo/_base/declare',
 
                 }));
 
+                $('.expand').click(lang.hitch(this, function(evt) {
+                    if (evt.currentTarget.firstElementChild.className === "fa fa-plus-circle") {
+                        evt.currentTarget.firstElementChild.className = "fa fa-minus-circle";
+                    } else {
+                        evt.currentTarget.firstElementChild.className = "fa fa-plus-circle";
+                    }
+                    if (evt.currentTarget.parentElement.parentElement.nextElementSibling.style.display === 'none') {
+                        evt.currentTarget.parentElement.parentElement.nextElementSibling.style.display = 'block';
+                    } else {
+                        evt.currentTarget.parentElement.parentElement.nextElementSibling.style.display = 'none';
+                    }
+                }));
             },
 
             checkBoxClick: function(checkedChkBox, evt, paginationFlag) {
+                var layerURL = evt.target.value;
+
                 if (evt.target.checked) {
-                    var layerURL = evt.target.value;
-                    var dynamicMSLayer = new FeatureLayer(layerURL);
-                    this.map.addLayer(dynamicMSLayer);
+                    if (evt.target.name === "Landuse Landcover") {
+                        this.layer = new ArcGISDynamicMapServiceLayer("https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/LanduseLandcover/MapServer", {
+                            id: evt.target.name
+                        });
+
+                    } else {
+                        this.layer = new FeatureLayer(layerURL, {
+                            id: evt.target.name
+                        });
+                    }
+                    this.map.addLayer(this.layer);
+
+                } else {
+                    this.layer = this.map.getLayer(evt.target.name);
+                    this.map.removeLayer(this.layer);
                 }
             },
 
@@ -308,6 +363,7 @@ define(['dojo/_base/declare',
                     };
 
                     this.gp.submitJob(params, lang.hitch(this, this.getModelOutput));
+                    //  this.gp.submitJob(params, lang.hitch(this, this.getModelOutput), lang.hitch(this, this.gpJobStatus), lang.hitch(this, this.ModelError));
                 }
             },
 
@@ -316,11 +372,40 @@ define(['dojo/_base/declare',
                 this.gp.getResultData(resultFeatures.jobId, "outputAvgScore", lang.hitch(this, this.displayData));
             },
 
+            ModelError: function() {
+                this.shelter.hide();
+            },
+
             displayData: function(result) {
                 var finalScore = result.value;
                 var score = Number(finalScore);
                 document.getElementById('score').innerHTML = score.toFixed(2);
+                var percent = ((score / 5) * 100).toFixed(2);
+                document.getElementById('scorePercent').innerHTML = percent + " %";
                 this.showResults();
+            },
+
+            gpJobStatus: function(jobinfo) {
+                var jobstatus;
+                switch (jobinfo.jobStatus) {
+                    case 'esriJobSubmitted':
+                        document.getElementById('totalProcess').innerHTML = "Out of 5 Process, Executing 1";
+                        jobstatus = 'Model Initiate.....';
+                        break;
+                    case 'esriJobExecuting':
+                        document.getElementById('btnCancelJob').disabled = false;
+                        for (var i = 0; i < jobinfo.messages.length; i++) {
+                            jobstatus = jobinfo.messages[i].description;
+                            document.getElementById('totalProcess').innerHTML = "Out of 5 Process, Executing 2";
+                        }
+                        jobstatus = 'Executing model.....';
+                        break;
+                    case 'esriJobSucceeded':
+                        document.getElementById('totalProcess').innerHTML = "Out of 5 Process, Executing 3";
+                        jobstatus = 'Model executed successfully';
+                        break;
+                }
+                document.getElementById('loaderMsg').innerHTML = jobstatus;
             },
 
             onSearchComplete: function() {
