@@ -1,10 +1,247 @@
 {
   "queries": [
     {
+      "category": "Potential EV Sites",
+      "Layer": [
+        {
+          "name": "Potential EV Sites",
+          "url": "https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/PotentialEVSites/MapServer/0",
+          "image": [
+            {
+              "symbol": {
+                "type": "esriPMS",
+                "url": "e4d6c85266126c3b71d4114c53538860",
+                "imageData": "iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAq1JREFUOI21lUtIVFEYx39HR6/jOPlAa0YofKUZUmBNhmNSUBARrVq0izZuChQhEFpEuKigTQ+cXZseiyCiWgSS1EKHbNoUBAUZIdZkppLmzNzm8bU443DvPMSEPrice879n9/9n++8HPyncKxHJASbMaQRk2oM5jD5qPCHNwQWggbIWQz6MKUNM/1BlyJMvAGuQ/d9hZJ1gcU7sYuwPAKaMkB7KMAH3IXgOWH8pKLn65pgMYLdhGUUcBUaTVbsB/VamPAr/F/ygoVJD2bioQ3a54QLLbDNDdPLcGUKApFseD3wVBjfp+iJ5gEnhxV4ALhaDXWlkBKYnIfQAsSS0OWGPRWwlIDBBWv3DlADwGUbWJj0QOJMRtbfCm/ndTZjKTjggRffwFms2zrrYPBVtvPzQuiawhe3OE6eAIptsqSA1wk/YjA5CyVFsMUJ33JSsRrVGPFDmIxaHONT2TKRdG5XoNerHTe4IVwQDKbsBQtYIZ4ckdOhh12WHoi7BFBQWpwjtRj0gm3yVAyy1vniH920FNf1pbjuuhwv7NggimmdPENmVPZm2FwGSkFtmf5BraEd15YV5CqTGZtjZTIGDNhU4SjsFF3uBmYi0FEDs1HYUZWf7JUxwrZUOJ9DdA6oyzRtdWnHDS6d68YKXa8vL2T4nQr3vLc7pjMmTFwCbmVkU8vQWgkLJtz+BC0uaBP4/Bu2V+YDD62+ZJ0VkQCUHweOooD2Su3wwXe4EdHbu9cL7ZtyiAIjRfif5QUrjqSEl6eg5AmJVC9NaYCjSJfF6ZXeXAnRhAWq7ilW+q2snNNNcfCXEDosNaFhZTIAGJmPgQgEglb5IqiLRXTfzObkPY8VvjgmQ0JwBDgNcgxoAqqAn8AH4DE47ii6FvMx1ryaFN3TwHD6+adY1523kfgLsqnWNl86BQUAAAAASUVORK5CYII=",
+                "contentType": "image/png",
+                "width": 16,
+                "height": 16,
+                "angle": 0,
+                "xoffset": 0,
+                "yoffset": 0
+              },
+              "value": "Apartments",
+              "label": "Apartments",
+              "description": ""
+            },
+            {
+              "symbol": {
+                "type": "esriPMS",
+                "url": "7e67309e3f9312ae60deb7e7d232161f",
+                "imageData": "iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAyJJREFUOI21lWtoFFcYhp85u2YaLc265rpV6iWpgap4x0a8Itq6riK1KJUiBRVKNQk0i+4fb8EuuAFbrxQpNI2NVZGgS4i1RrBCK8GivWxJW1NiE11j2mgN6k52PMcf7V4mGUMi+MKBmXO+7+Gd9wznOHlOcg6kyFfGOKHrY0xlDM9A74w5jd8agkSfCbx+PXqHiw9A3wjGeCkNBGBi4IyjvBVcERqfhEPUAmpAYF9ZwaSOIdE6YCwYdiWagBkojvoq2NQDq76u4ma/YJ9fL0FFzwHD+vvUNM3KgKaVfmbXhWi1BXtLyUcZpwYBTchjKsJrtjPzq5086utYpxJF/iChCU3o7qYcCFrA3lLyheI9iw3XmxR6piKEA6UURs8Dmq4fRCrb3HEK/ASoIkg8CXbqLJcKR+I998WF7Ck9RtzsIfOFoWhoaELjl99XseuLEluwhOG+uL4gjHEuCTZhhkgr+nDtx0T+uEbw2Hy2rG7ksZR83rCbPZuPs25RDdXn37WFC2lMB1LgRLYfbbiKOysbT95I2m7dYF9ZC+4sN0rBNs9naJrGysXvMGn8dNqjN6g+u4uuh9+lkSmwZCw0YiiY8OrkZM0ozysWN1kvuZLPRaOLKRpdjCdvFP7Dr6XikPojMFJg+VhvF+K/TZFKcvmHi9zr7mLaxNnkZad+lDv/3Kbpx0u4s3J4feo8isYU98rZaLc4dgqjUUJ5a1sLt+60McKdy8wpc6gNH2FxyYpk47dXvuGtJWtpbonw/dWL5Ge/bAFniIJGiKbArk7Od+XQWbqvMAcg9H4Eh3DwMNbNxlCqeeHEHQjhIFPPJHBksgWKxk91oWjE4ri6mpjXz06hOAAQ+HQOhblemm/XWHov/LyD1tCvdNyP0FvSZGsygfSF+hCHfRUsA94wZVcfaEJ/dp7oOyk5VL+XBlswIB8MYc0wkzMo5tpS7fVlOIey9Ik+p9uFIP8SYNGKuF4pMcoB/Wk0AXdN2F5fxf7ea/YHfZD4aYytbwc4FIuzDlgKjAVcwN9As5ScvqeoubSXu3aIfq+mk0H+Air/H4PSgO68Z9ETnSUTGvn3ldYAAAAASUVORK5CYII=",
+                "contentType": "image/png",
+                "width": 16,
+                "height": 16,
+                "angle": 0,
+                "xoffset": 0,
+                "yoffset": 0
+              },
+              "value": "AutoMobileServiceCentres",
+              "label": "AutoMobileServiceCentres",
+              "description": ""
+            },
+            {
+              "symbol": {
+                "type": "esriPMS",
+                "url": "32e7735887868a655bd12b06067d858e",
+                "imageData": "iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAA1hJREFUOI211X1MVWUcwPHvc87lJZwBLevKVQo02YzVVCwW2oR5fc/ZRhtbNXO9rFbj0h8KZ3My4o8D5sY0w63Nlauc/uFY2cauVxmr1gpoOS4V5ES8dvEqJldJgnPveU5/AJd7LhdGbv22sz0vv/M5v/PsnOdx8D+FYz5J6xs8yzIUJU9Ksh2KHMKI9rXu//j6/cFNb6S5jYXvYsm3gAIpJQBRCTgclrvB02UK5XBbddNJwJoXXNboeUodpwVk/iyPFcBa1ZJfuBs97ylWSrm35lBwTtjd4HkOi3PAglnfJj4siiVmxwZ9b0m79uFAUni7Xuk04Ew8+sRDTqpfeBXXIieBG4N80HKc4N/hBF3mpAjjbEVt7TOn6ur+mQEbQtQDzvixNzfsJNfpAiAvZynvlO5i/9nPktVeOJwergJ0GzxZ7Z7E7KwFC239jPQHkqETdQv2ommH0PVIDDZQd4JUE5Pb/Z3sXrwEIQSmlLT7u2aFgWx35mipD85NL4WQa5Nlnrz4LdfDf7HSlUfnld/oGOyfC0YRFBEPK+CUk+0MRyqjUQOAA1tfYU1BIWkpqZStLqaz10+D7zSKUEhXHbG8qYhY1mKIW2OJMgYTdPnT69i0poTuy72MRw2u3RhkmesxroaCSCnRNlWwavlKPvW10HrpFxusCjHjq/hzqjF0d5jwyF02FpVMTNwMceybU7xcuoPC/AIA+oMBxqPRmUshJ5wYbAp5QbWoAtjjfhF/fx8rcvMAWPKIk21F68l+MDMG3Lk3wttbX6Kt2W+DJeYFG7xUhs+HRNaQhEU//n4RRQjbDWmpqbb+mDHOz3/0JBbc7dOO/mqDT2gnxjY3VtZhiaPXboV4fUu5vRJp32eefXIV+ulPbGMmSs1U2/bneVcfOebuen/HTwO9W7bfHiLn4UfjZqdhaVlcCQboDgViY4qg2Vfd1JoUxo00D6ZXBEZuf/3acf35dbkFFC8vZIXrcSKmyeXgVXoGLtHa00F/+OY0avGl13J64qkZu1vbPv0OmrZxc+a9+h8CfVXfB/rSEnPiYliBWq92+KPEieQbva5HvFBTdrCyWTXV3ShyGxb5QBYot4BexZJfjUaUz7870DScjJjzaGrbdyQA1E9e/ynmdebdT/wLmpQ8UTJI6poAAAAASUVORK5CYII=",
+                "contentType": "image/png",
+                "width": 16,
+                "height": 16,
+                "angle": 0,
+                "xoffset": 0,
+                "yoffset": 0
+              },
+              "value": "EducationalInstitutions",
+              "label": "Educational Institutions",
+              "description": ""
+            },
+            {
+              "symbol": {
+                "type": "esriPMS",
+                "url": "863085c8acf047ad98e9aae64e44f8f8",
+                "imageData": "iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAodJREFUOI21lU9IVEEcxz/zVn2FSQplu1JBdhAsDDJLLMKgQ0Z02Q4FQYTSpdjdDtYahIjBHhJEM6VDQfTnJpUdAsnoEIX9gwJJI6hk4xEa6qF0dt2ZDru57z13bRP6whzmN/M+v3/zZvL4T8rLaVdQbzYNNkkoMRUTcp4xrgpreeAmbVLEaVNxSkKFVEmzTH6lCerXGHTRyV0QOiewL6irLLiHolxmdiuAGhS3CXKGfH2EDvFtSbAZ1HUWDAKFWbNxqpYEL2nWu7ksvmQGB7RXQr8bOtwI2ytBpxIWAjwGxOLQ3Q/nhikjxkNa9U7axOxisNDtILx2U8sW2FYBbz/A/ReggYSCQhNCfihft7B1K9OEgIgTHNBe4KQ7z2P1YBbA2DhERpxrTQ0QTzhMzbToDiIingZ7OIzC4wYXF6XTd0sDSjlMJeYv9kkYTIOVrkk2Oy2fBxIJiH6H9aXgLwWlYV5BWREUrlzsTMIOHGBXbQHCu6AgP1nT+urk+Ku09oG9xgZzONOithJ+zMDqVTkAUzIFs9IONtFRaSvFxSqwJmGjL3cogEREHRFLJYaAEIBpgH8PNFyDgcbMjcsmX4Ihyw5mmscUMwGsbauGT1GwEhCLuVvqVJ7zHL23esSII2JuijkCug1Bz4Y18DH15wsj2bxsis3bJgbhBYeOXd30cZZD159z4JIfXlXD6Fd4+g7OHwfDFfrnKPQ9+zPTvXQajzKDEYoV+uiTGQbqbrDXvnLhTfaoQd/BK4J2y+JrMyJmaNH7zZ+6XQoRAswliFNAK13GFfdC5os+IuISwgR0Lx5OoDgIlAPFGEwCoygeYHCLTjGVCbH009QtxoH21Pgn5fbmLUO/AbrJypj25ZDMAAAAAElFTkSuQmCC",
+                "contentType": "image/png",
+                "width": 16,
+                "height": 16,
+                "angle": 0,
+                "xoffset": 0,
+                "yoffset": 0
+              },
+              "value": "Fuel Station",
+              "label": "Fuel Station",
+              "description": ""
+            },
+            {
+              "symbol": {
+                "type": "esriPMS",
+                "url": "edbe8928fdffaf5e5b2a11a6419d1b4e",
+                "imageData": "iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAwRJREFUOI21lX9oW1UUxz/nvfS9NlnbrLCRF+rY6kYHDleGG52KbrDhGOL+UejAIa2QDXVb/UPs/ppSRAaCiKWSgH/I1A022OZkwn78P0TYKKtUHSgS8/ajNnTYJDdp3vEPmzZtk64beODC4d53Pvd7zrnv3hD/k4WW85E/zJNqu+tEzErFvS+B+cU7hP9Y4OynuIUwbytuQjGdYFAFMKigmSQ/IXzmJfhWQJcF9pPe03n8c0CHHd1PZHMfjWu6MOlbTI18xfTfSQG2onztJ3knLbzanuCvJcGZlPusqn/ZXXciEn5qH663ARELgPCG7YTXd1Pw3yU3eh7z+wBAtwU/pod5rv0t/qgJzqSIRbpOXgp3vhgJtayuXSMRGuOdNMbfZ/pBL1M/XyE38nrcsrmYTrGtPUF+seKAwfLU3dZ/bp7HaooS5CeRkIPYDkExh4RcCEoEpSksp4WgMIGWTSV6kxXQD3w8D5xJEUPpLfx6GAl1Eeu7wZ0v19K08QOcJ7aQ/X4j0ZduULr3G4XRPmJvFrl36jWC3IWqbHjPP80nXg+lOcXKK4ANIHZb7TJYNgSlOX+xreSBuxPM5WrwVmTGt5trl9cKodNFRLzZhi40xTwDVIGF2KxrO7UVi4UGZaiX0X9kD6qbJxQqx1w1qBOkiGWBTtcH4+bBVJ8KNw0zHa4HRkEsoFwXK5j0PMWCuabQDyANUXK3r2M17yAoTFC8M4bdeoDi3TGC/ARW8/Pkbl9HnDbILdzauwb+HNg0cdXJcb9h1ZFVbXs+wmpaQXh992xAy5Z9i9Q1tm9i4lKE0vhQZWokftAfnad47QEKmSQftu4YGBLHRculuunOZtng0rrzGONnhippD1TW5v15Xgdf+GfjL6PseSh14SbKsHeQH2qCZTeBn6JH4TvghUeAfmOyHK2eW3S7eQkm/dPs0kl3EEw/4C7BzIpy3DvE5wsXat7HXg8lMAN+imHgDVX2Ah1AFGEcGBPlgu1wcnUv2VqMJZ8mL8GfwODMeCRb1pv3OPYvp1oH48MGclMAAAAASUVORK5CYII=",
+                "contentType": "image/png",
+                "width": 16,
+                "height": 16,
+                "angle": 0,
+                "xoffset": 0,
+                "yoffset": 0
+              },
+              "value": "Government Office",
+              "label": "Government Office",
+              "description": ""
+            },
+            {
+              "symbol": {
+                "type": "esriPMS",
+                "url": "dd3e78a2c390918f0048b598c4212e06",
+                "imageData": "iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAmpJREFUOI211U+IV1UUwPHPGYVLDWj9RGht1CIMyk0ExSAt7I8WtogWuVDaSFCLCNPMcSbKIiIFRcgWSmHRoigqCwpr1bJFQVQ0i4gasJ4lzMSB+t0W7ze/fvOapinpwIV7z7n3e849757zVvufZPVyxsrl2I47sAE9/Fj5KngLbwbzKwZXVuFh7MNa7eGv8Q3WB3fjXvxQORC8+I/gyhq8hi34DFN4N/i1s2c7DuBEn4ng/iCXBNd2/TpuqaU8E5n7gn7XeXABpyqvVo4HO2tr2vF3ET82gE6PZU4Oo+v1rhnuaJpvg+8HDhK7+u18Z+XjhbQMwZUr8Ag+icyDQ1ApmzTN2RHne/F05wa7MYHpyulgfjTiHRhXyuORWbvXX06CrEzjJO7CK6PgrTgn8+xSh1cgb+CFyp1d8FX4NOhXHl1Q1swNsRgw0bnOyWA2uDB431ez+OOtq/w0mB9aUHagcOtgtNLrfaBpZgerc7iyC/452kq7GOmh6YJnsPG/EiuXaNP5Xhd8BlO117vB3NzmoTbzOjw/AjgRpZwe2pvmy8HsdlyKd7rgl7Ff00zFSA5rKeSwUgUzkflRJ9oxTOIX7ev4ExzM9Es5HpkPVh4Ijq04DaU8FZnXYk9wvhuxyNyLm3C4ts6OtQH5fWTbsHdUopYyFZl78D6eW7AtBjNf20J5G0cr24yPT0Zmt1mNKWWzzCci80Z8iHtiJIC/tM1oe+zNtZRDkblb02ypfIfPK+eDdbhe5nrM4SCeDH4b5SzZ6IN5mQ9VjuA+3IZNwWXaIvoCz+KlYHYpxrK/pmjf9vRg/CtZFnwx8gd1DMyyWuig3AAAAABJRU5ErkJggg==",
+                "contentType": "image/png",
+                "width": 16,
+                "height": 16,
+                "angle": 0,
+                "xoffset": 0,
+                "yoffset": 0
+              },
+              "value": "Hospital",
+              "label": "Hospital",
+              "description": ""
+            },
+            {
+              "symbol": {
+                "type": "esriPMS",
+                "url": "6a075f62ab4f732890c00c7274d5676b",
+                "imageData": "iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAeJJREFUOI211UFIFFEcx/HvX7ceFkJ7CHa7aYcgokO0FrtLGBhIRKcO3aJDXQryIniL2IMFXcJQ8Fp2k6gOgSh0cCfMTkGQF7FS5rCCdMjd16p/D+vKW3dmnFX6wTCPefM+MP/35r0E/ymJOC956Gk1dGFJYihhWcgh/oFgDzUKDzDcV8sZ7E5H7a5F9CvwIgtvBNFYcDGt59XnLdC9CzZGgAzw2oOHs+itPLISCXtGs+ozBRwP+5o9uSzwpYjmcshSIDyHpjYsky2g9ZwCPsyiPXmk3ARvogWQVItoPecEBoDhBngOTW3A3bBRyadQWYTyeCQ+OI8+zyDVXXgTbgLtYSO67kHpM/yOhpNVw1UsU04pNFOb7OD8nICjJyPRmmK5CA6s+9S28yysPNsfBk2DU2OBStMqd7LUFwcFDGWsA6vRZWx4KWLHyjK4y83KDLXlcqhomhl8B+6A6TKUgBhTFJpveV++gwNfQCpF9Anw8hDwUL3R8Oetw9gxuAH0t27qaI62j4HwNWTrE3r7CLwHrsQlBZ34izxynzXtbr3In3m075/RAlYGABNhrgk8ztI2srcjcD/OIFUsQx46CtxRuA50AyeAVeAH8C4Bry4ha0FG5NGURX4BhZ2rpcQ68w6SbW3Wj2s5SSVwAAAAAElFTkSuQmCC",
+                "contentType": "image/png",
+                "width": 16,
+                "height": 16,
+                "angle": 0,
+                "xoffset": 0,
+                "yoffset": 0
+              },
+              "value": "IT Park",
+              "label": "IT Park",
+              "description": ""
+            },
+            {
+              "symbol": {
+                "type": "esriPMS",
+                "url": "33a6da8696c2b74ff77df92925f36920",
+                "imageData": "iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAApxJREFUSInNlk1IVFEUx3/nzeg4FEpFlCDO6KLog8CCWuaijYUaIeSitkEQRjUuBgkJpRETzSCCQKKWQ4tKpE2QLfqgRRREipYzlYIVWmLTNB+802Jm1Gk+3qtA+sN73PfOOfd3zrv33XudrJKc/xVI28KbcdGkyh6BSqBMYVbQCQwZll7vq38CqS+0BeQicARFZIVNMneTLvWFX2PSIf3ee38MUl/oFMiAVTJp7cTgrvpCd4jLcbni/W4LZPpCfSDncgzH1sHoIkwnC/DkMC4e65kP9TJQ/bUoSNvDJ1ByIQCfk9CyAS5/KgAClF2IGdRAuEH83qWMskDqn6omwWDBTh4swr5yqF8Do5HCMIMDzNEG9OcHJY0ugbKCHZjAeCQFKwZKqUP9U0MSqF3IAun5t+VEabWK5mUE9lbA9lJ4Ey/muZ6Y0QIMZYGIOhuAUkvQZAJiJmx1W4HAoDkHpGidIAVjsrSQgI0ldjzrMo3likQqUXscYia4DTuemxQVQXTlZLCVIgAOgbitrJwE3jvwk1wGKbO2QW4HzP+04/kl8y8tgQSdwM4YlQlUOOG5xURIaTLTWK4oYYxQYuNz7HCl8nnxww5oOAckg56Pejb8CIP9RUPr1kIoCvOmFSSBKcEcUOpJ/ZjypGDoOgNq3XCryFqXlsJ1o98TyguS3pqnZnv4mign80YfqoCxCIxbjk9IyrRz5Yuc1VucrtMkYtuA+pzwmTg8sxybBUyapLtmrjgoUJnQzumDGkneEDiaZXxosZAK73BIo/R4xn435d345EJVFGjV9vB9lG6gyqKKmMJVgS7p8XzL51B0m5ZL3pvaOR0kkmxUk2Yx2E3qcOICZoFJTEYw9LbRVzNTrC/L80C6umD6+mut2rnuF6M82fVNIlSnAAAAAElFTkSuQmCC",
+                "contentType": "image/png",
+                "width": 19,
+                "height": 19,
+                "angle": 0,
+                "xoffset": 0,
+                "yoffset": 0
+              },
+              "value": "Malls",
+              "label": "Malls",
+              "description": ""
+            },
+            {
+              "symbol": {
+                "type": "esriPMS",
+                "url": "c2a9f7a2b505e68f999fb6b2fc0e076c",
+                "imageData": "iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAutJREFUOI21lVlIVFEYx39zm7zS5DKZMlNQLpTQSlJDJBSVtE2TiUULRQTSQjL64FQ+RUhMoCCibQ89hG0gIWZiuQQREakURUUrloyOW40l5VxnPLeXlrkzo2jRHy4cvvv/fuc7373nHD3/SfrxmPKwpciylKQqfiNyRJ9e8b52Uu/+K3AOOXIsPUeQOYBCqlAEIIHix4deLcDapkMqK6b2KqCOC5xnti2a7O6pBpINljgyTx2i6207iQtTabxQRefF5zqQlqlwuQBbLgxvK+FO55hgh2xbobppAAwA31s8NFZcY13ubrrbXfQ0vQtOWQ4RLQ6y0oup/hAWbMdqUhVuAIblZVnMXjCHWakpJMw0MzjwlXmWxaywruXFoyd86uqmOacSVREAM1T8tSfYaTnJ9aEQsAxFKpgSj6SRbd+vKaul4R6W9auIiolm6Zp0ANofv+R9aesvy4JBBvMBpwZsx2pSkfYDTDFGAaAMeelxdQEwZ8l8PL39eHr7iZlmJCbOiGyYoplcQu8ohBIn+H6DZfRbVMSkQOPnvn7K5+YH95Stt+ykWzNC4iCMPtm2GqW2IaAV/mUghTFPTEKRlgJ/wCqYgk1yZCRppzeGJMcmxI0KlsAMAT3WIXmD//JpCdPZdezwxCqWxRBKAHhEFi5J+fdWoAgXBIAlRd8MQvOlHt6+y6zUFGYmzdbkPn3QytSY6LBcyRzRjDsA3EdsUzyf+4B4/7APgI/P3hAdZwwBd7d3YDTFI0ZGNHEdPCt2V7/QVHyJS14H1pMqUsW7yjbe733FDsdBdDpdSFXr92TT2+mmJveMJu5HHP811uy8YurOFWDbLNzDG84vPBp2qaNJwNlS6urDggExmW87/RhuqrByAtwr8dTmBQZCTjcnd78UQoZPzixCEfmAPDpP8oD/RAl15cFvwp7HTvCh1BwvZPtZH959wCYgGYgF+oFXAlGjMlBZyn1POMaYV5OTqg6g6OczIY3rzvsb/QCsi/54R6EWYgAAAABJRU5ErkJggg==",
+                "contentType": "image/png",
+                "width": 16,
+                "height": 16,
+                "angle": 0,
+                "xoffset": 0,
+                "yoffset": 0
+              },
+              "value": "Metro Stations",
+              "label": "Metro Stations",
+              "description": ""
+            },
+            {
+              "symbol": {
+                "type": "esriPMS",
+                "url": "13c34542bffa1fedc8e4ca7c235094b9",
+                "imageData": "iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAuZJREFUOI21lUtoE1EUhr+TSTpNo7aFKh2taOvCResLq4iKICqoqIgodiPiJoqKrQvBnZYu3IhFLZFm63shoi5E8QEiiC8ExUex+IwZTYRQrU1upp3rIo1NmlhawR8GZuac+81/ztyHl/8k72iS7BAztGHWiqhKjRkXV3VZu7D/CZxox0yVsUdjBjVqJii0BlBoQUc7eYJw3ApyTkCPCmx3WrOT2JeBOlDFUgRYgOaM3cneiLC5JsiXEcHRsLlYa/smEBip1Bwt8sCjSIglNbv5UBQcDVONVpfGAM1IM9ljcC0SZmFNkGShY5c2hOoxQYfU4HFpAY7kgTNu2ZF9FmMagfkdiOEDBEQG3bloPcCvx83oge58tHDAvsBRqwlnyLFmA2AAiHcugXmHUR/u4MTaC6z5Ju0nML+dX88Oo52nuaFKfpjLQd3MBS9g0FTVllu4qpfexxuL1uzE2pmwtBn/jBvEz1flxTSqEcgB5/TWTfVilJVTub5rcIbqP0kimbYY/nIG+noKv6qxIPfnCanseO/4Kvq6HyA+E3NKPQO9iUzA48EbqETFukl/7SJQv6JIPWYSVO6sMCPZxSAlfpKvL2JMqKW0Zhbp2FvARTw+vLWNqHf3cGIPGTdnTQFWUJE8x4K6raEFoP9nnKpNIRAPIh78tY2ZbohglFVQsbwF3H76e74V68RtsIfAys+tkj7iwET1+QW+hpWkIq/oT3xGfKWIrxTtKFJOEqNiCv6pDajo6+Hc55N32i/zHE/fRiraSSvQoT7dR8wykq8u4Xw7VuDKN3Efbmor6Y/3h/fhYPY2b+VZdZyy37MuHWldnY60FgCzcuIncO6eyGdqQtZOrhcFyypcO0yThqvAsr+Sh0k0Z1WC5tx3BbubFaTHvsBK3WO2gWoBzBGYCdEcsnZxcnig6H5sNeGAOmiHCQHbtWYtUAdUIHwH3ojmilHC6Uk7SBRjjHg0WUE+AW2D15g0qjPvX/QbQccJ2YDFuiAAAAAASUVORK5CYII=",
+                "contentType": "image/png",
+                "width": 16,
+                "height": 16,
+                "angle": 0,
+                "xoffset": 0,
+                "yoffset": 0
+              },
+              "value": "Parking",
+              "label": "Parking",
+              "description": ""
+            },
+            {
+              "symbol": {
+                "type": "esriPMS",
+                "url": "dbc853dfe93491d63495e8bf137a6885",
+                "imageData": "iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAArRJREFUOI21lV1IU2EYx3/b2TqVF36E4CySbDXIMi80RKEIo6KvqzAjSASNQEsFF0oXIrtYMEHEWARBiH0QIlFdFJIRCQWRRIGQMKKJtQsrMQee17OztwtLz7bjEqE/HDg87//58Twv7/O+Dv6THKsxFTSz3amq2xQpsg3UadUhJsb9RNYGrkf1ZNFooF4A4SEuMAAQCB3pbuMdNnpDAe4BclVgV7OrOMMZeWhAIQgriw0oQ3LH3UaTAqcnuvmaFuzxqhWGjAwDGWk6NavcgLduL5WhAF8swSWXyYtKMZQMrcytIRqb43xlPT/nfnDtVSOGTOgkH8kTOtlHF/Mp4KiKD0meOTbU8J7inSVIKbHZbABUV9XQN9TLrQ9Xzdbd7jlaQuBPAC9WS53ZeXhLPXt27AVYggJs3JCB91w76xxOgmNXlhPseOmgGz/6EjiqcgqJYgZ31foTgGbZbXaKCophLCGcXaCrB8OIYfNWlCUnq07VEgogFjQG39xPiTvjohRYBiuSPCPJ1DMY4MyBs2Rn5pCTuQmH4iBmxNCExuCLB7yM9KeAFTsuMO2xZkNzJh3zgXEfA+M+AJpKu7lU3UprsIlnkzdX7ESLq/MgTKfCUKewWw4DAK8/j9KgXUwLXZSYSqgYuxgBWlayF+YUoq5b/w8oLNhdIxBZBoenee7OZRrItUrwbC5CURSq8usY+XbbEqrY+BgJRMYTK+5H0710OSXXrZLKiyr4FZ3lSMnxFcFajPa//wmTFw5ww93GCeBoctLJ4C5L2FK1cYKhHp5agoF4yEmNO8ZjJPvTkhJ1dyKXZnMg9dr0Mxvq4JBbV30gWoCVpwRmdOgMd9OXvGB90fvRQ4h2TwdBQ6cWOAYUAlnAd+CTHufRVsnAaA8zVoi0T9OEn0nA9+dLUThN7qrevLXoN50m5MGs8SlzAAAAAElFTkSuQmCC",
+                "contentType": "image/png",
+                "width": 16,
+                "height": 16,
+                "angle": 0,
+                "xoffset": 0,
+                "yoffset": 0
+              },
+              "value": "Parks Recreation",
+              "label": "Parks Recreation",
+              "description": ""
+            },
+            {
+              "symbol": {
+                "type": "esriPMS",
+                "url": "585c3f4d0a30374304197eccdea6ac07",
+                "imageData": "iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAq9JREFUOI21lVFIU2EUx//fvbu7g6VzY+IUBLNAopCaTZpBkBSGRE89+DbEsYsW5EvgXozwYQi9RLmYDIaUsReJFhJIPiish6wtAzEfhKhG2NZmJuY2704PNd31brUW/eHCxzmH3/0fvvN9nwb/SZpyiqJO5yHi+YOQZSOAuCyKK7axsU8VgZ87naKO56+AyEVAC4gAjgMA8NksRVyul5TL3bb6/Q8ZQGWBo/39rSTLj0DUXOK/DICNcdyDqMt1NcrY5RM+X+y34EhfXwfJ8gwAfelGFTpFRC8iAwOnrV7vu6LgiMNhgUYzBSL9kdFRxEIh1Hd14fP8PMx2O1KLi0iEQgAAXUsLDksSBL0eUUlqwM7Ok6WenvajweB3tWNBGAGRBQB0NTXQms0QjUZozWZoDQZoTabdUkt3NwS9oqljaYNhEIBHAY44HBZwXG+Z7UNbXV0sfH3B7b5l83iye451uksg4ssFkywXCZKRi8fPApjZA8uyLT9OeTV0doIXBNR1dIATBEVufXkZBxobVWzG8yeVYI6zFBZ8mJ6G1mRCbXs7ttbWsBWL4cvc3G4+PjUFoaoKdXa7kizL9YBy87YL8/ndN7e14dvqKtaCQZW7TCqlioHjVFPxUV1VkT7uB88CGPxXKsvlZpXgdPoZRDEOoLZSKAFvrH7/kgJsnZjYfiVJNxnR3cLidCqFTCJRFJRJJLC9vl5glw3ll4qTl/T57pkk6SIjupCPrQwPl3S4EQ5jIxz+6ZYxb5vP97Qo+DyQW8hkenhBCAE4U5Ko1mSyqelaYUB1u9kCga8Lbvc5PpkcAdEgALEkjrEUiG5Yx8fv7E8VvY9tHk8WwNDr3l6vLAgOBnQDaAZQAyCBXO4tOO6xZnPzfuvkZJFh/sPTdDwQeA9g5Nf3VyrrzatEPwCwWepwKG6HagAAAABJRU5ErkJggg==",
+                "contentType": "image/png",
+                "width": 16,
+                "height": 16,
+                "angle": 0,
+                "xoffset": 0,
+                "yoffset": 0
+              },
+              "value": "Restaurants",
+              "label": "Restaurants",
+              "description": ""
+            },
+            {
+              "symbol": {
+                "type": "esriPMS",
+                "url": "551954da931b1dea37318a6c5c6356b8",
+                "imageData": "iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAyxJREFUOI211W1oFEccx/HvzG06xktiEk29O7nUXBJObRIq5KmxKgWh1UopIlQK4RoUfaFg3ggeiUp6tYvgm1JrwL6IcqYESvrki5ZYX4j0RdMU2tRiUhptg/bERGPaihnvbqcv2jxsvKSJ0B8sLLv//czsn90Zi/8p1oKqom+UKqlKtDAFSpoRnXQGseOJJ4P37FH49H6F3KshrHEA0A7gkYbWSB/GeZfj8Q8BsyDYf+TNqoRJfgIypDMPK4AahDxPa+QAHr2Ttq5b88KqpbEhYUwP4J3zbdypJ6V6ORrZwFvnfs0Mt0R8WtC9CHRy/gEc5wLHdtXS1vXwcVg4MZC+RaFTkRU4qhmw3XBLxAc0zfdoXXYOjRUN1JZXEC4u4YehQTZ9dGq6wHCIaPQktp2chqV4FWM8s7EmX4hXKusozF3GkizF14P9FOUXkufNpWZNJWVWFr+kkpPlBcpKvKihZxo26RqQPOOx2Le2jkD+Cl6qeQFfYRGxrjOsLy6j1B9kX2gnQ7eGAVjylGL32nqiP16ZYrRJV+OCwQfQe/AETxcsZ+C3IZaqbAC2Pvc81WsqpwofJTWpdArLY9EQroIZMOB39xgmAKSUAOTn5nH/z3HyvDkA3PtjnDtjo/T9fBUhJDnZXtaVlPPs6jJX6xQ81DNhZeRNLeDExx3s3bKD0KpivvzmMsW+VSzz5nKl/1te7+lEG8NufynBon8+nmQ65YK1kTddM9ZCXgKn+eT1fupvVFAeXE2WZTHxSBMKBGm/2M0HG19jw7r1pNJpvr9+jVjXGdqv9bpgP6lLCVcrvM5XPGBECVG0tXYjAIHlK0mM3iG4MsCO6s0Mj9wm9mkHZ2/fYI70J453/uTucfTcBEca27SRp/oGrlJVGmZ0/D72hfMM/nWX7yYezIVNx3EOT566/7xYvJ3WyPbN3e+//N/KrAhxmnfiX2SGwSEtd+FxPgc2LULtZGn44Mwrjy+bdsc40egW5fk9pqEZUPOIYyCO8fbZ92bfyLzQ23ZSw2GiTaeRJoIw24AQkI9hFMEAhs9QqThHO8cyEfNvTXbHMBD791hUFrbnPUH+BjpAB2o/iirZAAAAAElFTkSuQmCC",
+                "contentType": "image/png",
+                "width": 16,
+                "height": 16,
+                "angle": 0,
+                "xoffset": 0,
+                "yoffset": 0
+              },
+              "value": "Transport Hubs",
+              "label": "Transport Hubs",
+              "description": ""
+            },
+            {
+              "symbol": {
+                "type": "esriPMS",
+                "url": "3073cb438bfe0b74d4313bcca3e764d4",
+                "imageData": "iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAltJREFUOI21lT1oU1EUx3+nDby2UmrA2kRcbIXaUhzEpJIUP0CpiDgpuIi4uCjYpVBcRCLaQRRR6uDoxyaiDmKx4NAE+7EoahUy+NEaSsVUQ01v0/Q4vLR5L4nph/iHx7mcc+6Pc+89714P/0melSTF0Ca12ILBi8UUho9hJLEmcAy1FM5gcVoNzZhcwLYaRUeBGyF4IIiuCBz163ZN8AhoXAK6JUAAuBeDs4Po0Q5koiw4ZmlIE/QD6/62mgLtEhiOouEw8qkkeAj1zRsergK6qE3A00E02IGki8BZNALiq+2BtssgYvuTYzDWCi3vwdti+1Th7XlI9S5NbxPoAq64wEOobx5OAaSuw/QJ8Lbasa938tZ7zR5Pj9l5BeoeQa8GkMwSOAtHgEoADCzMOVbyy20hFy8+WG/GYh+GfsdWaMA+bGh6BXXN+ci2XtBLII7sumbYOgzxoJushp3gACviWxw3tBckz0PiOfg78z5PNWwMQLyoaPWDY48FZou6PCfLC/V7bLusLNIYB1gtHcdIydzsHPwYhapOqLSWARsZd1WMkQHsdikGp+HbMWiYBGrLc9XPAAkHuBpepGEKqF+mpnJ605GQd66KdyCzUfQicOsfwD2LA9ef9xtu18DhmQkO1vjz/plx26Y+Q9UGR/6kc7b2hal4VhJ8AFl4iR5/vZknwO7CcuLBUu0Fgt6fQc45fUW3217k5wi6f87SCEa6gHJ9kBS4EKLiZmGg5H0cQDIYemJoH3BS4RDQCKwHvgMfgMceuNuOJEsxyj5NIeQLEMl9q9KK3ry16A8GNb9LxD8rHAAAAABJRU5ErkJggg==",
+                "contentType": "image/png",
+                "width": 16,
+                "height": 16,
+                "angle": 0,
+                "xoffset": 0,
+                "yoffset": 0
+              },
+              "value": "Travel Destrinations",
+              "label": "Travel Destrinations",
+              "description": ""
+            }
+          ],
+          "symboltype": "unique",
+          "geometrytype": "esriGeometryPoint"
+        }
+      ]
+    },
+    {
       "category": "Economic Condition",
       "Layer": [
         {
-          "name": "EconomicCondition",
+          "name": "Economic Condition",
           "url": "https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/EconomicDensity/MapServer/0",
           "image": [
             {
@@ -12,113 +249,9 @@
                 "type": "esriSFS",
                 "style": "esriSFSSolid",
                 "color": [
-                  166,
-                  110,
-                  80,
-                  255
-                ],
-                "outline": {
-                  "type": "esriSLS",
-                  "style": "esriSLSSolid",
-                  "color": [
-                    110,
-                    110,
-                    110,
-                    255
-                  ],
-                  "width": 0.4
-                }
-              },
-              "value": "1",
-              "label": "1",
-              "description": ""
-            },
-            {
-              "symbol": {
-                "type": "esriSFS",
-                "style": "esriSFSSolid",
-                "color": [
-                  222,
-                  209,
-                  122,
-                  255
-                ],
-                "outline": {
-                  "type": "esriSLS",
-                  "style": "esriSLSSolid",
-                  "color": [
-                    110,
-                    110,
-                    110,
-                    255
-                  ],
-                  "width": 0.4
-                }
-              },
-              "value": "2",
-              "label": "2",
-              "description": ""
-            },
-            {
-              "symbol": {
-                "type": "esriSFS",
-                "style": "esriSFSSolid",
-                "color": [
-                  158,
-                  144,
-                  82,
-                  255
-                ],
-                "outline": {
-                  "type": "esriSLS",
-                  "style": "esriSLSSolid",
-                  "color": [
-                    110,
-                    110,
-                    110,
-                    255
-                  ],
-                  "width": 0.4
-                }
-              },
-              "value": "3",
-              "label": "3",
-              "description": ""
-            },
-            {
-              "symbol": {
-                "type": "esriSFS",
-                "style": "esriSFSSolid",
-                "color": [
-                  227,
-                  164,
-                  116,
-                  255
-                ],
-                "outline": {
-                  "type": "esriSLS",
-                  "style": "esriSLSSolid",
-                  "color": [
-                    110,
-                    110,
-                    110,
-                    255
-                  ],
-                  "width": 0.4
-                }
-              },
-              "value": "4",
-              "label": "4",
-              "description": ""
-            },
-            {
-              "symbol": {
-                "type": "esriSFS",
-                "style": "esriSFSSolid",
-                "color": [
-                  222,
-                  134,
-                  102,
+                  171,
+                  41,
+                  117,
                   255
                 ],
                 "outline": {
@@ -134,7 +267,111 @@
                 }
               },
               "value": "5",
-              "label": "5",
+              "label": "Excellent",
+              "description": ""
+            },
+            {
+              "symbol": {
+                "type": "esriSFS",
+                "style": "esriSFSSolid",
+                "color": [
+                  36,
+                  60,
+                  145,
+                  255
+                ],
+                "outline": {
+                  "type": "esriSLS",
+                  "style": "esriSLSSolid",
+                  "color": [
+                    110,
+                    110,
+                    110,
+                    255
+                  ],
+                  "width": 0.4
+                }
+              },
+              "value": "4",
+              "label": "Good",
+              "description": ""
+            },
+            {
+              "symbol": {
+                "type": "esriSFS",
+                "style": "esriSFSSolid",
+                "color": [
+                  54,
+                  163,
+                  39,
+                  255
+                ],
+                "outline": {
+                  "type": "esriSLS",
+                  "style": "esriSLSSolid",
+                  "color": [
+                    110,
+                    110,
+                    110,
+                    255
+                  ],
+                  "width": 0.4
+                }
+              },
+              "value": "3",
+              "label": "Average",
+              "description": ""
+            },
+            {
+              "symbol": {
+                "type": "esriSFS",
+                "style": "esriSFSSolid",
+                "color": [
+                  176,
+                  75,
+                  39,
+                  255
+                ],
+                "outline": {
+                  "type": "esriSLS",
+                  "style": "esriSLSSolid",
+                  "color": [
+                    110,
+                    110,
+                    110,
+                    255
+                  ],
+                  "width": 0.4
+                }
+              },
+              "value": "2",
+              "label": "Poor",
+              "description": ""
+            },
+            {
+              "symbol": {
+                "type": "esriSFS",
+                "style": "esriSFSSolid",
+                "color": [
+                  40,
+                  141,
+                  143,
+                  255
+                ],
+                "outline": {
+                  "type": "esriSLS",
+                  "style": "esriSLSSolid",
+                  "color": [
+                    110,
+                    110,
+                    110,
+                    255
+                  ],
+                  "width": 0.4
+                }
+              },
+              "value": "1",
+              "label": "Very Poor",
               "description": ""
             }
           ],
@@ -155,113 +392,9 @@
                 "type": "esriSFS",
                 "style": "esriSFSSolid",
                 "color": [
-                  145,
-                  186,
-                  168,
-                  255
-                ],
-                "outline": {
-                  "type": "esriSLS",
-                  "style": "esriSLSSolid",
-                  "color": [
-                    110,
-                    110,
-                    110,
-                    255
-                  ],
-                  "width": 0.4
-                }
-              },
-              "value": "1",
-              "label": "1",
-              "description": ""
-            },
-            {
-              "symbol": {
-                "type": "esriSFS",
-                "style": "esriSFSSolid",
-                "color": [
-                  129,
-                  130,
-                  181,
-                  255
-                ],
-                "outline": {
-                  "type": "esriSLS",
-                  "style": "esriSLSSolid",
-                  "color": [
-                    110,
-                    110,
-                    110,
-                    255
-                  ],
-                  "width": 0.4
-                }
-              },
-              "value": "2",
-              "label": "2",
-              "description": ""
-            },
-            {
-              "symbol": {
-                "type": "esriSFS",
-                "style": "esriSFSSolid",
-                "color": [
-                  204,
-                  217,
-                  154,
-                  255
-                ],
-                "outline": {
-                  "type": "esriSLS",
-                  "style": "esriSLSSolid",
-                  "color": [
-                    110,
-                    110,
-                    110,
-                    255
-                  ],
-                  "width": 0.4
-                }
-              },
-              "value": "3",
-              "label": "3",
-              "description": ""
-            },
-            {
-              "symbol": {
-                "type": "esriSFS",
-                "style": "esriSFSSolid",
-                "color": [
-                  162,
-                  194,
-                  222,
-                  255
-                ],
-                "outline": {
-                  "type": "esriSLS",
-                  "style": "esriSLSSolid",
-                  "color": [
-                    110,
-                    110,
-                    110,
-                    255
-                  ],
-                  "width": 0.4
-                }
-              },
-              "value": "4",
-              "label": "4",
-              "description": ""
-            },
-            {
-              "symbol": {
-                "type": "esriSFS",
-                "style": "esriSFSSolid",
-                "color": [
-                  166,
-                  222,
-                  169,
+                  176,
+                  153,
+                  37,
                   255
                 ],
                 "outline": {
@@ -277,73 +410,116 @@
                 }
               },
               "value": "5",
-              "label": "5",
+              "label": "Very High",
+              "description": ""
+            },
+            {
+              "symbol": {
+                "type": "esriSFS",
+                "style": "esriSFSSolid",
+                "color": [
+                  48,
+                  157,
+                  176,
+                  255
+                ],
+                "outline": {
+                  "type": "esriSLS",
+                  "style": "esriSLSSolid",
+                  "color": [
+                    110,
+                    110,
+                    110,
+                    255
+                  ],
+                  "width": 0.4
+                }
+              },
+              "value": "4",
+              "label": "High",
+              "description": ""
+            },
+            {
+              "symbol": {
+                "type": "esriSFS",
+                "style": "esriSFSSolid",
+                "color": [
+                  64,
+                  44,
+                  176,
+                  255
+                ],
+                "outline": {
+                  "type": "esriSLS",
+                  "style": "esriSLSSolid",
+                  "color": [
+                    110,
+                    110,
+                    110,
+                    255
+                  ],
+                  "width": 0.4
+                }
+              },
+              "value": "3",
+              "label": "Average",
+              "description": ""
+            },
+            {
+              "symbol": {
+                "type": "esriSFS",
+                "style": "esriSFSSolid",
+                "color": [
+                  33,
+                  158,
+                  35,
+                  255
+                ],
+                "outline": {
+                  "type": "esriSLS",
+                  "style": "esriSLSSolid",
+                  "color": [
+                    110,
+                    110,
+                    110,
+                    255
+                  ],
+                  "width": 0.4
+                }
+              },
+              "value": "2",
+              "label": "Low",
+              "description": ""
+            },
+            {
+              "symbol": {
+                "type": "esriSFS",
+                "style": "esriSFSSolid",
+                "color": [
+                  130,
+                  62,
+                  56,
+                  255
+                ],
+                "outline": {
+                  "type": "esriSLS",
+                  "style": "esriSLSSolid",
+                  "color": [
+                    110,
+                    110,
+                    110,
+                    255
+                  ],
+                  "width": 0.4
+                }
+              },
+              "value": "1",
+              "label": "Very Low",
               "description": ""
             }
           ],
           "symboltype": "unique",
           "geometrytype": "esriGeometryPolygon"
-        }
-      ]
-    },
-    {
-      "category": "Street Network",
-      "Layer": [
-        {
-          "name": "Street Network",
-          "url": "https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/StreetNetwork/MapServer/0",
-          "image": [
-            {
-              "symbol": {
-                "type": "esriSLS",
-                "style": "esriSLSSolid",
-                "color": [
-                  255,
-                  127,
-                  127,
-                  255
-                ],
-                "width": 2
-              },
-              "value": "MajHwys",
-              "label": "Major Highways",
-              "description": ""
-            },
-            {
-              "symbol": {
-                "type": "esriSLS",
-                "style": "esriSLSSolid",
-                "color": [
-                  255,
-                  190,
-                  190,
-                  255
-                ],
-                "width": 1.5
-              },
-              "value": "SecHwys",
-              "label": "Secondary Highways",
-              "description": ""
-            },
-            {
-              "symbol": {
-                "type": "esriSLS",
-                "style": "esriSLSSolid",
-                "color": [
-                  255,
-                  255,
-                  115,
-                  255
-                ],
-                "width": 1
-              },
-              "value": "Street",
-              "label": "Street",
-              "description": ""
-            }
-          ],
-          "symboltype": "unique",
-          "geometrytype": "esriGeometryPolyline"
         }
       ]
     },
@@ -1839,6 +2015,67 @@
           ],
           "symboltype": "unique",
           "geometrytype": "esriGeometryPolygon"
+        }
+      ]
+    },
+    {
+      "category": "Street Network",
+      "Layer": [
+        {
+          "name": "Street Network",
+          "url": "https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/StreetNetwork/MapServer/0",
+          "image": [
+            {
+              "symbol": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  255,
+                  127,
+                  127,
+                  255
+                ],
+                "width": 2
+              },
+              "value": "MajHwys",
+              "label": "Major Highways",
+              "description": ""
+            },
+            {
+              "symbol": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  255,
+                  190,
+                  190,
+                  255
+                ],
+                "width": 1.5
+              },
+              "value": "SecHwys",
+              "label": "Secondary Highways",
+              "description": ""
+            },
+            {
+              "symbol": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  178,
+                  178,
+                  178,
+                  255
+                ],
+                "width": 1
+              },
+              "value": "Street",
+              "label": "Street",
+              "description": ""
+            }
+          ],
+          "symboltype": "unique",
+          "geometrytype": "esriGeometryPolyline"
         }
       ]
     },
