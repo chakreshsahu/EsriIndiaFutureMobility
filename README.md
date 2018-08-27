@@ -14,3 +14,12 @@ An electric vehicle user to locate a nearby suitable charging station and identi
 Features of the application are following
 * Site Suitability Assessment
 * Locate and Route
+
+## Site Suitability Assessment
+
+
+## Locate and Route
+
+
+## Methodology
+
