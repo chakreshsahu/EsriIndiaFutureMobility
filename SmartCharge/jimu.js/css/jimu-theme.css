@@ -327,12 +327,13 @@
 
 /* css for TabContainer3 dijit */
 .jimu-tab3 .tab-item-td{
-  color: #898989;
-	border-left: 0;
-  border-right: 0;
-  border-top: 0;
-  border-bottom: 1px solid #ccc;
-  font-family: "Avenir Light";
+color: #212121;
+    border-left: 0;
+    border-right: 0;
+    border-top: 0;
+    border-bottom: 1px solid #a2a2a2;
+    font-family: "Avenir Light";
+    background: #f9f9f9;
 }
 
 /*.jimu-tab3 .tab-item-td.jimu-state-active{
@@ -344,10 +345,11 @@
 }*/
 
 .jimu-tab3 .tab-item-td.jimu-state-active{
-  color: #48494B;
-  border-bottom: 2px solid #24B5CC;
-  font-family: "Avenir Medium";
-  color: #24B5CC;
+     color: #48494B;
+    border-bottom: 2px solid #21cf7b;
+    font-family: "Avenir Medium";
+    color: #ffffff;
+    background: #263463;
 }
 
 /* css for LayerChooserFromMap dijit */
