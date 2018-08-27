@@ -15,28 +15,28 @@
 
         <div data-dojo-attach-point="resultTabNode">
             <div id="results">
-                <table border="1" cellspacing="0px">
+                <table class="resulttable">
                     <tr>
-                        <td colspan="2"> Site Suitability Details</td>
+                        <td colspan="2" class="heading">Site Suitability Details</td>
                     </tr>
                     <tr>
-                        <td> Existing EV Stations (within 3 km)</td>
-                        <td><label id="evCount"></label></td>
+                        <td><span class="resultlablebig">Existing EV Stations</span><span class="resultlablesmall">(within 3 km)</span></td>
+                        <td><label id="evCount" class="resultitem"></label></td>
                     </tr>
                     <tr>
-                        <td> Potential EV Stations (within 3 km)</td>
-                        <td><label id="potentialevCount"></label></td>
+                        <td><span class="resultlablebig">Potential EV Stations</span><span class="resultlablesmall">(within 3 km)</span></td>
+                        <td><label id="potentialevCount" class="resultitem"></label></td>
                     </tr>
                     <tr>
-                        <td> Site Suitability Score out of 5 </td>
-                        <td><label id="score"></label></td>
+                        <td><span class="resultlablebig">Site Suitability Score</span></td>
+                        <td><label id="score" class="resultitem"></label><span class="resultlablesmall"> Out of 5</span></td>
                     </tr>
                     <tr>
-                        <td> Site Suitability Score %</td>
-                        <td><label id="scorePercent"></label></td>
+                        <td><span class="resultlablebig">Site Suitability Score %</span></td>
+                        <td><label id="scorePercent" class="resultitem"></label></td>
                     </tr>
                 </table>
-                <div id="image" class='resultimage'></div>
+                <div id="image" class='resultimage excellent'></div>
             </div>
         </div>
         <!--<div><span class="fa fa-star checked"></span>
