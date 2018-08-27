@@ -348,11 +348,12 @@ define(['dojo/_base/declare',
 
             executeModel: function() {
                 this.shelter.show();
-                this.createBuffer();
                 var ID = this.generateID();
                 if (this.inputX === null || this.inputY === null) {
                     alert('Please select location !');
+                    this.shelter.hide();
                 } else {
+                    this.createBuffer();
                     this.gp = new Geoprocessor("https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/SiteSuitability/GPServer/SiteSuitability");
                     this.gp.setOutputSpatialReference({ wkid: 102100 });
                     var params = {
@@ -373,7 +374,7 @@ define(['dojo/_base/declare',
             },
 
             ModelError: function(error) {
-                var error = error.message;
+                console.log(error.message);
                 this.shelter.hide();
             },
 
@@ -418,7 +419,6 @@ define(['dojo/_base/declare',
 
             createBuffer: function() {
 
-                // this.showResults();
                 var mapPoint = new Point(this.inputX, this.inputY, new SpatialReference({ wkid: 4326 }));
                 var bufferPolygon = geometryEngine.geodesicBuffer(mapPoint, 1.5, 9036);
                 var fill = new SimpleFillSymbol();
@@ -427,7 +427,6 @@ define(['dojo/_base/declare',
                 this.map.graphics.add(gra);
                 var extent = bufferPolygon.getExtent();
                 this.map.centerAndZoom(mapPoint, 13);
-                //  this.map.setExtent(extent);
                 this.existingEVStations = new FeatureLayer(this.existingEVlayerURL, {
                     mode: FeatureLayer.MODE_ONDEMAND,
                     outFields: ["*"],
@@ -436,6 +435,8 @@ define(['dojo/_base/declare',
                 var query = new Query();
                 query.where = "1=1";
                 query.geometry = extent;
+                document.getElementById('potentialevCount').innerHTML = 0;
+                document.getElementById('evCount').innerHTML = 0;
                 document.getElementById('results').style.display = 'block';
                 this.existingEVStations.queryFeatures(query, lang.hitch(this, function(response) {
                     this.existingEVStationsCount = response.features.length;
