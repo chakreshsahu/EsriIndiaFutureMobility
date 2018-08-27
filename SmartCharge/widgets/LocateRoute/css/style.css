@@ -257,3 +257,30 @@ input:checked+.slider:before {
   line-height: 34px
 }
 
+.resulttable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top:10px;
+}
+
+.resulttable > tbody > tr > td {
+    padding: 5px;
+    min-width:50%;
+}
+.listlbl{
+    font-weight:bold;
+    font-size:14px;
+}
+.results table{
+    background: #fafafa;
+    margin-top: 10px;
+    border: 1px solid #22d57f;
+    cursor:pointer;
+}
+.results table:hover{
+    background: #eff6d5;
+}
+.results table td{
+    padding:2px 0px;
+    vertical-align:top;
+}

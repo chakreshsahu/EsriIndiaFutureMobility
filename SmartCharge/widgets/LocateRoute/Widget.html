@@ -18,33 +18,39 @@
             <label id="sliderValue">3</label> Km</p>
         </div>
       </div>
-      <div>
-        <br>
-        <span class="formlabel">${nls.ChargerType}</span>
-        <br>
-        <br>
-        <select name="chargerType" id="chargerType" data-dojo-attach-point="chargerType" data-dojo-type="dijit/form/Select">
-          <option value="Select" selected="selected">Select</option>
-          <option value="AC">AC</option>
-          <option value="Level 1 DC">Level 1 DC</option>
-          <option value="Level 2 DC">Level 2 DC</option>
-        </select>
-        <br>
-      </div>
-      <div>
-        <br>
-        <span class="formlabel">${nls.ConnectorType}</span>
-        <br>
-        <br>
-        <input id="connectorType" data-dojo-attach-point="connectorType" />
-      </div>
-      <br>
-      <div class='jimu-btn' data-dojo-attach-point='locateStation' id='locateStation' data-dojo-attach-event="onclick: _locateStation">${nls.LocateStation}</div>
-    </div>
+
+        <table class="resulttable">
+            <tr>
+                <td><span class="formlabel">${nls.ChargerType}</span></td>
+                <td><select name="chargerType" id="chargerType" data-dojo-attach-point="chargerType" data-dojo-type="dijit/form/Select" style="width:100%;">
+    <option value="Select" selected="selected">Select</option>
+    <option value="AC">AC</option>
+    <option value="Level 1 DC">Level 1 DC</option>
+    <option value="Level 2 DC">Level 2 DC</option>
+</select></td>
+            </tr>
+            <tr>
+                <td><span class="formlabel">${nls.ConnectorType}</span></td>
+                <td><input id="connectorType" data-dojo-attach-point="connectorType" style="width:100%;" /></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align:center;">
+                    <div class='jimu-btn' data-dojo-attach-point='locateStation' id='locateStation' data-dojo-attach-event="onclick: _locateStation">${nls.LocateStation}</div>
+                </td>
+            </tr>
+        </table>
+
+
+
+
+
+    
+     
+
     <div data-dojo-attach-point='bufferResult'>
       <img style="width: 15px; height: 15px; cursor:pointer;" data-dojo-attach-point='backBtn' src='./widgets/LocateRoute/images/back.jpg'
         alt='back to grid' title='Back to grid' data-dojo-attach-event="onclick: _backPress" />
-      <div data-dojo-attach-point="bufferResultTable"></div>
+      <div data-dojo-attach-point="bufferResultTable" class="results"></div>
 
     </div>
 

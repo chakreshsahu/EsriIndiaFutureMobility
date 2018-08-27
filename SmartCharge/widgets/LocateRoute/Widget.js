@@ -190,32 +190,32 @@ define([
           data: [{
             id: 1,
             name: "Select",
-            label: "<b>Select</b>"
+            label: "Select"
           },
           {
             id: 2,
             name: "IEC 60309",
-            label: "<b>IEC 60309</b> <img src ='./widgets/LocateRoute/images/IEC_60309.png' style='width:50px;height:50px;' />"
+            label: "<img src ='./widgets/LocateRoute/images/IEC60309.png' style='width:30px;height:30px;margin-right:10px;vertical-align:middle;' /><span class='listlbl'>IEC 60309</span>"
           },
           {
             id: 3,
             name: "IEC 62196",
-            label: "<b>IEC 62196</b> <img src='./widgets/LocateRoute/images/IEC_62196.png' style='width:50px;height:50px;'/>"
+            label: "<img src='./widgets/LocateRoute/images/IEC62196.png' style='width:30px;height:30px;margin-right:10px;vertical-align:middle;'/><span class='listlbl'>IEC 62196</span>"
           },
           {
             id: 4,
             name: "CHAdeMO",
-            label: "<b>CHAdeMO</b> <img src='./widgets/LocateRoute/images/CHAdeMO.png' style='width:50px;height:50px;'/>"
+            label: "<img src='./widgets/LocateRoute/images/CHAdeMO.png' style='width:30px;height:30px;margin-right:10px;vertical-align:middle;'/><span class='listlbl'>CHAdeMO</span>"
           },
           {
             id: 5,
             name: "CCS",
-            label: "<b>CCS</b> <img src='./widgets/LocateRoute/images/CCS.png' style='width:50px;height:50px;'/>"
+            label: "<img src='./widgets/LocateRoute/images/CCS.png' style='width:30px;height:30px;margin-right:10px;vertical-align:middle;'/><span class='listlbl'>CCS</span>"
           },
           {
             id: 6,
             name: "GB/T",
-            label: "<b>GB/T</b> <img src='./widgets/LocateRoute/images/GBT.png' style='width:50px;height:50px;'/>"
+            label: "<img src='./widgets/LocateRoute/images/GBT.png' style='width:30px;height:30px;margin-right:10px;vertical-align:middle;'/><span class='listlbl'>GBT</span>"
           }
           ]
         });
@@ -422,7 +422,8 @@ define([
 
               var table = domConstruct.create("table", {
                 style: {
-                  cursor: "pointer"
+                    cursor: "pointer",
+                    width:"100%"
                 }
               }, this.bufferResultTable);
               table.onclick = lang.hitch(this, this.getCurrentStation);
