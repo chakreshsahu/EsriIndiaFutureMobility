@@ -33,11 +33,9 @@ define(['dojo/_base/declare',
         "esri/symbols/jsonUtils",
         'jimu/loaderplugins/jquery-loader!https://code.jquery.com/jquery-git1.min.js',
         'dojo/on',
-        './NlsStrings',
-        './LayerListView',
         'jimu/BaseWidget'
     ],
-    function(declare, lang, html, dom, gfx, Search, LocateButton, Color, Point, Locator, SimpleFillSymbol, SimpleMarkerSymbol, SimpleLineSymbol, TabContainer3, LoadingShelter, Graphic, Query, FeatureLayer, ArcGISDynamicMapServiceLayer, geometryEngine, webMercatorUtils, Geoprocessor, SpatialReference, LayerInfos, domConstruct, jsonUtils, $, on, NlsStrings, LayerListView, BaseWidget) {
+    function(declare, lang, html, dom, gfx, Search, LocateButton, Color, Point, Locator, SimpleFillSymbol, SimpleMarkerSymbol, SimpleLineSymbol, TabContainer3, LoadingShelter, Graphic, Query, FeatureLayer, ArcGISDynamicMapServiceLayer, geometryEngine, webMercatorUtils, Geoprocessor, SpatialReference, LayerInfos, domConstruct, jsonUtils, $, on, BaseWidget) {
         //To create a widget, you need to derive from BaseWidget.
         return declare([BaseWidget], {
 
@@ -119,6 +117,16 @@ define(['dojo/_base/declare',
 
             onClose: function() {
                 this.map.graphics.clear();
+                for (var j = 0; j < this.map.graphicsLayerIds.length; j++) {
+                    if (this.map.graphicsLayerIds[j] !== "ExistingEVStations_560") {
+                        var layer = this.map.getLayer(this.map.graphicsLayerIds[j]);
+                        this.map.removeLayer(layer);
+                    }
+                }
+                var elementChkBox = document.getElementsByClassName('checkBoxes');
+                for (var c = 0; c < elementChkBox.length; c++) {
+                    elementChkBox[c].checked = false;
+                }
                 this.mapClickHandler[0].remove();
                 console.log('sitesuitabilityassessment::onClose');
             },
@@ -161,7 +169,7 @@ define(['dojo/_base/declare',
                     cell = domConstruct.create('td', null, newdiv);
                     cell.innerHTML = this.config.queries[i].Layer[0].name;
                     cell = domConstruct.create('td', null, newdiv);
-                    cell.innerHTML = "<label class='expand'><i class='fa fa-minus-circle' aria-hidden='true'></i></label>";
+                    cell.innerHTML = "<label class='expand'><i class='fa fa-plus-circle' aria-hidden='true'></i></label>";
                     var newdiv1 = domConstruct.create("div", { 'class': 'divContent' }, this.exploreMapTabNode);
                     if (this.config.queries[i].Layer[0].symboltype === "unique") {
                         for (var j = 0; j < this.config.queries[i].Layer[0].image.length; j++) {
@@ -198,7 +206,7 @@ define(['dojo/_base/declare',
                     } else {
                         evt.currentTarget.firstElementChild.className = "fa fa-plus-circle";
                     }
-                    if (evt.currentTarget.parentElement.parentElement.nextElementSibling.style.display === 'none') {
+                    if (evt.currentTarget.parentElement.parentElement.nextElementSibling.style.display === 'none' || evt.currentTarget.parentElement.parentElement.nextElementSibling.style.display === "") {
                         evt.currentTarget.parentElement.parentElement.nextElementSibling.style.display = 'block';
                     } else {
                         evt.currentTarget.parentElement.parentElement.nextElementSibling.style.display = 'none';
@@ -354,6 +362,7 @@ define(['dojo/_base/declare',
                     this.shelter.hide();
                 } else {
                     this.createBuffer();
+                    //this.gp = new Geoprocessor("https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/SiteSuitabilityEV/GPServer/SiteSuitability");
                     this.gp = new Geoprocessor("https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/SiteSuitability/GPServer/SiteSuitability");
                     this.gp.setOutputSpatialReference({ wkid: 102100 });
                     var params = {
@@ -394,7 +403,6 @@ define(['dojo/_base/declare',
                         jobstatus = 'Model Initiate.....';
                         break;
                     case 'esriJobExecuting':
-
                         jobstatus = 'Executing model.....';
                         break;
                     case 'esriJobSucceeded':
