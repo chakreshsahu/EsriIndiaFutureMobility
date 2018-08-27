@@ -22,6 +22,7 @@ define([
   "esri/layers/GraphicsLayer",
   "esri/layers/ArcGISDynamicMapServiceLayer",
   "esri/geometry/geometryEngine",
+  "esri/geometry/Extent",
   "esri/symbols/SimpleFillSymbol",
   "esri/symbols/SimpleMarkerSymbol",
   "esri/symbols/SimpleLineSymbol",
@@ -62,6 +63,7 @@ define([
     GraphicsLayer,
     ArcGISDynamicMapServiceLayer,
     geometryEngine,
+    Extent,
     SimpleFillSymbol,
     SimpleMarkerSymbol,
     SimpleLineSymbol,
@@ -107,9 +109,11 @@ define([
       totalDistanceThree: null,
       viewFirstRoute: false,
       viewSecondRoute: false,
-      viewThirdRoute: false,
-      viewRoute: null,
+      viewThirdRoute: false,      
       trafficLayer: null,
+      firstRouteExtent: null,
+      secondRouteExtent: null,
+      thirdRouteExtent: null,
       existingEVlayerURL: "https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/ExistingEVStations/FeatureServer/0",
       trafficLayerURL: "http://traffic.arcgis.com/arcgis/rest/services/World/Traffic/MapServer",
 
@@ -165,12 +169,12 @@ define([
         this.map.addLayer(this.evGraphicsLayer);
         this.map.addLayer(this.bufferGraphicsLayer);
         //traffic Layer
-        this.trafficLayer = new ArcGISDynamicMapServiceLayer(this.trafficLayerURL, {
-          id: 'trafficID'
-        }
-        );
-        this.map.addLayer(this.trafficLayer);
-        this.map.getLayer('trafficID').setVisibility(false);
+        // this.trafficLayer = new ArcGISDynamicMapServiceLayer(this.trafficLayerURL, {
+        //   id: 'trafficID'
+        // }
+        // );
+        // this.map.addLayer(this.trafficLayer);
+        // this.map.getLayer('trafficID').setVisibility(false);
       },
       _switchView: function (idx) {
         this.currentStack = idx;
@@ -369,6 +373,7 @@ define([
           return;
 
         }
+        this.bufferGraphicsLayer.clear();
         this.mapPoint = this.map.graphics.graphics[0].geometry;
         var bufferDistance = dom.byId("sliderValue").innerText;
         var bufferPolygon = geometryEngine.geodesicBuffer(this.mapPoint, bufferDistance, 9036);
@@ -415,39 +420,126 @@ define([
 
             array.forEach(features, lang.hitch(this, function (feature) {
 
-              var div = domConstruct.create("div", {
+              var table = domConstruct.create("table", {
                 style: {
                   cursor: "pointer"
                 }
               }, this.bufferResultTable);
-              div.onclick = lang.hitch(this, this.getCurrentStation);
-              var cell = domConstruct.create('tr', null, div);
+              table.onclick = lang.hitch(this, this.getCurrentStation);
 
-              cell.innerHTML = "<b>Station Name :</b><span>" + feature.name + "</span>";
+              var tr = domConstruct.create('tr', null, table);
 
-              cell = domConstruct.create('tr', null, div);
-              cell.innerHTML += "<b>Charging Type:</b>" + feature.type_of_station;
+              var td1 = domConstruct.create('td', null, tr);
 
-              cell = domConstruct.create('tr', null, div);
-              cell.innerHTML += "<b>Connector Type:</b>" + feature.connector_type;
+              td1.innerHTML = "<b>Station Name :";
 
-              cell = domConstruct.create('tr', null, div);
-              cell.innerHTML += "<b>Network/Operator:</b>" + feature.network_operator;
+              var td2 = domConstruct.create('td', null, tr);
 
-              cell = domConstruct.create('tr', null, div);
-              cell.innerHTML += "<b>Usage:</b>" + feature.usage;
+              td2.innerHTML = "<span>" + feature.name + "</span>";
 
-              cell = domConstruct.create('tr', null, div);
-              cell.innerHTML += "<b>Max voltage:</b>" + feature.max__voltage;
+              tr = domConstruct.create('tr', null, table);
 
-              cell = domConstruct.create('tr', null, div);
-              cell.innerHTML += "<b>Max Current:</b>" + feature.max__current;
+              td1 = domConstruct.create('td', null, tr);
 
-              cell = domConstruct.create('tr', null, div);
-              cell.innerHTML += "<b>Max Power (kw):</b>" + feature.max__power_kw_;
+              td1.innerHTML = "<b>Charging Type:";
 
-              cell = domConstruct.create('tr', null, div);
-              cell.innerHTML += "<b>Aerial Distance (KM):</b>" + feature.aerialDistance;
+              td2 = domConstruct.create('td', null, tr);
+
+              td2.innerHTML = "<span>" + feature.type_of_station + "</span>";
+
+              tr = domConstruct.create('tr', null, table);
+
+              td1 = domConstruct.create('td', null, tr);
+
+              td1.innerHTML = "<b>Connector Type:";
+
+              td2 = domConstruct.create('td', null, tr);
+
+              td2.innerHTML = "<span>" + feature.connector_type + "</span>";
+
+              tr = domConstruct.create('tr', null, table);
+
+              td1 = domConstruct.create('td', null, tr);
+
+              td1.innerHTML = "<b>Network/Operator:";
+
+              td2 = domConstruct.create('td', null, tr);
+
+              td2.innerHTML = "<span>" + feature.network_operator + "</span>";
+
+              tr = domConstruct.create('tr', null, table);
+
+              td1 = domConstruct.create('td', null, tr);
+
+              td1.innerHTML = "<b>Usage:";
+
+              td2 = domConstruct.create('td', null, tr);
+
+              td2.innerHTML = "<span>" + feature.usage + "</span>";
+
+              tr = domConstruct.create('tr', null, table);
+
+              td1 = domConstruct.create('td', null, tr);
+
+              td1.innerHTML = "<b>Max Voltage:";
+
+              td2 = domConstruct.create('td', null, tr);
+
+              td2.innerHTML = "<span>" + feature.max__voltage + "</span>";
+
+              tr = domConstruct.create('tr', null, table);
+
+              td1 = domConstruct.create('td', null, tr);
+
+              td1.innerHTML = "<b>Max Current:";
+
+              td2 = domConstruct.create('td', null, tr);
+
+              td2.innerHTML = "<span>" + feature.max__current + "</span>";
+
+              tr = domConstruct.create('tr', null, table);
+
+              td1 = domConstruct.create('td', null, tr);
+
+              td1.innerHTML = "<b>Max Power (kw):";
+
+              td2 = domConstruct.create('td', null, tr);
+
+              td2.innerHTML = "<span>" + feature.max__power_kw_ + "</span>";
+
+              tr = domConstruct.create('tr', null, table);
+
+              td1 = domConstruct.create('td', null, tr);
+
+              td1.innerHTML = "<b>Aerial Distance (KM):";
+
+              td2 = domConstruct.create('td', null, tr);
+
+              td2.innerHTML = "<span>" + feature.aerialDistance + "</span>";
+
+              // cell = domConstruct.create('tr', null, div);
+              // cell.innerHTML += "<b>Charging Type:</b>" + feature.type_of_station;
+
+              // cell = domConstruct.create('tr', null, div);
+              // cell.innerHTML += "<b>Connector Type:</b>" + feature.connector_type;
+
+              // cell = domConstruct.create('tr', null, div);
+              // cell.innerHTML += "<b>Network/Operator:</b>" + feature.network_operator;
+
+              // cell = domConstruct.create('tr', null, div);
+              // cell.innerHTML += "<b>Usage:</b>" + feature.usage;
+
+              // cell = domConstruct.create('tr', null, div);
+              // cell.innerHTML += "<b>Max voltage:</b>" + feature.max__voltage;
+
+              // cell = domConstruct.create('tr', null, div);
+              // cell.innerHTML += "<b>Max Current:</b>" + feature.max__current;
+
+              // cell = domConstruct.create('tr', null, div);
+              // cell.innerHTML += "<b>Max Power (kw):</b>" + feature.max__power_kw_;
+
+              // cell = domConstruct.create('tr', null, div);
+              // cell.innerHTML += "<b>Aerial Distance (KM):</b>" + feature.aerialDistance;
 
               domConstruct.create("br", null, this.bufferResultTable);
             }));
@@ -468,7 +560,6 @@ define([
 
       getCurrentStation: function (evt) {
         this.shelter.show();
-        console.log(evt);
         var query = new Query();
         query.where = "name='" + evt.currentTarget.children[0].children[1].innerText + "'";
         query.returnGeometry = true;
@@ -598,6 +689,7 @@ define([
             }
             if (evt.currentTarget.checked === true) {
               this.map.addLayer(this.firstRouteLyr);
+            
             } else {
               this.map.removeLayer(this.firstRouteLyr);
               if (this.map.getLayer('firstPointLayer')) {
@@ -658,6 +750,7 @@ define([
         var length, eachtime;
         for (var b = 1; b < this.directions.features.length; b++) {
           graphic = new Graphic(this.directions.features[b].geometry, this.firstRouteSymbol);
+          this.firstRouteExtent = this.directions.extent; 
           routeFeatures.features.push(graphic);
           this.firstRouteLyr.add(graphic);
           this.totalTime += this.directions.features[b].attributes.time;
@@ -788,6 +881,7 @@ define([
         for (var k = 1; k < this.directions.features.length; k++) {
           graphic = new Graphic(this.directions.features[k].geometry, this.secondRouteSymbol);
           routeFeatures.features.push(graphic);
+          this.secondRouteExtent = this.directions.extent;          
           this.secondRouteLyr.add(graphic);
           this.totalTime += this.directions.features[k].attributes.time;
           this.totalLength += this.directions.features[k].attributes.length;
@@ -932,6 +1026,7 @@ define([
         var length, eachtime;
         for (var k = 1; k < this.directions.features.length; k++) {
           var graphic = new Graphic(this.directions.features[k].geometry, this.thirdRouteSymbol);
+          this.thirdRouteExtent = this.directions.extent; 
           routeFeatures.features.push(graphic);
           this.thirdRouteLyr.add(graphic);
           this.totalTime += this.directions.features[k].attributes.time;
@@ -966,6 +1061,21 @@ define([
         this.shelter.hide();
       },
       showAllLayer: function () {
+        // if (this.startPoint.geometry.x > this.endPoint.geometry.x){
+        //   this.totalDistanceOne > this.totalDistanceThree ? this.totalDistanceOne : this.totalDistanceThree;
+        //    var xmin = null;
+        //    xmin = this.startPoint.geometry.x > this.endPoint.geometry.x ? 
+        //   var x
+        // }
+        // var extent = new Extent(
+        //   {
+        //     "xmin":-122.68,
+        //     "ymin":45.53,
+        //     "xmax":-122.45,
+        //     "ymax":45.6,
+        //     "spatialReference":{"wkid":102100}
+        //   }
+        // );
         var timeDistanceOne;
         var timeDistanceTwo;
         var timeDistanceThree;
@@ -1081,17 +1191,20 @@ define([
               this.firstRouteUpCheckBox.checked = true;
               this.secondRouteUpCheckBox.checked = false;
               this.thirdRouteUpCheckBox.checked = false;
+              this.initialExtent = this.map.extent;
+              this.map.setExtent(this.firstRouteExtent);
               this.map.removeLayer(this.firstRouteLyr);
               this.map.removeLayer(this.secondRouteLyr);
               this.map.removeLayer(this.thirdRouteLyr);
               this.map.addLayer(this.firstRouteLyr);
-              if (this.map.getLayer('trafficID').visible === false) {
-                this.map.getLayer('trafficID').setVisibility(true);
-              }
+              // if (this.map.getLayer('trafficID').visible === false) {
+              //   this.map.getLayer('trafficID').setVisibility(true);
+              // }
               this.viewFirstRoute = true;
-              this.viewRoute = true;
+            
             }
             else {
+              this.map.setExtent(this.initialExtent);
               this.map.addLayer(this.firstRouteLyr);
               this.map.addLayer(this.secondRouteLyr);
               this.map.addLayer(this.thirdRouteLyr);
@@ -1099,10 +1212,10 @@ define([
               this.firstRouteUpCheckBox.checked = true;
               this.secondRouteUpCheckBox.checked = true;
               this.thirdRouteUpCheckBox.checked = true;
-              this.viewRoute = false;
-              if (this.map.getLayer('trafficID').visible === true) {
-                this.map.getLayer('trafficID').setVisibility(false);
-              }
+              
+              // if (this.map.getLayer('trafficID').visible === true) {
+              //   this.map.getLayer('trafficID').setVisibility(false);
+              // }
 
             }
             break;
@@ -1111,18 +1224,19 @@ define([
               this.firstRouteUpCheckBox.checked = false;
               this.secondRouteUpCheckBox.checked = true;
               this.thirdRouteUpCheckBox.checked = false;
-
+              this.initialExtent = this.map.extent;
+              this.map.setExtent(this.secondRouteExtent);
               this.map.removeLayer(this.firstRouteLyr);
               this.map.removeLayer(this.secondRouteLyr);
               this.map.removeLayer(this.thirdRouteLyr);
               this.map.addLayer(this.secondRouteLyr);
-              this.map.addLayer(this.trafficLayer);
               this.viewSecondRoute = true;
-              if (this.map.getLayer('trafficID').visible === false) {
-                this.map.getLayer('trafficID').setVisibility(true);
-              }
+              // if (this.map.getLayer('trafficID').visible === false) {
+              //   this.map.getLayer('trafficID').setVisibility(true);
+              // }
             }
             else {
+              this.map.setExtent(this.initialExtent);
               this.map.addLayer(this.firstRouteLyr);
               this.map.addLayer(this.secondRouteLyr);
               this.map.addLayer(this.thirdRouteLyr);
@@ -1130,10 +1244,9 @@ define([
               this.firstRouteUpCheckBox.checked = true;
               this.secondRouteUpCheckBox.checked = true;
               this.thirdRouteUpCheckBox.checked = true;
-              this.map.getLayer('trafficID').setVisibility(false);
-              if (this.map.getLayer('trafficID').visible === true) {
-                this.map.getLayer('trafficID').setVisibility(false);
-              }
+              // if (this.map.getLayer('trafficID').visible === true) {
+              //   this.map.getLayer('trafficID').setVisibility(false);
+              // }
             }
             break;
           case 'thirdRouteUpCheckBox':
@@ -1141,18 +1254,19 @@ define([
               this.secondRouteUpCheckBox.checked = false;
               this.firstRouteUpCheckBox.checked = false;
               this.thirdRouteUpCheckBox.checked = true;
-
+              this.initialExtent = this.map.extent;
+              this.map.setExtent(this.thirdRouteExtent);
               this.map.removeLayer(this.firstRouteLyr);
               this.map.removeLayer(this.secondRouteLyr);
               this.map.removeLayer(this.thirdRouteLyr);
               this.map.addLayer(this.thirdRouteLyr);
-              this.map.addLayer(this.trafficLayer);
               this.viewThirdRoute = true;
-              if (this.map.getLayer('trafficID').visible === false) {
-                this.map.getLayer('trafficID').setVisibility(true);
-              }
+              // if (this.map.getLayer('trafficID').visible === false) {
+              //   this.map.getLayer('trafficID').setVisibility(true);
+              // }
             }
             else {
+              this.map.setExtent(this.initialExtent);
               this.map.addLayer(this.firstRouteLyr);
               this.map.addLayer(this.secondRouteLyr);
               this.map.addLayer(this.thirdRouteLyr);
@@ -1160,9 +1274,9 @@ define([
               this.firstRouteUpCheckBox.checked = true;
               this.secondRouteUpCheckBox.checked = true;
               this.thirdRouteUpCheckBox.checked = true;
-              if (this.map.getLayer('trafficID').visible === true) {
-                this.map.getLayer('trafficID').setVisibility(false);
-              }
+              // if (this.map.getLayer('trafficID').visible === true) {
+              //   this.map.getLayer('trafficID').setVisibility(false);
+              // }
             }
             break;
           default:
@@ -1326,13 +1440,14 @@ define([
       },
       _backPressData: function () {
         this.map.graphics.clear();
+        this.map.setExtent(this.initialExtent);
         var pictureMarkerSymbol = new PictureMarkerSymbol('./widgets/LocateRoute/images/search_pointer.png', 36, 36);
         var graphic = new Graphic(this.startPoint.geometry, pictureMarkerSymbol);
         this.map.graphics.add(graphic);
         this.map.addLayer(this.bufferGraphicsLayer);
-        if (this.trafficLayer) {
-          this.map.removeLayer(this.trafficLayer);
-        }
+        // if (this.trafficLayer) {
+        //   this.map.removeLayer(this.trafficLayer);
+        // }
         this._switchView(1);
         if (this.firstRouteLyr) {
           this.map.removeLayer(this.firstRouteLyr);
@@ -1368,9 +1483,6 @@ define([
         }
         if (this.thirdRouteLyr) {
           this.thirdRouteLyr.clear();
-        }
-        if (this.trafficLayer) {
-          this.trafficLayer.clear();
         }
 
         this.search.set('value', "");
