@@ -73,6 +73,10 @@ Locate and Route module search EV Charging Station based user's charger type and
 | 500 | 4 |
 | 1000 | 5 |
 
+## Existing EV Station 
+
+Dummy data created showing xisting EV Station.  
+
 ## Data Source
 
 Gurugram and South Delhi taken as study area for Site Suitability Assessment. The following data used for computation purpose.
