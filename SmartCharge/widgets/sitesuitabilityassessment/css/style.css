@@ -25,7 +25,16 @@
 }
 
 .divContent {
-    margin-left: 15px !important;
+   margin: 10px 25px;
+}
+
+.divContent svg{
+    width:20px;
+    height:20px;
+    margin-right:10px;
+}
+.divContent td{
+    vertical-align:bottom;
 }
 
 
