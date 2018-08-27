@@ -50,9 +50,9 @@ define(['dojo/_base/declare',
             search: null,
             locate: null,
             existingEVStations: null,
-            existingEVStationsCount: null,
+            existingEVStationsCount: 0,
             potentialEVStations: null,
-            potentialEVStationsCount: null,
+            potentialEVStationsCount: 0,
             existingEVlayerURL: null,
             potentialEVlayerURL: null,
             selectSiteTabNode: null,
@@ -361,7 +361,7 @@ define(['dojo/_base/declare',
                         "_inputConditionValue": ID,
                         "_sdefileName": "F:/SiteSuitabilityModel/gisdb@localhost.sde"
                     };
-
+                    //this.gp.submitJob(params, lang.hitch(this, this.getModelOutput));
                     this.gp.submitJob(params, lang.hitch(this, this.getModelOutput), lang.hitch(this, this.gpJobStatus), lang.hitch(this, this.ModelError));
 
                 }
@@ -372,7 +372,8 @@ define(['dojo/_base/declare',
                 this.gp.getResultData(resultFeatures.jobId, "outputAvgScore", lang.hitch(this, this.displayData));
             },
 
-            ModelError: function() {
+            ModelError: function(error) {
+                var error = error.message;
                 this.shelter.hide();
             },
 
@@ -389,31 +390,30 @@ define(['dojo/_base/declare',
                 var jobstatus;
                 switch (jobinfo.jobStatus) {
                     case 'esriJobSubmitted':
-                        document.getElementById('totalProcess').innerHTML = "Out of 5 Process, Executing 1";
                         jobstatus = 'Model Initiate.....';
                         break;
                     case 'esriJobExecuting':
-                        document.getElementById('btnCancelJob').disabled = false;
-                        for (var i = 0; i < jobinfo.messages.length; i++) {
-                            jobstatus = jobinfo.messages[i].description;
-                            document.getElementById('totalProcess').innerHTML = "Out of 5 Process, Executing 2";
-                        }
+
                         jobstatus = 'Executing model.....';
                         break;
                     case 'esriJobSucceeded':
-                        document.getElementById('totalProcess').innerHTML = "Out of 5 Process, Executing 3";
+
                         jobstatus = 'Model executed successfully';
                         break;
                 }
-                document.getElementById('loaderMsg').innerHTML = jobstatus;
+                // document.getElementById('loaderMsg').innerHTML = jobstatus;
             },
 
-            onSearchComplete: function() {
+            onSearchComplete: function(evt) {
+                var feature = evt.results[0][0].feature;
+                var mp = webMercatorUtils.webMercatorToGeographic(feature.geometry);
+                this.inputX = mp.x;
+                this.inputY = mp.y;
                 this.map.graphics.clear();
             },
 
             generateID: function() {
-                return Math.random().toString(36).substr(2, 9);
+                return Math.random().toString(36).substr(2, 5);
             },
 
             createBuffer: function() {
@@ -426,7 +426,8 @@ define(['dojo/_base/declare',
                 var gra = new Graphic(bufferPolygon, fill);
                 this.map.graphics.add(gra);
                 var extent = bufferPolygon.getExtent();
-                this.map.setExtent(extent);
+                this.map.centerAndZoom(mapPoint, 13);
+                //  this.map.setExtent(extent);
                 this.existingEVStations = new FeatureLayer(this.existingEVlayerURL, {
                     mode: FeatureLayer.MODE_ONDEMAND,
                     outFields: ["*"],
