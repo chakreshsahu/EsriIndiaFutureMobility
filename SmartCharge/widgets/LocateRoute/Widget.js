@@ -121,7 +121,7 @@ define([
           viewType: 'dom',
           views: [this.tabHeader, this.bufferResult, this.allrouteresult]
         });
-        
+
         html.place(this.viewStack.domNode, this.widgetContent);
         this._switchView(0);
         this.directionGraphicsLayer = new GraphicsLayer();
@@ -268,8 +268,8 @@ define([
         //this.shelter.show();taking time that why i commented it
         this.map.graphics.clear();
         var pictureMarkerSymbol = new PictureMarkerSymbol('./widgets/LocateRoute/images/search_pointer.png', 36, 36);
-        var graphic2 = new Graphic(evt.mapPoint, pictureMarkerSymbol);
-        this.map.graphics.add(graphic2);
+        var graphic = new Graphic(evt.mapPoint, pictureMarkerSymbol);
+        this.map.graphics.add(graphic);
 
         this.locator.locationToAddress(webMercatorUtils.webMercatorToGeographic(evt.mapPoint), 100);
         this.map.infoWindow.hide();
@@ -339,7 +339,7 @@ define([
 
         var connector_type = dijit.byId("connectorType");
         var type_of_station = dijit.byId("chargerType");
-        if (this.map.graphics.graphics[0].geometry.x == 0){
+        if (this.map.graphics.graphics.length == 0 || this.map.graphics.graphics[0].geometry.x == 0) {
           new Message({
             titleLabel: "Locate and Route Module",
             message: "Please Select Location either by clicking on map or by searching or enable your current location to search EV station"
@@ -368,7 +368,7 @@ define([
           });
           return;
 
-        }        
+        }
         this.mapPoint = this.map.graphics.graphics[0].geometry;
         var bufferDistance = dom.byId("sliderValue").innerText;
         var bufferPolygon = geometryEngine.geodesicBuffer(this.mapPoint, bufferDistance, 9036);
@@ -378,7 +378,8 @@ define([
         this.bufferGraphicsLayer.add(gra);
         //this.map.graphics.add(gra);
         var extent = bufferPolygon.getExtent();
-        this.map.setExtent(extent);
+        //this.map.setExtent(extent);
+        this.map.centerAndZoom( this.mapPoint, 12);
         var query = new Query();
 
         query.where = "connector_type = '" + connector_type.item.name.trim() + "' and type_of_station = '" + type_of_station.value.trim() + "'";
@@ -389,67 +390,71 @@ define([
           var features = [];
           this.evGraphicsLayer.clear();
           this.bufferResultTable.innerHTML = "";
-          array.forEach(response.features, lang.hitch(this, function (feature) {
+          if (response.features.length == 0) {
+            new Message({
+              titleLabel: "Locate and Route Module",
+              message: "There are no nearby EV charging stations available !! "
+            })
 
-            features.push(feature.attributes);
-            var graphic = new Graphic(feature.geometry);
-            this.evGraphicsLayer.add(graphic);
-            //this.evGraphicsLayer.redraw();
-            var geom2 = feature.geometry;
+          } else {
+            array.forEach(response.features, lang.hitch(this, function (feature) {
 
-            var aerialDistance = geometryEngine.distance(this.mapPoint, geom2, 9036);
+              features.push(feature.attributes);
+              var graphic = new Graphic(feature.geometry);
+              this.evGraphicsLayer.add(graphic);
+              //this.evGraphicsLayer.redraw();
+              var geom2 = feature.geometry;
 
-            feature.attributes.aerialDistance = aerialDistance.toFixed(2);
+              var aerialDistance = geometryEngine.distance(this.mapPoint, geom2, 9036);
 
-          }));
+              feature.attributes.aerialDistance = aerialDistance.toFixed(2);
 
-          lang.hitch(this, this.sortStationsAerialDist(features, 'aerialDistance'));
+            }));
 
-          array.forEach(features, lang.hitch(this, function (feature) {
+            lang.hitch(this, this.sortStationsAerialDist(features, 'aerialDistance'));
 
-            // var graphic = new Graphic(feature.geometry);
-            // this.evGraphicsLayer.add(graphic);
-            // this.evGraphicsLayer.redraw();
+            array.forEach(features, lang.hitch(this, function (feature) {
 
-            var div = domConstruct.create("div", {
-              style: {
-                cursor: "pointer"
-              }
-            }, this.bufferResultTable);
-            div.onclick = lang.hitch(this, this.getCurrentStation);
-            var cell = domConstruct.create('tr', null, div);
+              var div = domConstruct.create("div", {
+                style: {
+                  cursor: "pointer"
+                }
+              }, this.bufferResultTable);
+              div.onclick = lang.hitch(this, this.getCurrentStation);
+              var cell = domConstruct.create('tr', null, div);
 
-            cell.innerHTML = "<b>Station Name :</b><span>" + feature.name + "</span>";
+              cell.innerHTML = "<b>Station Name :</b><span>" + feature.name + "</span>";
 
-            cell = domConstruct.create('tr', null, div);
-            cell.innerHTML += "<b>Charging Type:</b>" + feature.type_of_station;
+              cell = domConstruct.create('tr', null, div);
+              cell.innerHTML += "<b>Charging Type:</b>" + feature.type_of_station;
 
-            cell = domConstruct.create('tr', null, div);
-            cell.innerHTML += "<b>Connector Type:</b>" + feature.connector_type;
+              cell = domConstruct.create('tr', null, div);
+              cell.innerHTML += "<b>Connector Type:</b>" + feature.connector_type;
 
-            cell = domConstruct.create('tr', null, div);
-            cell.innerHTML += "<b>Network/Operator:</b>" + feature.network_operator;
+              cell = domConstruct.create('tr', null, div);
+              cell.innerHTML += "<b>Network/Operator:</b>" + feature.network_operator;
 
-            cell = domConstruct.create('tr', null, div);
-            cell.innerHTML += "<b>Usage:</b>" + feature.usage;
+              cell = domConstruct.create('tr', null, div);
+              cell.innerHTML += "<b>Usage:</b>" + feature.usage;
 
-            cell = domConstruct.create('tr', null, div);
-            cell.innerHTML += "<b>Max voltage:</b>" + feature.max__voltage;
+              cell = domConstruct.create('tr', null, div);
+              cell.innerHTML += "<b>Max voltage:</b>" + feature.max__voltage;
 
-            cell = domConstruct.create('tr', null, div);
-            cell.innerHTML += "<b>Max Current:</b>" + feature.max__current;
+              cell = domConstruct.create('tr', null, div);
+              cell.innerHTML += "<b>Max Current:</b>" + feature.max__current;
 
-            cell = domConstruct.create('tr', null, div);
-            cell.innerHTML += "<b>Max Power (kw):</b>" + feature.max__power_kw_;
+              cell = domConstruct.create('tr', null, div);
+              cell.innerHTML += "<b>Max Power (kw):</b>" + feature.max__power_kw_;
 
-            cell = domConstruct.create('tr', null, div);
-            cell.innerHTML += "<b>Aerial Distance (KM):</b>" + feature.aerialDistance;
+              cell = domConstruct.create('tr', null, div);
+              cell.innerHTML += "<b>Aerial Distance (KM):</b>" + feature.aerialDistance;
 
-            domConstruct.create("br", null, this.bufferResultTable);            
-          }));
-          this._switchView(1);
+              domConstruct.create("br", null, this.bufferResultTable);
+            }));
+            this._switchView(1);
+          }
         }));
-      
+
       },
       sortStationsAerialDist: function (json_object, key_to_sort_by) {
         function sortByKey(a, b) {
@@ -473,7 +478,7 @@ define([
           this.endPoint.attributes = {
             'name': 'End Point'
           };
-          this.map.graphics.clear();
+          // this.map.graphics.clear();
           // this.map.graphics.add(this.endPoint);
           // this.map.graphics.add(this.startPoint);
           this.routeParams.stops.features = [];
@@ -954,6 +959,7 @@ define([
 
         this.showAllLayer();
         this._switchView(2);
+        this.map.graphics.clear();
         this.map.graphics.add(this.endPoint);
         this.map.graphics.add(this.startPoint);
         this.map.removeLayer(this.bufferGraphicsLayer);
@@ -1079,9 +1085,9 @@ define([
               this.map.removeLayer(this.secondRouteLyr);
               this.map.removeLayer(this.thirdRouteLyr);
               this.map.addLayer(this.firstRouteLyr);
-              if (this.map.getLayer('trafficID').visible === false){
-                this.map.getLayer('trafficID').setVisibility(true);   
-              }          
+              if (this.map.getLayer('trafficID').visible === false) {
+                this.map.getLayer('trafficID').setVisibility(true);
+              }
               this.viewFirstRoute = true;
               this.viewRoute = true;
             }
@@ -1094,10 +1100,10 @@ define([
               this.secondRouteUpCheckBox.checked = true;
               this.thirdRouteUpCheckBox.checked = true;
               this.viewRoute = false;
-              if (this.map.getLayer('trafficID').visible === true){
-                this.map.getLayer('trafficID').setVisibility(false);    
-              }                            
-             
+              if (this.map.getLayer('trafficID').visible === true) {
+                this.map.getLayer('trafficID').setVisibility(false);
+              }
+
             }
             break;
           case 'secondRouteUpCheckBox':
@@ -1112,8 +1118,8 @@ define([
               this.map.addLayer(this.secondRouteLyr);
               this.map.addLayer(this.trafficLayer);
               this.viewSecondRoute = true;
-              if (this.map.getLayer('trafficID').visible === false){
-                this.map.getLayer('trafficID').setVisibility(true);   
+              if (this.map.getLayer('trafficID').visible === false) {
+                this.map.getLayer('trafficID').setVisibility(true);
               }
             }
             else {
@@ -1125,8 +1131,8 @@ define([
               this.secondRouteUpCheckBox.checked = true;
               this.thirdRouteUpCheckBox.checked = true;
               this.map.getLayer('trafficID').setVisibility(false);
-              if (this.map.getLayer('trafficID').visible === true){
-                this.map.getLayer('trafficID').setVisibility(false);    
+              if (this.map.getLayer('trafficID').visible === true) {
+                this.map.getLayer('trafficID').setVisibility(false);
               }
             }
             break;
@@ -1142,8 +1148,8 @@ define([
               this.map.addLayer(this.thirdRouteLyr);
               this.map.addLayer(this.trafficLayer);
               this.viewThirdRoute = true;
-              if (this.map.getLayer('trafficID').visible === false){
-                this.map.getLayer('trafficID').setVisibility(true);   
+              if (this.map.getLayer('trafficID').visible === false) {
+                this.map.getLayer('trafficID').setVisibility(true);
               }
             }
             else {
@@ -1153,9 +1159,9 @@ define([
               this.viewThirdRoute = false;
               this.firstRouteUpCheckBox.checked = true;
               this.secondRouteUpCheckBox.checked = true;
-              this.thirdRouteUpCheckBox.checked = true;              
-              if (this.map.getLayer('trafficID').visible === true){
-                this.map.getLayer('trafficID').setVisibility(false);    
+              this.thirdRouteUpCheckBox.checked = true;
+              if (this.map.getLayer('trafficID').visible === true) {
+                this.map.getLayer('trafficID').setVisibility(false);
               }
             }
             break;
@@ -1320,9 +1326,12 @@ define([
       },
       _backPressData: function () {
         this.map.graphics.clear();
+        var pictureMarkerSymbol = new PictureMarkerSymbol('./widgets/LocateRoute/images/search_pointer.png', 36, 36);
+        var graphic = new Graphic(this.startPoint.geometry, pictureMarkerSymbol);
+        this.map.graphics.add(graphic);
         this.map.addLayer(this.bufferGraphicsLayer);
-        if (this.trafficLayer){
-        this.map.removeLayer(this.trafficLayer);
+        if (this.trafficLayer) {
+          this.map.removeLayer(this.trafficLayer);
         }
         this._switchView(1);
         if (this.firstRouteLyr) {
@@ -1345,11 +1354,25 @@ define([
 
       onClose: function () {
         this.map.graphics.clear();
-        this.evGraphicsLayer.clear();
-        this.bufferGraphicsLayer.clear();
-        this.firstRouteLyr.clear();
-        this.secondRouteLyr.clear();
-        this.thirdRouteLyr.clear();
+        if (this.evGraphicsLayer) {
+          this.evGraphicsLayer.clear();
+        }
+        if (this.bufferGraphicsLayer) {
+          this.bufferGraphicsLayer.clear();
+        }
+        if (this.firstRouteLyr) {
+          this.firstRouteLyr.clear();
+        }
+        if (this.secondRouteLyr) {
+          this.secondRouteLyr.clear();
+        }
+        if (this.thirdRouteLyr) {
+          this.thirdRouteLyr.clear();
+        }
+        if (this.trafficLayer) {
+          this.trafficLayer.clear();
+        }
+
         this.search.set('value', "");
 
         if (this.mapClickEvent !== null) {
