@@ -17,6 +17,7 @@ define(['dojo/_base/declare',
         "esri/tasks/locator",
         "esri/symbols/SimpleFillSymbol",
         "esri/symbols/SimpleMarkerSymbol",
+        "esri/symbols/PictureMarkerSymbol",
         "esri/symbols/SimpleLineSymbol",
         'jimu/dijit/TabContainer3',
         "jimu/dijit/LoadingShelter",
@@ -35,7 +36,7 @@ define(['dojo/_base/declare',
         'dojo/on',
         'jimu/BaseWidget'
     ],
-    function(declare, lang, html, dom, gfx, Search, LocateButton, Color, Point, Locator, SimpleFillSymbol, SimpleMarkerSymbol, SimpleLineSymbol, TabContainer3, LoadingShelter, Graphic, Query, FeatureLayer, ArcGISDynamicMapServiceLayer, geometryEngine, webMercatorUtils, Geoprocessor, SpatialReference, LayerInfos, domConstruct, jsonUtils, $, on, BaseWidget) {
+    function(declare, lang, html, dom, gfx, Search, LocateButton, Color, Point, Locator, SimpleFillSymbol, SimpleMarkerSymbol, PictureMarkerSymbol, SimpleLineSymbol, TabContainer3, LoadingShelter, Graphic, Query, FeatureLayer, ArcGISDynamicMapServiceLayer, geometryEngine, webMercatorUtils, Geoprocessor, SpatialReference, LayerInfos, domConstruct, jsonUtils, $, on, BaseWidget) {
         //To create a widget, you need to derive from BaseWidget.
         return declare([BaseWidget], {
 
@@ -345,10 +346,14 @@ define(['dojo/_base/declare',
                 this.inputX = mp.x;
                 this.inputY = mp.y;
                 var mapClickPoint = new Point(this.inputX, this.inputY);
-                var simpleMarkerSymbol = new SimpleMarkerSymbol();
-                simpleMarkerSymbol.setSize(12);
-                simpleMarkerSymbol.setColor(new Color([255, 0, 0, 1]));
-                var graphic = new Graphic(mapClickPoint, simpleMarkerSymbol);
+                // var simpleMarkerSymbol = new SimpleMarkerSymbol();
+                var marker = new PictureMarkerSymbol();
+                marker.setHeight(30);
+                marker.setWidth(30);
+                marker.setUrl("./images/location-01.png");
+                // simpleMarkerSymbol.setSize(12);
+                // simpleMarkerSymbol.setColor(new Color([255, 0, 0, 1]));
+                var graphic = new Graphic(mapClickPoint, marker);
                 this.map.graphics.add(graphic);
                 this.map.centerAndZoom(mapClickPoint, 12);
             },
@@ -393,6 +398,16 @@ define(['dojo/_base/declare',
                 document.getElementById('score').innerHTML = score.toFixed(2);
                 var percent = ((score / 5) * 100).toFixed(2);
                 document.getElementById('scorePercent').innerHTML = percent + " %";
+
+                if (percent > 0 && percent < 41) {
+                    document.getElementById('image').classList.add("notfeasible");
+                } else if (percent > 40 && percent < 61) {
+                    document.getElementById('image').classList.add("avrg");
+                } else if (percent > 60 && percent < 81) {
+                    document.getElementById('image').classList.add("good");
+                } else {
+                    document.getElementById('image').classList.add("excellent");
+                }
                 this.showResults();
             },
 
