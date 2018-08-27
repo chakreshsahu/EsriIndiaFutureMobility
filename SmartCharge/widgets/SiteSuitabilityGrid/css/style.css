@@ -5,3 +5,27 @@
   margin-top: 0;
 }
 /* add additional custom styles */
+  #dashboard { 
+        background:rgba(56,56,56,.5);
+        color: #fff;
+        font-family: arial;
+        height: auto; 
+        overflow: hidden;
+        padding: 5px;
+        position: absolute;
+        right: 30px;
+        text-align: center;
+        top: 30px;
+        width: 300px;
+        z-index: 40;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+        border: 1px solid rgb(56,56,56);
+      }
+      #dashboardWidgets {
+        background: #fff;
+        color: #888;
+        margin: 0 auto;
+        text-align: left;
+      }
