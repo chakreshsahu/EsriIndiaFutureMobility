@@ -59,6 +59,7 @@ define(['dojo/_base/declare',
             resultTabNode: null,
             evSitePanel: null,
             layer: null,
+            mapClickHandler: null,
             // this property is set by the framework when widget is loaded.
             // name: 'sitesuitabilityassessment',
             // add additional properties here
@@ -87,15 +88,13 @@ define(['dojo/_base/declare',
                 }, "locatebuton");
                 this.locate.startup();
                 this.locator = new Locator("https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer");
-                this.own(on(this.map, 'click', lang.hitch(this, this._onMapClick)));
+                this.mapClickHandler = this.own(on(this.map, 'click', lang.hitch(this, this._onMapClick)));
 
                 if (this.map.itemId) {
                     LayerInfos.getInstance(this.map, this.map.itemInfo)
                         .then(lang.hitch(this, function(operLayerInfos) {
                             this.operLayerInfos = operLayerInfos;
                             this.showLayers(this.operLayerInfos);
-                            // this.bindEvents();
-                            //  dom.setSelectable(this.layersSection, false);
                         }));
                 } else {
                     var itemInfo = this._obtainMapLayers();
@@ -110,7 +109,6 @@ define(['dojo/_base/declare',
             },
 
             onOpen: function() {
-                // on(this.locate, "locate", lang.hitch(this, this.onLocate));
                 this.own(on(this.locate, 'locate', lang.hitch(this, this.onLocate)));
                 on(this.search, 'search-results', lang.hitch(this, this.onSearchComplete));
                 this.existingEVlayerURL = "https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/ExistingEVStations/FeatureServer/0";
@@ -120,6 +118,8 @@ define(['dojo/_base/declare',
             },
 
             onClose: function() {
+                this.map.graphics.clear();
+                this.mapClickHandler[0].remove();
                 console.log('sitesuitabilityassessment::onClose');
             },
 
@@ -189,9 +189,7 @@ define(['dojo/_base/declare',
                 }
 
                 $('.checkBoxes').change(lang.hitch(this, function(evt) {
-                    var checkedChkBox = document.getElementsByClassName('checkBoxes');
-                    lang.hitch(this, this.checkBoxClick(checkedChkBox, evt, null));
-
+                    lang.hitch(this, this.checkBoxClick(evt));
                 }));
 
                 $('.expand').click(lang.hitch(this, function(evt) {
@@ -208,7 +206,7 @@ define(['dojo/_base/declare',
                 }));
             },
 
-            checkBoxClick: function(checkedChkBox, evt, paginationFlag) {
+            checkBoxClick: function(evt) {
                 var layerURL = evt.target.value;
 
                 if (evt.target.checked) {
@@ -216,7 +214,10 @@ define(['dojo/_base/declare',
                         this.layer = new ArcGISDynamicMapServiceLayer("https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/LanduseLandcover/MapServer", {
                             id: evt.target.name
                         });
-
+                    } else if (evt.target.name === "Street Network") {
+                        this.layer = new ArcGISDynamicMapServiceLayer("https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/StreetNetwork/MapServer", {
+                            id: evt.target.name
+                        });
                     } else {
                         this.layer = new FeatureLayer(layerURL, {
                             id: evt.target.name
@@ -251,7 +252,7 @@ define(['dojo/_base/declare',
                     };
 
                     var resultsTab = {
-                        title: "Results",
+                        title: "Analysis",
                         content: this.resultTabNode
                     };
 
@@ -352,7 +353,6 @@ define(['dojo/_base/declare',
                 if (this.inputX === null || this.inputY === null) {
                     alert('Please select location !');
                 } else {
-                    //this.gp = new Geoprocessor("https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/SiteSuitabilityModel/GPServer/SiteSuitabilityModel");
                     this.gp = new Geoprocessor("https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/SiteSuitability/GPServer/SiteSuitability");
                     this.gp.setOutputSpatialReference({ wkid: 102100 });
                     var params = {
@@ -362,8 +362,8 @@ define(['dojo/_base/declare',
                         "_sdefileName": "F:/SiteSuitabilityModel/gisdb@localhost.sde"
                     };
 
-                    this.gp.submitJob(params, lang.hitch(this, this.getModelOutput));
-                    //  this.gp.submitJob(params, lang.hitch(this, this.getModelOutput), lang.hitch(this, this.gpJobStatus), lang.hitch(this, this.ModelError));
+                    this.gp.submitJob(params, lang.hitch(this, this.getModelOutput), lang.hitch(this, this.gpJobStatus), lang.hitch(this, this.ModelError));
+
                 }
             },
 
