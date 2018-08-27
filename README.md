@@ -54,11 +54,29 @@ Locate and Route module search EV Charging Station based user's charger type and
 | Transport Hubs | 3 | 5 | 5 | 4.33333333333 |
 | Travel Destrinations | 3 | 4 | 3 | 3.33333333333 |
 
+#### Average Time of Stay (Number of Hours)
+| Range | Weightage |
+| --- | --- | 
+| less then 1 | 1 |
+| 1 to 3 | 2 |
+| 3 to 5 | 3 |
+| 5 to 8 | 4 |
+| 8 to 12 | 5 |
+
+
+#### Parking Space (No of Car's Space)
+| Value | Weightage |
+| --- | --- | 
+| 50 | 1 |
+| 100 | 2 |
+| 200 | 3 |
+| 500 | 4 |
+| 1000 | 5 |
 
 ## Data Source
 
 Gurugram and South Delhi taken as study area for Site Suitability Assessment. The following data used for computation purpose.
-
+* Existing EV Station (Dummy Data)
 * Potential EV Station 
    * Apartments
    * Automobile Service Centres
