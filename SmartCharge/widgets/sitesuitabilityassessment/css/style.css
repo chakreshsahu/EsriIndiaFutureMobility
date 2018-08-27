@@ -31,48 +31,58 @@
 
 /* add additional custom styles */
 
-.resulttable{
-    width:100%;
-    border-collapse:collapse;
+.resulttable {
+    width: 100%;
+    border-collapse: collapse;
 }
-.resulttable td{
-    padding:5px;
+
+.resulttable td {
+    padding: 5px;
 }
-.heading{
+
+.heading {
     background: #f9f9f9;
     text-align: center;
     font-size: 16px;
     border-radius: 5px;
 }
-.resultitem{
-    font-size:18px;
-    font-weight:bold;
-    color:#22d17c;
+
+.resultitem {
+    font-size: 18px;
+    font-weight: bold;
+    color: #22d17c;
 }
-.resultlablebig{
-    color:#000;
-    font-size:14px;
-    font-weight:bold;
+
+.resultlablebig {
+    color: #000;
+    font-size: 14px;
+    font-weight: bold;
 }
-.resultlablesmall{
-    font-style:italic;
-    font-size:12px;
-    margin:0px 5px;
+
+.resultlablesmall {
+    font-style: italic;
+    font-size: 12px;
+    margin: 0px 5px;
 }
-.resultimage{
-    width:300px;
-    height:200px;
-    margin:auto;
+
+.resultimage {
+    width: 300px;
+    height: 200px;
+    margin: auto;
 }
-.excellent{
-    background-image:url(../images/excellent.png);
+
+.excellent {
+    background-image: url(../images/excellent.png);
 }
-.good{
-    background-image:url(../images/good.png);
+
+.good {
+    background-image: url(../images/good.png);
 }
-.average{
-    background-image:url(../images/average.png);
+
+.avrg {
+    background-image: url(../images/average.png);
 }
-.notfeasible{
-    background-image:url(../images/notfeasible.png);
+
+.notfeasible {
+    background-image: url(../images/notfeasible.png);
 }
