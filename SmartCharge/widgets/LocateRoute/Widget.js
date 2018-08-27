@@ -265,6 +265,12 @@ define([
       },
 
       onMapClick: function (evt) {
+        //this.shelter.show();taking time that why i commented it
+        this.map.graphics.clear();
+        var pictureMarkerSymbol = new PictureMarkerSymbol('./widgets/LocateRoute/images/search_pointer.png', 36, 36);
+        var graphic2 = new Graphic(evt.mapPoint, pictureMarkerSymbol);
+        this.map.graphics.add(graphic2);
+
         this.locator.locationToAddress(webMercatorUtils.webMercatorToGeographic(evt.mapPoint), 100);
         this.map.infoWindow.hide();
       },
@@ -289,15 +295,16 @@ define([
       locationAdressComplete: function (evt) {
         if (evt.address.address) {
           var address = evt.address.address;
-          this.map.graphics.clear();
-          var pictureMarkerSymbol = new PictureMarkerSymbol('./widgets/LocateRoute/images/search_pointer.png', 36, 36);
+          // this.map.graphics.clear();
+          //var pictureMarkerSymbol = new PictureMarkerSymbol('./widgets/LocateRoute/images/search_pointer.png', 36, 36);
           if (address.Address === "")
             this.search.set('value', evt.address.address.City);
           else {
             this.search.set('value', evt.address.address.Address);
           }
-          var graphic = new Graphic(webMercatorUtils.geographicToWebMercator(evt.address.location), pictureMarkerSymbol);
-          this.map.graphics.add(graphic);
+          //var graphic = new Graphic(webMercatorUtils.geographicToWebMercator(evt.address.location), pictureMarkerSymbol);
+          //this.map.graphics.add(graphic);
+          //this.shelter.hide();same her as it is no use using shelter
         }
         var point = new Point(evt.address.location.x, evt.address.location.y);
         var sPoint = webMercatorUtils.project(point, this.map.spatialReference);
@@ -332,21 +339,6 @@ define([
 
         var connector_type = dijit.byId("connectorType");
         var type_of_station = dijit.byId("chargerType");
-        if (this.search.get('value') === "") {
-          new Message({
-            titleLabel: "Locate and Route Module",
-            message: "Please Select Location either by clicking on map or by searching or enable your current location to search EV station"
-          });
-          return;
-
-        }
-        if (connector_type.item.name.trim() === "Select") {
-          connector_type.set("state", "Error");
-        }
-        if (type_of_station.value.trim() === "Select") {
-          type_of_station.set("state", "Error");
-          return;
-        }
         if (this.map.graphics.graphics[0].geometry.x == 0){
           new Message({
             titleLabel: "Locate and Route Module",
@@ -354,7 +346,29 @@ define([
           });
           return;
         }
-        else{
+        // if (this.search.get('value') === "") {
+        //   new Message({
+        //     titleLabel: "Locate and Route Module",
+        //     message: "Please Select Location either by clicking on map or by searching or enable your current location to search EV station"
+        //   });
+        //   return;
+
+        // }
+        if (connector_type.item.name.trim() === "Select") {
+          connector_type.set("state", "Error");
+        }
+        if (type_of_station.value.trim() === "Select") {
+          type_of_station.set("state", "Error");
+          return;
+        }
+        if (this.search.get('value') === "") {
+          new Message({
+            titleLabel: "Locate and Route Module",
+            message: "Please Select Location either by clicking on map or by searching or enable your current location to search EV station"
+          });
+          return;
+
+        }        
         this.mapPoint = this.map.graphics.graphics[0].geometry;
         var bufferDistance = dom.byId("sliderValue").innerText;
         var bufferPolygon = geometryEngine.geodesicBuffer(this.mapPoint, bufferDistance, 9036);
@@ -435,7 +449,7 @@ define([
           }));
           this._switchView(1);
         }));
-      }
+      
       },
       sortStationsAerialDist: function (json_object, key_to_sort_by) {
         function sortByKey(a, b) {
@@ -1065,7 +1079,9 @@ define([
               this.map.removeLayer(this.secondRouteLyr);
               this.map.removeLayer(this.thirdRouteLyr);
               this.map.addLayer(this.firstRouteLyr);
-              this.map.getLayer('trafficID').setVisibility(true);             
+              if (this.map.getLayer('trafficID').visible === false){
+                this.map.getLayer('trafficID').setVisibility(true);   
+              }          
               this.viewFirstRoute = true;
               this.viewRoute = true;
             }
@@ -1078,7 +1094,9 @@ define([
               this.secondRouteUpCheckBox.checked = true;
               this.thirdRouteUpCheckBox.checked = true;
               this.viewRoute = false;
-              this.map.getLayer('trafficID').setVisibility(false);             
+              if (this.map.getLayer('trafficID').visible === true){
+                this.map.getLayer('trafficID').setVisibility(false);    
+              }                            
              
             }
             break;
@@ -1094,7 +1112,9 @@ define([
               this.map.addLayer(this.secondRouteLyr);
               this.map.addLayer(this.trafficLayer);
               this.viewSecondRoute = true;
-              this.map.getLayer('trafficID').setVisibility(true);
+              if (this.map.getLayer('trafficID').visible === false){
+                this.map.getLayer('trafficID').setVisibility(true);   
+              }
             }
             else {
               this.map.addLayer(this.firstRouteLyr);
@@ -1105,6 +1125,9 @@ define([
               this.secondRouteUpCheckBox.checked = true;
               this.thirdRouteUpCheckBox.checked = true;
               this.map.getLayer('trafficID').setVisibility(false);
+              if (this.map.getLayer('trafficID').visible === true){
+                this.map.getLayer('trafficID').setVisibility(false);    
+              }
             }
             break;
           case 'thirdRouteUpCheckBox':
@@ -1119,7 +1142,9 @@ define([
               this.map.addLayer(this.thirdRouteLyr);
               this.map.addLayer(this.trafficLayer);
               this.viewThirdRoute = true;
-              this.map.getLayer('trafficID').setVisibility(true);
+              if (this.map.getLayer('trafficID').visible === false){
+                this.map.getLayer('trafficID').setVisibility(true);   
+              }
             }
             else {
               this.map.addLayer(this.firstRouteLyr);
@@ -1129,7 +1154,9 @@ define([
               this.firstRouteUpCheckBox.checked = true;
               this.secondRouteUpCheckBox.checked = true;
               this.thirdRouteUpCheckBox.checked = true;              
-              this.map.getLayer('trafficID').setVisibility(false);
+              if (this.map.getLayer('trafficID').visible === true){
+                this.map.getLayer('trafficID').setVisibility(false);    
+              }
             }
             break;
           default:
@@ -1319,6 +1346,12 @@ define([
       onClose: function () {
         this.map.graphics.clear();
         this.evGraphicsLayer.clear();
+        this.bufferGraphicsLayer.clear();
+        this.firstRouteLyr.clear();
+        this.secondRouteLyr.clear();
+        this.thirdRouteLyr.clear();
+        this.search.set('value', "");
+
         if (this.mapClickEvent !== null) {
           this.mapClickEvent.remove();
         }
