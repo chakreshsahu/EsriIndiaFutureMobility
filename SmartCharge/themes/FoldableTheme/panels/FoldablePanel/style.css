@@ -27,6 +27,13 @@
   color: white;
   cursor: pointer;
   background-color: #485566;
+   background: -moz-linear-gradient(0deg, rgba(38,52,99,1) 0%, rgba(34,131,109,1) 35%, rgba(32,199,118,1) 65%, rgba(37,232,138,1) 100%); /* ff3.6+ */
+background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(38,52,99,1)), color-stop(35%, rgba(34,131,109,1)), color-stop(65%, rgba(32,199,118,1)), color-stop(100%, rgba(37,232,138,1))); /* safari4+,chrome */
+background: -webkit-linear-gradient(0deg, rgba(38,52,99,1) 0%, rgba(34,131,109,1) 35%, rgba(32,199,118,1) 65%, rgba(37,232,138,1) 100%); /* safari5.1+,chrome10+ */
+background: -o-linear-gradient(0deg, rgba(38,52,99,1) 0%, rgba(34,131,109,1) 35%, rgba(32,199,118,1) 65%, rgba(37,232,138,1) 100%); /* opera 11.10+ */
+background: -ms-linear-gradient(0deg, rgba(38,52,99,1) 0%, rgba(34,131,109,1) 35%, rgba(32,199,118,1) 65%, rgba(37,232,138,1) 100%); /* ie10+ */
+background: linear-gradient(90deg, rgba(38,52,99,1) 0%, rgba(34,131,109,1) 35%, rgba(32,199,118,1) 65%, rgba(37,232,138,1) 100%); /* w3c */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#263463', endColorstr='#25E88A',GradientType=1 ); /* ie6-9 */
   box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.4);
   position: relative;
   font-weight: bold;
