@@ -37,3 +37,27 @@ Locate and Route module search EV Charging Station based user's charger type and
 ## Weightage and Criteria of Calculation
 
 
+## Data Source
+
+Gurugram and South Delhi taken as study area for Site Suitability Assessment. The following data used for computation purpose.
+
+* Potential EV Station 
+   * Apartments
+   * Automobile Service Centres
+   * IT Park
+   * Educational Institutions
+   * Fuel Station
+   * Government Office
+   * Hospital
+   * Malls
+   * Metro Stations
+   * Parking
+   * Parks Recreation
+   * Restaurants
+   * Transport Hubs
+   * Travel Destrinations
+* Economic Condition
+* Population Density
+* VehiclePopulationDensity
+* Landuse Landcover
+* Street Network
