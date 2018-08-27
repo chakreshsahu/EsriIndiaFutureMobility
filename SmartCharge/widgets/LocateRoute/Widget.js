@@ -108,6 +108,7 @@ define([
       viewFirstRoute: false,
       viewSecondRoute: false,
       viewThirdRoute: false,
+      viewRoute: null,
       trafficLayer: null,
       existingEVlayerURL: "https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/ExistingEVStations/FeatureServer/0",
       trafficLayerURL: "http://traffic.arcgis.com/arcgis/rest/services/World/Traffic/MapServer",
@@ -120,6 +121,7 @@ define([
           viewType: 'dom',
           views: [this.tabHeader, this.bufferResult, this.allrouteresult]
         });
+        
         html.place(this.viewStack.domNode, this.widgetContent);
         this._switchView(0);
         this.directionGraphicsLayer = new GraphicsLayer();
@@ -167,6 +169,8 @@ define([
           id: 'trafficID'
         }
         );
+        this.map.addLayer(this.trafficLayer);
+        this.map.getLayer('trafficID').setVisibility(false);
       },
       _switchView: function (idx) {
         this.currentStack = idx;
@@ -333,6 +337,7 @@ define([
             titleLabel: "Locate and Route Module",
             message: "Please Select Location either by clicking on map or by searching or enable your current location to search EV station"
           });
+          return;
 
         }
         if (connector_type.item.name.trim() === "Select") {
@@ -342,7 +347,14 @@ define([
           type_of_station.set("state", "Error");
           return;
         }
-
+        if (this.map.graphics.graphics[0].geometry.x == 0){
+          new Message({
+            titleLabel: "Locate and Route Module",
+            message: "Please Select Location either by clicking on map or by searching or enable your current location to search EV station"
+          });
+          return;
+        }
+        else{
         this.mapPoint = this.map.graphics.graphics[0].geometry;
         var bufferDistance = dom.byId("sliderValue").innerText;
         var bufferPolygon = geometryEngine.geodesicBuffer(this.mapPoint, bufferDistance, 9036);
@@ -419,11 +431,11 @@ define([
             cell = domConstruct.create('tr', null, div);
             cell.innerHTML += "<b>Aerial Distance (KM):</b>" + feature.aerialDistance;
 
-            domConstruct.create("br", null, this.bufferResultTable);
-            this._switchView(1);
+            domConstruct.create("br", null, this.bufferResultTable);            
           }));
+          this._switchView(1);
         }));
-
+      }
       },
       sortStationsAerialDist: function (json_object, key_to_sort_by) {
         function sortByKey(a, b) {
@@ -448,8 +460,8 @@ define([
             'name': 'End Point'
           };
           this.map.graphics.clear();
-          this.map.graphics.add(this.endPoint);
-          this.map.graphics.add(this.startPoint);
+          // this.map.graphics.add(this.endPoint);
+          // this.map.graphics.add(this.startPoint);
           this.routeParams.stops.features = [];
           this.routeParams.stops.features.push(this.startPoint);
           this.routeParams.stops.features.push(this.endPoint);
@@ -459,9 +471,6 @@ define([
 
       },
 
-      _locateRoute: function () {
-        alert("Bingo");
-      },
       addRouteAsBarrier: function (routeResult, val, pathArray) {
         var addFeatures = [];
         var flipFeatures = [];
@@ -931,6 +940,8 @@ define([
 
         this.showAllLayer();
         this._switchView(2);
+        this.map.graphics.add(this.endPoint);
+        this.map.graphics.add(this.startPoint);
         this.map.removeLayer(this.bufferGraphicsLayer);
         this.shelter.hide();
       },
@@ -1050,13 +1061,13 @@ define([
               this.firstRouteUpCheckBox.checked = true;
               this.secondRouteUpCheckBox.checked = false;
               this.thirdRouteUpCheckBox.checked = false;
-
               this.map.removeLayer(this.firstRouteLyr);
               this.map.removeLayer(this.secondRouteLyr);
               this.map.removeLayer(this.thirdRouteLyr);
               this.map.addLayer(this.firstRouteLyr);
-              this.map.addLayer(this.trafficLayer);
+              this.map.getLayer('trafficID').setVisibility(true);             
               this.viewFirstRoute = true;
+              this.viewRoute = true;
             }
             else {
               this.map.addLayer(this.firstRouteLyr);
@@ -1066,7 +1077,9 @@ define([
               this.firstRouteUpCheckBox.checked = true;
               this.secondRouteUpCheckBox.checked = true;
               this.thirdRouteUpCheckBox.checked = true;
-              this.map.removeLayer(this.trafficLayer);
+              this.viewRoute = false;
+              this.map.getLayer('trafficID').setVisibility(false);             
+             
             }
             break;
           case 'secondRouteUpCheckBox':
@@ -1081,6 +1094,7 @@ define([
               this.map.addLayer(this.secondRouteLyr);
               this.map.addLayer(this.trafficLayer);
               this.viewSecondRoute = true;
+              this.map.getLayer('trafficID').setVisibility(true);
             }
             else {
               this.map.addLayer(this.firstRouteLyr);
@@ -1090,7 +1104,7 @@ define([
               this.firstRouteUpCheckBox.checked = true;
               this.secondRouteUpCheckBox.checked = true;
               this.thirdRouteUpCheckBox.checked = true;
-              this.map.removeLayer(this.trafficLayer);
+              this.map.getLayer('trafficID').setVisibility(false);
             }
             break;
           case 'thirdRouteUpCheckBox':
@@ -1105,6 +1119,7 @@ define([
               this.map.addLayer(this.thirdRouteLyr);
               this.map.addLayer(this.trafficLayer);
               this.viewThirdRoute = true;
+              this.map.getLayer('trafficID').setVisibility(true);
             }
             else {
               this.map.addLayer(this.firstRouteLyr);
@@ -1113,8 +1128,8 @@ define([
               this.viewThirdRoute = false;
               this.firstRouteUpCheckBox.checked = true;
               this.secondRouteUpCheckBox.checked = true;
-              this.thirdRouteUpCheckBox.checked = true;
-              this.map.removeLayer(this.trafficLayer);
+              this.thirdRouteUpCheckBox.checked = true;              
+              this.map.getLayer('trafficID').setVisibility(false);
             }
             break;
           default:
