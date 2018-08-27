@@ -10,6 +10,12 @@ An electric vehicle user to locate a nearby suitable charging station and identi
 
 [View it live](https://esriindia1.centralindia.cloudapp.azure.com/smartcharge)
 
+![alt text](https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/StartScreen.png "landing page")
+
+![alt text](https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/MainScreen.png "starting page")
+
+
+
 ## Features
 Features of the application are following
 * Site Suitability Assessment
