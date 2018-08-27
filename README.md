@@ -9,3 +9,8 @@ Application will provide options to users for delineate or marks their location 
 An electric vehicle user to locate a nearby suitable charging station and identifying a shortest alternative paths to avoid range anxiety would also be part of the solution. The Application will show GIS maps of all charging stations, Street data, Traffic congestion and congestion pattern of charging stations.
 
 [View it live](https://esriindia1.centralindia.cloudapp.azure.com/smartcharge)
+
+## Features
+Features of the application are following
+* Site Suitability Assessment
+* Locate and Route
