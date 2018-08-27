@@ -10,9 +10,11 @@ An electric vehicle user to locate a nearby suitable charging station and identi
 
 [View it live](https://esriindia1.centralindia.cloudapp.azure.com/smartcharge)
 
-![alt text](https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/StartScreen.png "landing page")
 
-![alt text](https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/MainScreen.png "starting page")
+
+![landing page](https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/StartScreen.png)
+
+![starting page](https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/MainScreen.png)
 
 
 
@@ -23,9 +25,15 @@ Features of the application are following
 
 ## Site Suitability Assessment
 
+Site Suitability Assessment module check site suitablity for establishing EV Charging Station. 
 
 ## Locate and Route
 
+Locate and Route module search EV Charging Station based user's charger type and connector type within 3 km buffer. It provide a list of EV charging station with distance. When user select a particular charging station three alternative routes generated for mobility. 
 
 ## Methodology
+
+
+## Weightage and Criteria of Calculation
+
 
