@@ -424,6 +424,14 @@
       {
         "urlPrefix": "https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services",
         "proxyUrl": "https://esriindia1.centralindia.cloudapp.azure.com/proxy/proxy.ashx"
+      },
+      {
+        "urlPrefix": "http://traffic.arcgis.com",
+        "proxyUrl": "https://esriindia1.centralindia.cloudapp.azure.com/proxy/proxy.ashx"
+      },
+      {
+        "urlPrefix": "http://route.arcgis.com",
+        "proxyUrl": "https://esriindia1.centralindia.cloudapp.azure.com/proxy/proxy.ashx"
       }
     ]
   },
