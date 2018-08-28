@@ -147,7 +147,7 @@ define([
         //this.endSymbol = new PictureMarkerSymbol('widgets/LocateRoute/images/endpoint.png', 50, 50);
           //this.startSymbol = new PictureMarkerSymbol('widgets/LocateRoute/images/startpoint.png', 50, 50);
         this.endSymbol = new PictureMarkerSymbol('widgets/LocateRoute/images/endpoint.png', 16, 50);
-        this.startSymbol = new PictureMarkerSymbol('widgets/LocateRoute/images/startpoint.png', 50, 42);
+        this.startSymbol = new PictureMarkerSymbol('widgets/LocateRoute/images/startpoint.png', 40, 34);
         this.existingEVStations = new FeatureLayer(this.existingEVlayerURL, {
           mode: FeatureLayer.MODE_ONDEMAND,
           outFields: ["*"],
@@ -275,7 +275,7 @@ define([
       onMapClick: function (evt) {
         //this.shelter.show();taking time that why i commented it
         this.map.graphics.clear();
-        var pictureMarkerSymbol = new PictureMarkerSymbol('./widgets/LocateRoute/images/search_pointer.png', 50, 42);
+        var pictureMarkerSymbol = new PictureMarkerSymbol('./widgets/LocateRoute/images/search_pointer.png', 40, 34);
         var graphic = new Graphic(evt.mapPoint, pictureMarkerSymbol);
         this.map.graphics.add(graphic);
 
@@ -1510,7 +1510,7 @@ define([
         this.viewSecondRoute = false;
         this.viewThirdRoute = false;
           //var pictureMarkerSymbol = new PictureMarkerSymbol('./widgets/LocateRoute/images/search_pointer.png', 36, 36);
-        var pictureMarkerSymbol = new PictureMarkerSymbol('./widgets/LocateRoute/images/search_pointer.png', 50, 42);
+        var pictureMarkerSymbol = new PictureMarkerSymbol('./widgets/LocateRoute/images/search_pointer.png', 40, 34);
         var graphic = new Graphic(this.startPoint.geometry, pictureMarkerSymbol);
         this.map.graphics.add(graphic);
         this.map.addLayer(this.bufferGraphicsLayer);
