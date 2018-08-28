@@ -18,6 +18,7 @@ An electric vehicle user to locate a nearby suitable charging station and identi
 
 ## How it works
 
+![Alt Text](https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/videomobility.gif)
 
 ## Features
 Features of the application are as follows
