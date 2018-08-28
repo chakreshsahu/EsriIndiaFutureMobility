@@ -62,6 +62,27 @@ Locate and Route module search EV Charging Station based user's charger type and
 
 ## Methodology
 
+Python Script is used to create GP service to find out the site suitability of Electric Vehicle Charging Station.
+
+In GP Service we are checking of site suitability based on input location. A location point as input is taken and make buffer of 500 meter on it.
+
+Buffered output is then intersect with feature layers named as 
+
+* EconomicCondition
+* ExistingEVStations
+* LanduseLandcover
+* PopulationDensity
+* StreetNetwork
+* VehiclePopulationDensity
+
+whereas each layer have there weight score out of 5 i.e if feature of an layer have score 5 then it is most preferable for site suitability.
+
+When buffer layer is intersect each above stated layers then we will count final average score.
+
+And this final average score is the output of this GP service.
+
+### Site Suitability Model 
+![Site Suitability Model](https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/SiteSuitabilityModel.PNG)
 
 ## Weightage and Criteria of Calculation
 
