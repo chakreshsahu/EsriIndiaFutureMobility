@@ -404,11 +404,11 @@ define(['dojo/_base/declare',
                 var percent = ((score / 5) * 100).toFixed(2);
                 document.getElementById('scorePercent').innerHTML = percent + " %";
 
-                if (percent > 0 && percent < 41) {
+                if (percent > 0 && percent < 31) {
                     document.getElementById('image').classList.add("notfeasible");
-                } else if (percent > 40 && percent < 61) {
+                } else if (percent > 30 && percent < 51) {
                     document.getElementById('image').classList.add("avrg");
-                } else if (percent > 60 && percent < 81) {
+                } else if (percent > 50 && percent < 71) {
                     document.getElementById('image').classList.add("good");
                 } else {
                     document.getElementById('image').classList.add("excellent");
