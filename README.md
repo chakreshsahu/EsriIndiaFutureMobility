@@ -49,7 +49,7 @@ Select Site enables user to assess his/her site for EV Station prospects.
 
 4.	Based on average score of site suitability site is rated as follows:
 
-![score range](https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/Score_range.PNG)
+![score range](https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/Score_range.PNG=250x250)
 
 #### Analysis
 
