@@ -171,7 +171,7 @@ define(['dojo/_base/declare',
                     cell.innerHTML = this.config.queries[i].Layer[0].name;
                     cell = domConstruct.create('td', null, newdiv);
                     cell.innerHTML = "<label class='expand'><i class='fa fa-plus-circle' aria-hidden='true'></i></label>";
-                    var newdiv1 = domConstruct.create("div", { 'class': 'divContent' }, this.exploreMapTabNode);
+                    var newdiv1 = domConstruct.create("div", { 'class': 'divContent', 'style': 'display: none' }, this.exploreMapTabNode);
                     if (this.config.queries[i].Layer[0].symboltype === "unique") {
                         for (var j = 0; j < this.config.queries[i].Layer[0].image.length; j++) {
                             var b = this.config.queries[i].Layer[0].image[j];
