@@ -27,9 +27,7 @@ Features of the application are following
 
 Site Suitability assessment widget enables the user to search or mark a site on map and analyse its suitability for planning a future EV station prospects.
 
-Workflow:
-
-####Explore Map
+#### Explore Map
 
 Use Explore Map to view the layers on map used for analysing the site suitability.
 
@@ -54,10 +52,6 @@ Select Site enables user to assess his/her site for EV Station prospects.
 #### Analysis
 
 Result of site analysis are displayed under analysis tab
-
-![analysis result not feasible](https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/AnalysisResultNotFeasible.PNG)
-
-![analysis tab](https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/AnalysisResult.PNG)
 
 ![analysis tab](https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/AnalysisResultGood.PNG)
 
