@@ -27,6 +27,41 @@ Features of the application are following
 
 Site Suitability Assessment module check site suitablity for establishing EV Charging Station. 
 
+Site Suitability assessment widget enables the user to search or mark a site on map and analyse its suitability for planning a future EV station prospects.
+
+Workflow:
+
+####Explore Map
+
+Use Explore Map to view the layers on map used for analysing the site suitability.
+
+![explore tab](https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/ExploreTab.png)
+
+#### Select Site
+
+Select Site enables user to assess his/her site for EV Station prospects.
+
+1.	Search or Click on map to locate the site for which you want to check suitability.
+
+2.	Click on Get Suitability button.
+
+![selectsite tab](https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/SelectSitetab%202.png)
+
+3.	After successful completion of analysis user is redirected to analysis tab which shows the result of site analysis.
+
+4.	Based on average score of site suitability site is rated as follows:
+
+#### Analysis
+
+Result of site analysis are displayed under analysis tab
+
+![analysis result not feasible](https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/AnalysisResultNotFeasible.PNG)
+
+![analysis tab](https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/AnalysisResult.PNG)
+
+![analysis tab](https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/AnalysisResultGood.PNG)
+
+
 ## Locate and Route
 
 Locate and Route module search EV Charging Station based user's charger type and connector type within 3 km buffer. It provide a list of EV charging station with distance. When user select a particular charging station three alternative routes generated for mobility. 
