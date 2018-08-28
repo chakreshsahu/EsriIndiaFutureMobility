@@ -38,12 +38,12 @@
 }
 
 .divHeader {
-    font-size: large
+    font-size: large !important;
 }
 
 .divHeader td {
     vertical-align: top !important;
-    padding-right: 6px;
+    padding-right: 6px !important;
 }
 
 
