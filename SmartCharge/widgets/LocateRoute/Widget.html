@@ -19,33 +19,41 @@
         </div>
       </div>
 
-        <table class="resulttable">
-            <tr>
-                <td><span class="formlabel">${nls.ChargerType}</span></td>
-                <td><select name="chargerType" id="chargerType" data-dojo-attach-point="chargerType" data-dojo-type="dijit/form/Select" style="width:100%;">
-    <option value="Select" selected="selected">Select</option>
-    <option value="AC">AC</option>
-    <option value="Level 1 DC">Level 1 DC</option>
-    <option value="Level 2 DC">Level 2 DC</option>
-</select></td>
-            </tr>
-            <tr>
-                <td><span class="formlabel">${nls.ConnectorType}</span></td>
-                <td><input id="connectorType" data-dojo-attach-point="connectorType" style="width:100%;" /></td>
-            </tr>
-            <tr>
-                <td colspan="2" style="text-align:center;">
-                    <div class='jimu-btn' data-dojo-attach-point='locateStation' id='locateStation' data-dojo-attach-event="onclick: _locateStation">${nls.LocateStation}</div>
-                </td>
-            </tr>
-        </table>
+      <table class="resulttable">
+        <tr>
+          <td>
+            <span class="formlabel">${nls.ChargerType}</span>
+          </td>
+          <td>
+            <select name="chargerType" id="chargerType" data-dojo-attach-point="chargerType" data-dojo-type="dijit/form/Select" style="width:100%;">
+              <option value="Select" selected="selected">Select</option>
+              <option value="AC">AC</option>
+              <option value="Level 1 DC">Level 1 DC</option>
+              <option value="Level 2 DC">Level 2 DC</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span class="formlabel">${nls.ConnectorType}</span>
+          </td>
+          <td>
+            <input id="connectorType" data-dojo-attach-point="connectorType" style="width:100%;" />
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" style="text-align:center;">
+            <div class='jimu-btn' data-dojo-attach-point='locateStation' id='locateStation' data-dojo-attach-event="onclick: _locateStation">${nls.LocateStation}</div>
+          </td>
+        </tr>
+      </table>
+    </div>
 
 
 
 
 
-    
-     
+
 
     <div data-dojo-attach-point='bufferResult'>
       <img style="width: 15px; height: 15px; cursor:pointer;" data-dojo-attach-point='backBtn' src='./widgets/LocateRoute/images/back.jpg'
@@ -159,4 +167,5 @@
     </div>
     <div data-dojo-attach-point="shelter" data-dojo-type="jimu/dijit/LoadingShelter" data-dojo-props='hidden:true'></div>
   </div>
+
 </div>

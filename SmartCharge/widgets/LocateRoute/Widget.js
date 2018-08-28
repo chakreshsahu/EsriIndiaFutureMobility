@@ -577,7 +577,7 @@ define([
           this.routeParams.stops.features.push(this.startPoint);
           this.routeParams.stops.features.push(this.endPoint);
           lang.hitch(this, this.fetchRoute());
-          this.shelter.show();
+          //this.shelter.show();
         }));
 
       },
@@ -1055,6 +1055,7 @@ define([
 
         this.showAllLayer();
         this._switchView(2);
+        this.initialExtent = this.map.extent;
         this.map.graphics.clear();
         this.map.graphics.add(this.endPoint);
         this.map.graphics.add(this.startPoint);
@@ -1194,10 +1195,24 @@ define([
               this.thirdRouteUpCheckBox.checked = false;
               this.initialExtent = this.map.extent;
               this.map.setExtent(this.firstRouteExtent);
-              this.map.removeLayer(this.firstRouteLyr);
-              this.map.removeLayer(this.secondRouteLyr);
-              this.map.removeLayer(this.thirdRouteLyr);
+
+              if (this.firstRouteLyr) {
+                this.map.removeLayer(this.firstRouteLyr);                
+              }
+              if (this.secondRouteLyr) {
+                this.map.removeLayer(this.secondRouteLyr);                
+              }
+              if (this.thirdRouteLyr) {
+                this.map.removeLayer(this.thirdRouteLyr);                
+              }
+
               this.map.addLayer(this.firstRouteLyr);
+
+              if (this.directionGraphicsLayer) {
+                this.map.removeLayer(this.directionGraphicsLayer);
+                this.directionGraphicsLayer.clear();
+              }
+              this.map.addLayer(this.directionGraphicsLayer)
               // if (this.map.getLayer('trafficID').visible === false) {
               //   this.map.getLayer('trafficID').setVisibility(true);
               // }
@@ -1209,6 +1224,11 @@ define([
               this.map.addLayer(this.firstRouteLyr);
               this.map.addLayer(this.secondRouteLyr);
               this.map.addLayer(this.thirdRouteLyr);
+              if (this.directionGraphicsLayer) {
+                this.map.removeLayer(this.directionGraphicsLayer);
+                this.directionGraphicsLayer.clear();
+              }
+              this.map.addLayer(this.directionGraphicsLayer)
               this.viewFirstRoute = false;
               this.firstRouteUpCheckBox.checked = true;
               this.secondRouteUpCheckBox.checked = true;
@@ -1227,10 +1247,24 @@ define([
               this.thirdRouteUpCheckBox.checked = false;
               this.initialExtent = this.map.extent;
               this.map.setExtent(this.secondRouteExtent);
-              this.map.removeLayer(this.firstRouteLyr);
-              this.map.removeLayer(this.secondRouteLyr);
-              this.map.removeLayer(this.thirdRouteLyr);
+
+              if (this.firstRouteLyr) {
+                this.map.removeLayer(this.firstRouteLyr);                
+              }
+              if (this.secondRouteLyr) {
+                this.map.removeLayer(this.secondRouteLyr);                
+              }
+              if (this.thirdRouteLyr) {
+                this.map.removeLayer(this.thirdRouteLyr);                
+              }
+
               this.map.addLayer(this.secondRouteLyr);
+              
+              if (this.directionGraphicsLayer) {
+                this.map.removeLayer(this.directionGraphicsLayer);
+                this.directionGraphicsLayer.clear();
+              }
+              this.map.addLayer(this.directionGraphicsLayer)
               this.viewSecondRoute = true;
               // if (this.map.getLayer('trafficID').visible === false) {
               //   this.map.getLayer('trafficID').setVisibility(true);
@@ -1241,6 +1275,11 @@ define([
               this.map.addLayer(this.firstRouteLyr);
               this.map.addLayer(this.secondRouteLyr);
               this.map.addLayer(this.thirdRouteLyr);
+              if (this.directionGraphicsLayer) {
+                this.map.removeLayer(this.directionGraphicsLayer);
+                this.directionGraphicsLayer.clear();
+              }
+              this.map.addLayer(this.directionGraphicsLayer)
               this.viewSecondRoute = false;
               this.firstRouteUpCheckBox.checked = true;
               this.secondRouteUpCheckBox.checked = true;
@@ -1257,10 +1296,24 @@ define([
               this.thirdRouteUpCheckBox.checked = true;
               this.initialExtent = this.map.extent;
               this.map.setExtent(this.thirdRouteExtent);
-              this.map.removeLayer(this.firstRouteLyr);
-              this.map.removeLayer(this.secondRouteLyr);
-              this.map.removeLayer(this.thirdRouteLyr);
+
+              if (this.firstRouteLyr) {
+                this.map.removeLayer(this.firstRouteLyr);                
+              }
+              if (this.secondRouteLyr) {
+                this.map.removeLayer(this.secondRouteLyr);                
+              }
+              if (this.thirdRouteLyr) {
+                this.map.removeLayer(this.thirdRouteLyr);                
+              }
+
               this.map.addLayer(this.thirdRouteLyr);
+
+              if (this.directionGraphicsLayer) {
+                this.map.removeLayer(this.directionGraphicsLayer);
+                this.directionGraphicsLayer.clear();
+              }
+              this.map.addLayer(this.directionGraphicsLayer)
               this.viewThirdRoute = true;
               // if (this.map.getLayer('trafficID').visible === false) {
               //   this.map.getLayer('trafficID').setVisibility(true);
@@ -1271,6 +1324,11 @@ define([
               this.map.addLayer(this.firstRouteLyr);
               this.map.addLayer(this.secondRouteLyr);
               this.map.addLayer(this.thirdRouteLyr);
+              if (this.directionGraphicsLayer) {
+                this.map.removeLayer(this.directionGraphicsLayer);
+                this.directionGraphicsLayer.clear();
+              }
+              this.map.addLayer(this.directionGraphicsLayer)
               this.viewThirdRoute = false;
               this.firstRouteUpCheckBox.checked = true;
               this.secondRouteUpCheckBox.checked = true;
@@ -1441,7 +1499,11 @@ define([
       },
       _backPressData: function () {
         this.map.graphics.clear();
-        this.map.setExtent(this.initialExtent);
+        this.map.centerAndZoom(this.mapPoint,12);
+        // this.map.setExtent(this.initialExtent);
+        this.viewFirstRoute = false;
+        this.viewSecondRoute = false;
+        this.viewThirdRoute = false;
         var pictureMarkerSymbol = new PictureMarkerSymbol('./widgets/LocateRoute/images/search_pointer.png', 36, 36);
         var graphic = new Graphic(this.startPoint.geometry, pictureMarkerSymbol);
         this.map.graphics.add(graphic);
