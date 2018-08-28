@@ -198,6 +198,11 @@ Dummy data created for showing existing EV Station.
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Saraswati Apartments EV Charging Station | 	Sector D, Vasant Kunj, New Delhi, Delhi 110070 | Mahindra Reva | Private | 3 | 29 | Level 1 DC | CHAdeMO | 220-250V | 	65AMP | 60 |
 
+## Site Suitability Grid 
+
+Site suitability grid indicates the prospects of planning a EV station at any particular site.
+
+<img src="https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/GridTemplate.jpg" alt="score range" style="max-width: 70%;">
 
 ## Data Source
 
