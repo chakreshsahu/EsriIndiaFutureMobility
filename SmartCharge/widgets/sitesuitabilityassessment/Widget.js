@@ -449,13 +449,13 @@ define(['dojo/_base/declare',
             createBuffer: function() {
 
                 var mapPoint = new Point(this.inputX, this.inputY, new SpatialReference({ wkid: 4326 }));
-                var bufferPolygon = geometryEngine.geodesicBuffer(mapPoint, 1.5, 9036);
+                var bufferPolygon = geometryEngine.geodesicBuffer(mapPoint, 0.5, 9036);
                 var fill = new SimpleFillSymbol();
                 fill.setColor(new Color([255, 167, 127, 0.25]));
                 var gra = new Graphic(bufferPolygon, fill);
                 this.map.graphics.add(gra);
                 var extent = bufferPolygon.getExtent();
-                this.map.centerAndZoom(mapPoint, 13);
+                this.map.centerAndZoom(mapPoint, 14);
                 this.existingEVStations = new FeatureLayer(this.existingEVlayerURL, {
                     mode: FeatureLayer.MODE_ONDEMAND,
                     outFields: ["*"],
