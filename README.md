@@ -4,9 +4,9 @@ Electric vehicle technology is evolving, more in terms of fuel efficiency, cost 
 
 As a solution, we propose a model to identify a suitable location for establishing a charging station using GIS analysis techniques in which various parameters like demographic information, traffic details, street network, vehicle population, already available charging station and point of interest can be utilized intelligently. 
 
-Application will provide options to users for delineate or marks their location on GIS map, provide different parameters and run analysis to check their site suitability for setting up charging station. The geo analysis will also give a clear picture for profitability.  
+Application will provide options for the users to delineate or mark their location on GIS map, provide different parameters and run analysis to check their site suitability for setting up charging station. The geo analysis will also give a clear picture for profitability.  
 
-An electric vehicle user to locate a nearby suitable charging station and identifying a shortest alternative paths to avoid range anxiety would also be part of the solution. The Application will show GIS maps of all charging stations, Street data, Traffic congestion and congestion pattern of charging stations.
+An electric vehicle user to locate a nearby suitable charging station and identifying the shortest alternative path to avoid range anxiety would also be part of the solution. The Application will show GIS maps of all charging stations, Street data, Traffic congestion and congestion pattern of charging stations.
 
 [View it live](https://esriindia1.centralindia.cloudapp.azure.com/esmartcharge/)
 
@@ -20,7 +20,7 @@ An electric vehicle user to locate a nearby suitable charging station and identi
 
 
 ## Features
-Features of the application are following
+Features of the application are as follows
 * Site Suitability Assessment
 * Locate and Route
 
@@ -46,7 +46,7 @@ Select Site enables user to assess his/her site for EV Station prospects.
 
 3.	After successful completion of analysis user is redirected to analysis tab which shows the result of site analysis.
 
-4.	Based on average score of site suitability site is rated as follows:
+4.	Based on average score of site suitability, site is rated as follows:
 
 <img src="https://github.com/chakreshsahu/EsriIndiaFutureMobility/raw/master/SmartCharge/screenshot/Score_range.PNG" alt="score range" style="max-width: 50%;">
 
@@ -59,7 +59,7 @@ Result of site analysis are displayed under analysis tab
 
 ## Locate and Route
 
-Locate and Route module search EV Charging Station based user's charger type and connector type within buffer area. It provide a list of EV charging station with distance. When user select a particular charging station three alternative routes generated for mobility. 
+Locate and Route module search EV Charging Station based on user's charger type and connector type within buffer area. It provide a list of EV charging station with distance. When user select a particular charging station three alternative routes generated for mobility. 
 
 1.	Search or Click on map to locate the site around which you want to locate EV Stations.
 
@@ -106,9 +106,9 @@ Buffered output is then intersect with feature layers named as
 * StreetNetwork
 * VehiclePopulationDensity
 
-whereas each layer have there weight score out of 5 i.e if feature of an layer have score 5 then it is most preferable for site suitability.
+whereas each layer have their weight score out of 5 i.e if feature of a layer have score 5 then it is most preferable for site suitability.
 
-When buffer layer is intersect each above stated layers then we will count final average score.
+When buffer layer is intersected to each above stated layers then we will count final average score.
 
 And this final average score is the output of this GP service.
 
