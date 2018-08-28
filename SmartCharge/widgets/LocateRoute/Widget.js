@@ -15,6 +15,7 @@ define([
   "esri/tasks/FeatureSet",
   "esri/Color",
   "esri/geometry/Point",
+  "esri/geometry/Multipoint",
   "esri/tasks/locator",
   "esri/SpatialReference",
   "esri/tasks/query",
@@ -56,6 +57,7 @@ define([
     FeatureSet,
     Color,
     Point,
+    Multipoint,
     Locator,
     SpatialReference,
     Query,
@@ -109,7 +111,7 @@ define([
       totalDistanceThree: null,
       viewFirstRoute: false,
       viewSecondRoute: false,
-      viewThirdRoute: false,      
+      viewThirdRoute: false,
       trafficLayer: null,
       firstRouteExtent: null,
       secondRouteExtent: null,
@@ -145,7 +147,7 @@ define([
         this.thirdRouteSymbol = new SimpleLineSymbol().setColor(new Color([192, 183, 0, 1])).setWidth(5);
 
         //this.endSymbol = new PictureMarkerSymbol('widgets/LocateRoute/images/endpoint.png', 50, 50);
-          //this.startSymbol = new PictureMarkerSymbol('widgets/LocateRoute/images/startpoint.png', 50, 50);
+        //this.startSymbol = new PictureMarkerSymbol('widgets/LocateRoute/images/startpoint.png', 50, 50);
         this.endSymbol = new PictureMarkerSymbol('widgets/LocateRoute/images/endpoint.png', 16, 50);
         this.startSymbol = new PictureMarkerSymbol('widgets/LocateRoute/images/startpoint.png', 40, 34);
         this.existingEVStations = new FeatureLayer(this.existingEVlayerURL, {
@@ -164,7 +166,7 @@ define([
             1
           ),
           //new Color([207, 34, 171, 0.5])
-            new Color([251, 3, 108, 0.9])
+          new Color([251, 3, 108, 0.9])
         );
         var evRenderer = new SimpleRenderer(symbol);
         this.evGraphicsLayer = new GraphicsLayer();
@@ -382,14 +384,14 @@ define([
         var bufferDistance = dom.byId("sliderValue").innerText;
         var bufferPolygon = geometryEngine.geodesicBuffer(this.mapPoint, bufferDistance, 9036);
         var fill = new SimpleFillSymbol();
-          //fill.setColor(new Color([255, 167, 127, 0.25]));
+        //fill.setColor(new Color([255, 167, 127, 0.25]));
         fill.setColor(new Color([174, 228, 29, 0.25]));
         var gra = new Graphic(bufferPolygon, fill);
         this.bufferGraphicsLayer.add(gra);
         //this.map.graphics.add(gra);
         var extent = bufferPolygon.getExtent();
         //this.map.setExtent(extent);
-        this.map.centerAndZoom( this.mapPoint, 12);
+        this.map.centerAndZoom(this.mapPoint, 13);
         var query = new Query();
 
         query.where = "connector_type = '" + connector_type.item.name.trim() + "' and type_of_station = '" + type_of_station.value.trim() + "'";
@@ -427,8 +429,8 @@ define([
 
               var table = domConstruct.create("table", {
                 style: {
-                    cursor: "pointer",
-                    width:"100%"
+                  cursor: "pointer",
+                  width: "100%"
                 }
               }, this.bufferResultTable);
               table.onclick = lang.hitch(this, this.getCurrentStation);
@@ -695,7 +697,7 @@ define([
             }
             if (evt.currentTarget.checked === true) {
               this.map.addLayer(this.firstRouteLyr);
-            
+
             } else {
               this.map.removeLayer(this.firstRouteLyr);
               if (this.map.getLayer('firstPointLayer')) {
@@ -756,7 +758,7 @@ define([
         var length, eachtime;
         for (var b = 1; b < this.directions.features.length; b++) {
           graphic = new Graphic(this.directions.features[b].geometry, this.firstRouteSymbol);
-          this.firstRouteExtent = this.directions.extent; 
+          this.firstRouteExtent = this.directions.extent;
           routeFeatures.features.push(graphic);
           this.firstRouteLyr.add(graphic);
           this.totalTime += this.directions.features[b].attributes.time;
@@ -887,7 +889,7 @@ define([
         for (var k = 1; k < this.directions.features.length; k++) {
           graphic = new Graphic(this.directions.features[k].geometry, this.secondRouteSymbol);
           routeFeatures.features.push(graphic);
-          this.secondRouteExtent = this.directions.extent;          
+          this.secondRouteExtent = this.directions.extent;
           this.secondRouteLyr.add(graphic);
           this.totalTime += this.directions.features[k].attributes.time;
           this.totalLength += this.directions.features[k].attributes.length;
@@ -1032,7 +1034,7 @@ define([
         var length, eachtime;
         for (var k = 1; k < this.directions.features.length; k++) {
           var graphic = new Graphic(this.directions.features[k].geometry, this.thirdRouteSymbol);
-          this.thirdRouteExtent = this.directions.extent; 
+          this.thirdRouteExtent = this.directions.extent;
           routeFeatures.features.push(graphic);
           this.thirdRouteLyr.add(graphic);
           this.totalTime += this.directions.features[k].attributes.time;
@@ -1060,7 +1062,20 @@ define([
 
         this.showAllLayer();
         this._switchView(2);
+        var extJson = {
+          "points": [
+            [this.firstRouteExtent.xmin, this.firstRouteExtent.ymin],
+            [this.firstRouteExtent.xmax, this.firstRouteExtent.ymax],
+            [this.secondRouteExtent.xmin, this.secondRouteExtent.ymin],
+            [this.secondRouteExtent.xmax, this.secondRouteExtent.ymax],
+            [this.thirdRouteExtent.xmin, this.thirdRouteExtent.ymin],
+            [this.thirdRouteExtent.xmax, this.thirdRouteExtent.ymax]
+          ],
+          "spatialReference": ({ "wkid": 102100 })
+        };
+        var multipoint = new Multipoint(extJson);
         this.initialExtent = this.map.extent;
+        this.map.setExtent((multipoint.getExtent()).expand(2));
         this.map.graphics.clear();
         this.map.graphics.add(this.endPoint);
         this.map.graphics.add(this.startPoint);
@@ -1199,16 +1214,16 @@ define([
               this.secondRouteUpCheckBox.checked = false;
               this.thirdRouteUpCheckBox.checked = false;
               this.initialExtent = this.map.extent;
-              this.map.setExtent(this.firstRouteExtent);
+              this.map.setExtent(this.firstRouteExtent.expand(2));
 
               if (this.firstRouteLyr) {
-                this.map.removeLayer(this.firstRouteLyr);                
+                this.map.removeLayer(this.firstRouteLyr);
               }
               if (this.secondRouteLyr) {
-                this.map.removeLayer(this.secondRouteLyr);                
+                this.map.removeLayer(this.secondRouteLyr);
               }
               if (this.thirdRouteLyr) {
-                this.map.removeLayer(this.thirdRouteLyr);                
+                this.map.removeLayer(this.thirdRouteLyr);
               }
 
               this.map.addLayer(this.firstRouteLyr);
@@ -1222,7 +1237,7 @@ define([
               //   this.map.getLayer('trafficID').setVisibility(true);
               // }
               this.viewFirstRoute = true;
-            
+
             }
             else {
               this.map.setExtent(this.initialExtent);
@@ -1238,7 +1253,7 @@ define([
               this.firstRouteUpCheckBox.checked = true;
               this.secondRouteUpCheckBox.checked = true;
               this.thirdRouteUpCheckBox.checked = true;
-              
+
               // if (this.map.getLayer('trafficID').visible === true) {
               //   this.map.getLayer('trafficID').setVisibility(false);
               // }
@@ -1251,20 +1266,20 @@ define([
               this.secondRouteUpCheckBox.checked = true;
               this.thirdRouteUpCheckBox.checked = false;
               this.initialExtent = this.map.extent;
-              this.map.setExtent(this.secondRouteExtent);
+              this.map.setExtent(this.secondRouteExtent.expand(2));
 
               if (this.firstRouteLyr) {
-                this.map.removeLayer(this.firstRouteLyr);                
+                this.map.removeLayer(this.firstRouteLyr);
               }
               if (this.secondRouteLyr) {
-                this.map.removeLayer(this.secondRouteLyr);                
+                this.map.removeLayer(this.secondRouteLyr);
               }
               if (this.thirdRouteLyr) {
-                this.map.removeLayer(this.thirdRouteLyr);                
+                this.map.removeLayer(this.thirdRouteLyr);
               }
 
               this.map.addLayer(this.secondRouteLyr);
-              
+
               if (this.directionGraphicsLayer) {
                 this.map.removeLayer(this.directionGraphicsLayer);
                 this.directionGraphicsLayer.clear();
@@ -1300,16 +1315,16 @@ define([
               this.firstRouteUpCheckBox.checked = false;
               this.thirdRouteUpCheckBox.checked = true;
               this.initialExtent = this.map.extent;
-              this.map.setExtent(this.thirdRouteExtent);
+              this.map.setExtent(this.thirdRouteExtent.expand(2));
 
               if (this.firstRouteLyr) {
-                this.map.removeLayer(this.firstRouteLyr);                
+                this.map.removeLayer(this.firstRouteLyr);
               }
               if (this.secondRouteLyr) {
-                this.map.removeLayer(this.secondRouteLyr);                
+                this.map.removeLayer(this.secondRouteLyr);
               }
               if (this.thirdRouteLyr) {
-                this.map.removeLayer(this.thirdRouteLyr);                
+                this.map.removeLayer(this.thirdRouteLyr);
               }
 
               this.map.addLayer(this.thirdRouteLyr);
@@ -1504,12 +1519,12 @@ define([
       },
       _backPressData: function () {
         this.map.graphics.clear();
-        this.map.centerAndZoom(this.mapPoint,12);
+        this.map.centerAndZoom(this.mapPoint, 13);
         // this.map.setExtent(this.initialExtent);
         this.viewFirstRoute = false;
         this.viewSecondRoute = false;
         this.viewThirdRoute = false;
-          //var pictureMarkerSymbol = new PictureMarkerSymbol('./widgets/LocateRoute/images/search_pointer.png', 36, 36);
+        //var pictureMarkerSymbol = new PictureMarkerSymbol('./widgets/LocateRoute/images/search_pointer.png', 36, 36);
         var pictureMarkerSymbol = new PictureMarkerSymbol('./widgets/LocateRoute/images/search_pointer.png', 40, 34);
         var graphic = new Graphic(this.startPoint.geometry, pictureMarkerSymbol);
         this.map.graphics.add(graphic);
