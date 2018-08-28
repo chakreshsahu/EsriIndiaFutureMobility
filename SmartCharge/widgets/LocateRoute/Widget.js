@@ -305,15 +305,15 @@ define([
       locationAdressComplete: function (evt) {
         if (evt.address.address) {
           var address = evt.address.address;
-          // this.map.graphics.clear();
-          //var pictureMarkerSymbol = new PictureMarkerSymbol('./widgets/LocateRoute/images/search_pointer.png', 36, 36);
+          this.map.graphics.clear();
+          var pictureMarkerSymbol = new PictureMarkerSymbol('./widgets/LocateRoute/images/search_pointer.png', 36, 36);
           if (address.Address === "")
             this.search.set('value', evt.address.address.City);
           else {
             this.search.set('value', evt.address.address.Address);
           }
-          //var graphic = new Graphic(webMercatorUtils.geographicToWebMercator(evt.address.location), pictureMarkerSymbol);
-          //this.map.graphics.add(graphic);
+          var graphic = new Graphic(webMercatorUtils.geographicToWebMercator(evt.address.location), pictureMarkerSymbol);
+          this.map.graphics.add(graphic);
           //this.shelter.hide();same her as it is no use using shelter
         }
         var point = new Point(evt.address.location.x, evt.address.location.y);
