@@ -361,7 +361,7 @@ define(['dojo/_base/declare',
 
                 var graphic = new Graphic(mapClickPoint, this.marker);
                 this.map.graphics.add(graphic);
-                this.map.centerAndZoom(mapClickPoint, 12);
+                this.map.centerAndZoom(mapClickPoint, 14);
                 this.shelter.hide();
             },
 
