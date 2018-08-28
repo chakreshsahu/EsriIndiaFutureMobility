@@ -108,6 +108,7 @@ define(['dojo/_base/declare',
             },
 
             onOpen: function() {
+                this.mapClickHandler = this.own(on(this.map, 'click', lang.hitch(this, this._onMapClick)));
                 this.own(on(this.locate, 'locate', lang.hitch(this, this.onLocate)));
                 on(this.search, 'search-results', lang.hitch(this, this.onSearchComplete));
                 this.existingEVlayerURL = "https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/ExistingEVStations/FeatureServer/0";
@@ -225,6 +226,10 @@ define(['dojo/_base/declare',
                         });
                     } else if (evt.target.name === "Street Network") {
                         this.layer = new ArcGISDynamicMapServiceLayer("https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/StreetNetwork/MapServer", {
+                            id: evt.target.name
+                        });
+                    } else if (evt.target.name === "Potential EV Sites") {
+                        this.layer = new ArcGISDynamicMapServiceLayer("https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/PotentialEVSites/MapServer", {
                             id: evt.target.name
                         });
                     } else {
