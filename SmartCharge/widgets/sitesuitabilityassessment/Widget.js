@@ -6,39 +6,40 @@
  */
 
 define(['dojo/_base/declare',
-        'dojo/_base/lang',
-        'dojo/_base/html',
-        'dojo/dom',
-        "dojox/gfx",
-        "esri/dijit/Search",
-        "esri/dijit/LocateButton",
-        "esri/Color",
-        "esri/geometry/Point",
-        "esri/tasks/locator",
-        "esri/symbols/SimpleFillSymbol",
-        "esri/symbols/SimpleMarkerSymbol",
-        "esri/symbols/PictureMarkerSymbol",
-        "esri/symbols/SimpleLineSymbol",
-        'jimu/dijit/TabContainer3',
-        "jimu/dijit/LoadingShelter",
-        "esri/graphic",
-        "esri/tasks/query",
-        "esri/layers/FeatureLayer",
-        "esri/layers/ArcGISDynamicMapServiceLayer",
-        "esri/geometry/geometryEngine",
-        "esri/geometry/webMercatorUtils",
-        "esri/tasks/Geoprocessor",
-        "esri/SpatialReference",
-        'jimu/LayerInfos/LayerInfos',
-        "dojo/dom-construct",
-        "esri/symbols/jsonUtils",
-        'jimu/loaderplugins/jquery-loader!https://code.jquery.com/jquery-git1.min.js',
-        'dojo/on',
-        'jimu/BaseWidget'
-    ],
-    function(declare, lang, html, dom, gfx, Search, LocateButton, Color, Point, Locator, SimpleFillSymbol, SimpleMarkerSymbol, PictureMarkerSymbol, SimpleLineSymbol, TabContainer3, LoadingShelter, Graphic, Query, FeatureLayer, ArcGISDynamicMapServiceLayer, geometryEngine, webMercatorUtils, Geoprocessor, SpatialReference, LayerInfos, domConstruct, jsonUtils, $, on, BaseWidget) {
+    'dojo/_base/lang',
+    'dojo/_base/html',
+    'dojo/dom',
+    "dojox/gfx",
+    "esri/dijit/Search",
+    "esri/dijit/LocateButton",
+    "esri/Color",
+    "esri/geometry/Point",
+    "esri/tasks/locator",
+    "esri/symbols/SimpleFillSymbol",
+    "esri/symbols/SimpleMarkerSymbol",
+    "esri/symbols/PictureMarkerSymbol",
+    "esri/symbols/SimpleLineSymbol",
+    'jimu/dijit/TabContainer3',
+    "jimu/dijit/LoadingShelter",
+    "esri/graphic",
+    "esri/tasks/query",
+    "esri/layers/FeatureLayer",
+    "esri/layers/ArcGISDynamicMapServiceLayer",
+    "esri/geometry/geometryEngine",
+    "esri/geometry/webMercatorUtils",
+    "esri/tasks/Geoprocessor",
+    "esri/SpatialReference",
+    'jimu/LayerInfos/LayerInfos',
+    "dojo/dom-construct",
+    "esri/symbols/jsonUtils",
+    'jimu/loaderplugins/jquery-loader!https://code.jquery.com/jquery-git1.min.js',
+    'dojo/on',
+    'jimu/BaseWidget',
+    'dijit/_WidgetsInTemplateMixin'
+],
+    function (declare, lang, html, dom, gfx, Search, LocateButton, Color, Point, Locator, SimpleFillSymbol, SimpleMarkerSymbol, PictureMarkerSymbol, SimpleLineSymbol, TabContainer3, LoadingShelter, Graphic, Query, FeatureLayer, ArcGISDynamicMapServiceLayer, geometryEngine, webMercatorUtils, Geoprocessor, SpatialReference, LayerInfos, domConstruct, jsonUtils, $, on, BaseWidget, _WidgetsInTemplateMixin) {
         //To create a widget, you need to derive from BaseWidget.
-        return declare([BaseWidget], {
+        return declare([BaseWidget, _WidgetsInTemplateMixin], {
 
             // Custom widget code goes here
 
@@ -65,7 +66,7 @@ define(['dojo/_base/declare',
             // add additional properties here
 
             //methods to communication with app container:
-            postCreate: function() {
+            postCreate: function () {
                 this.inherited(arguments);
                 console.log('sitesuitabilityassessment::postCreate');
                 this.shelter = new LoadingShelter({
@@ -76,7 +77,7 @@ define(['dojo/_base/declare',
                 this._initializeTab();
             },
 
-            startup: function() {
+            startup: function () {
                 this.inherited(arguments);
                 console.log('sitesuitabilityassessment::startup');
                 this.search = new Search({
@@ -92,14 +93,14 @@ define(['dojo/_base/declare',
 
                 if (this.map.itemId) {
                     LayerInfos.getInstance(this.map, this.map.itemInfo)
-                        .then(lang.hitch(this, function(operLayerInfos) {
+                        .then(lang.hitch(this, function (operLayerInfos) {
                             this.operLayerInfos = operLayerInfos;
                             this.showLayers(this.operLayerInfos);
                         }));
                 } else {
                     var itemInfo = this._obtainMapLayers();
                     LayerInfos.getInstance(this.map, itemInfo)
-                        .then(lang.hitch(this, function(operLayerInfos) {
+                        .then(lang.hitch(this, function (operLayerInfos) {
                             this.operLayerInfos = operLayerInfos;
                             this.showLayers(this.operLayerInfos);
                             //   this.bindEvents();
@@ -108,7 +109,7 @@ define(['dojo/_base/declare',
                 }
             },
 
-            onOpen: function() {
+            onOpen: function () {
                 this.mapClickHandler = this.own(on(this.map, 'click', lang.hitch(this, this._onMapClick)));
                 this.own(on(this.locate, 'locate', lang.hitch(this, this.onLocate)));
                 on(this.search, 'search-results', lang.hitch(this, this.onSearchComplete));
@@ -121,7 +122,7 @@ define(['dojo/_base/declare',
                 console.log('sitesuitabilityassessment::onOpen');
             },
 
-            onClose: function() {
+            onClose: function () {
                 this.map.graphics.clear();
                 for (var j = 0; j < this.map.graphicsLayerIds.length; j++) {
                     if (this.map.graphicsLayerIds[j] !== "ExistingEVStations_560") {
@@ -137,31 +138,31 @@ define(['dojo/_base/declare',
                 console.log('sitesuitabilityassessment::onClose');
             },
 
-            onMinimize: function() {
+            onMinimize: function () {
                 console.log('sitesuitabilityassessment::onMinimize');
             },
 
-            onMaximize: function() {
+            onMaximize: function () {
                 console.log('sitesuitabilityassessment::onMaximize');
             },
 
-            onSignIn: function(credential) {
+            onSignIn: function (credential) {
                 console.log('sitesuitabilityassessment::onSignIn', credential);
             },
 
-            onSignOut: function() {
+            onSignOut: function () {
                 console.log('sitesuitabilityassessment::onSignOut');
             },
 
-            onPositionChange: function() {
+            onPositionChange: function () {
                 console.log('sitesuitabilityassessment::onPositionChange');
             },
 
-            resize: function() {
+            resize: function () {
                 console.log('sitesuitabilityassessment::resize');
             },
 
-            showLayers: function(operLayerInfos) {
+            showLayers: function (operLayerInfos) {
                 // summary:
                 //    create a LayerListView module used to draw layers list in browser.
                 this.operLayerInfos = operLayerInfos;
@@ -203,11 +204,11 @@ define(['dojo/_base/declare',
 
                 }
 
-                $('.checkBoxes').change(lang.hitch(this, function(evt) {
+                $('.checkBoxes').change(lang.hitch(this, function (evt) {
                     lang.hitch(this, this.checkBoxClick(evt));
                 }));
 
-                $('.expand').click(lang.hitch(this, function(evt) {
+                $('.expand').click(lang.hitch(this, function (evt) {
                     if (evt.currentTarget.firstElementChild.className === "fa fa-plus-circle") {
                         evt.currentTarget.firstElementChild.className = "fa fa-minus-circle";
                     } else {
@@ -221,7 +222,7 @@ define(['dojo/_base/declare',
                 }));
             },
 
-            checkBoxClick: function(evt) {
+            checkBoxClick: function (evt) {
                 var layerURL = evt.target.value;
 
                 if (evt.target.checked) {
@@ -251,12 +252,12 @@ define(['dojo/_base/declare',
             },
 
 
-            displayLayer: function() {
+            displayLayer: function () {
                 console.log("Test");
             },
 
 
-            _initializeTab: function() {
+            _initializeTab: function () {
 
                 try {
 
@@ -282,7 +283,7 @@ define(['dojo/_base/declare',
                         selected: this.nls.NewSetting
                     });
 
-                    this.own(on(this.tab, 'tabChanged', lang.hitch(this, function(evt) {
+                    this.own(on(this.tab, 'tabChanged', lang.hitch(this, function (evt) {
                         var event = evt;
                         if (evt === 'Select Site') {
                             document.getElementById('results').style.display = 'none';
@@ -304,7 +305,7 @@ define(['dojo/_base/declare',
             },
 
 
-            onLocate: function(evt) {
+            onLocate: function (evt) {
                 if (evt.error) {
                     this.onLocateError(evt.error);
                 } else {
@@ -320,11 +321,11 @@ define(['dojo/_base/declare',
 
             },
 
-            onLocateError: function(error) {
+            onLocateError: function (error) {
                 console.log("Error:" + error);
             },
 
-            locationAdressComplete: function(evt) {
+            locationAdressComplete: function (evt) {
                 this.map.graphics.clear();
                 if (evt.address.address) {
                     var address = evt.address.address;
@@ -350,7 +351,7 @@ define(['dojo/_base/declare',
                 }
             },
 
-            _onMapClick: function(evt) {
+            _onMapClick: function (evt) {
                 this.shelter.show();
                 this.map.graphics.clear();
                 var mp = webMercatorUtils.webMercatorToGeographic(evt.mapPoint);
@@ -365,7 +366,7 @@ define(['dojo/_base/declare',
             },
 
 
-            executeModel: function() {
+            executeModel: function () {
                 this.shelter.show();
                 var ID = this.generateID();
                 if (this.inputX === null || this.inputY === null) {
@@ -389,16 +390,16 @@ define(['dojo/_base/declare',
             },
 
 
-            getModelOutput: function(resultFeatures) {
+            getModelOutput: function (resultFeatures) {
                 this.gp.getResultData(resultFeatures.jobId, "outputAvgScore", lang.hitch(this, this.displayData));
             },
 
-            ModelError: function(error) {
+            ModelError: function (error) {
                 console.log(error.message);
                 this.shelter.hide();
             },
 
-            displayData: function(result) {
+            displayData: function (result) {
                 var finalScore = result.value;
                 var score = Number(finalScore);
                 document.getElementById('score').innerHTML = score.toFixed(2);
@@ -417,7 +418,7 @@ define(['dojo/_base/declare',
                 this.showResults();
             },
 
-            gpJobStatus: function(jobinfo) {
+            gpJobStatus: function (jobinfo) {
                 var jobstatus;
                 switch (jobinfo.jobStatus) {
                     case 'esriJobSubmitted':
@@ -434,7 +435,7 @@ define(['dojo/_base/declare',
                 // document.getElementById('loaderMsg').innerHTML = jobstatus;
             },
 
-            onSearchComplete: function(evt) {
+            onSearchComplete: function (evt) {
                 var feature = evt.results[0][0].feature;
                 var mp = webMercatorUtils.webMercatorToGeographic(feature.geometry);
                 this.inputX = mp.x;
@@ -442,11 +443,11 @@ define(['dojo/_base/declare',
                 this.map.graphics.clear();
             },
 
-            generateID: function() {
+            generateID: function () {
                 return Math.random().toString(36).substr(2, 5);
             },
 
-            createBuffer: function() {
+            createBuffer: function () {
 
                 var mapPoint = new Point(this.inputX, this.inputY, new SpatialReference({ wkid: 4326 }));
                 var bufferPolygon = geometryEngine.geodesicBuffer(mapPoint, 1.5, 9036);
@@ -467,7 +468,7 @@ define(['dojo/_base/declare',
                 document.getElementById('potentialevCount').innerHTML = 0;
                 document.getElementById('evCount').innerHTML = 0;
                 document.getElementById('results').style.display = 'block';
-                this.existingEVStations.queryFeatures(query, lang.hitch(this, function(response) {
+                this.existingEVStations.queryFeatures(query, lang.hitch(this, function (response) {
                     this.existingEVStationsCount = response.features.length;
                     document.getElementById('evCount').innerHTML = this.existingEVStationsCount;
                 }));
@@ -478,7 +479,7 @@ define(['dojo/_base/declare',
                     id: "potentialEVStations"
                 });
 
-                this.potentialEVStations.queryFeatures(query, lang.hitch(this, function(response) {
+                this.potentialEVStations.queryFeatures(query, lang.hitch(this, function (response) {
                     this.potentialEVStationsCount = response.features.length;
                     document.getElementById('potentialevCount').innerHTML = this.potentialEVStationsCount;
                 }));
@@ -487,7 +488,7 @@ define(['dojo/_base/declare',
 
             },
 
-            showResults: function() {
+            showResults: function () {
                 this.tab.tabs[0].content.style.display = "none";
                 this.tab.tabs[1].content.style.display = "none";
                 this.tab.tabs[2].content.style.display = "inline-block";
