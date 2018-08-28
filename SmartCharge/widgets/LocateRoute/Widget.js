@@ -525,30 +525,6 @@ define([
 
               td2.innerHTML = "<span>" + feature.aerialDistance + "</span>";
 
-              // cell = domConstruct.create('tr', null, div);
-              // cell.innerHTML += "<b>Charging Type:</b>" + feature.type_of_station;
-
-              // cell = domConstruct.create('tr', null, div);
-              // cell.innerHTML += "<b>Connector Type:</b>" + feature.connector_type;
-
-              // cell = domConstruct.create('tr', null, div);
-              // cell.innerHTML += "<b>Network/Operator:</b>" + feature.network_operator;
-
-              // cell = domConstruct.create('tr', null, div);
-              // cell.innerHTML += "<b>Usage:</b>" + feature.usage;
-
-              // cell = domConstruct.create('tr', null, div);
-              // cell.innerHTML += "<b>Max voltage:</b>" + feature.max__voltage;
-
-              // cell = domConstruct.create('tr', null, div);
-              // cell.innerHTML += "<b>Max Current:</b>" + feature.max__current;
-
-              // cell = domConstruct.create('tr', null, div);
-              // cell.innerHTML += "<b>Max Power (kw):</b>" + feature.max__power_kw_;
-
-              // cell = domConstruct.create('tr', null, div);
-              // cell.innerHTML += "<b>Aerial Distance (KM):</b>" + feature.aerialDistance;
-
               domConstruct.create("br", null, this.bufferResultTable);
             }));
             this._switchView(1);
@@ -1080,24 +1056,10 @@ define([
         this.map.graphics.add(this.endPoint);
         this.map.graphics.add(this.startPoint);
         this.map.removeLayer(this.bufferGraphicsLayer);
+        this.map.removeLayer(this.evGraphicsLayer);
         this.shelter.hide();
       },
       showAllLayer: function () {
-        // if (this.startPoint.geometry.x > this.endPoint.geometry.x){
-        //   this.totalDistanceOne > this.totalDistanceThree ? this.totalDistanceOne : this.totalDistanceThree;
-        //    var xmin = null;
-        //    xmin = this.startPoint.geometry.x > this.endPoint.geometry.x ? 
-        //   var x
-        // }
-        // var extent = new Extent(
-        //   {
-        //     "xmin":-122.68,
-        //     "ymin":45.53,
-        //     "xmax":-122.45,
-        //     "ymax":45.6,
-        //     "spatialReference":{"wkid":102100}
-        //   }
-        // );
         var timeDistanceOne;
         var timeDistanceTwo;
         var timeDistanceThree;
@@ -1529,6 +1491,7 @@ define([
         var graphic = new Graphic(this.startPoint.geometry, pictureMarkerSymbol);
         this.map.graphics.add(graphic);
         this.map.addLayer(this.bufferGraphicsLayer);
+        this.map.addLayer(this.evGraphicsLayer);
         // if (this.trafficLayer) {
         //   this.map.removeLayer(this.trafficLayer);
         // }
