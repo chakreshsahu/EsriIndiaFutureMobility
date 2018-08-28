@@ -15,6 +15,7 @@ define([
   "esri/tasks/FeatureSet",
   "esri/Color",
   "esri/geometry/Point",
+  "esri/geometry/Multipoint",
   "esri/tasks/locator",
   "esri/SpatialReference",
   "esri/tasks/query",
@@ -56,6 +57,7 @@ define([
     FeatureSet,
     Color,
     Point,
+    Multipoint,
     Locator,
     SpatialReference,
     Query,
@@ -300,14 +302,12 @@ define([
         if (evt.address.address) {
           var address = evt.address.address;
           // this.map.graphics.clear();
-          //var pictureMarkerSymbol = new PictureMarkerSymbol('./widgets/LocateRoute/images/search_pointer.png', 36, 36);
+         
           if (address.Address === "")
             this.search.set('value', evt.address.address.City);
           else {
             this.search.set('value', evt.address.address.Address);
           }
-          //var graphic = new Graphic(webMercatorUtils.geographicToWebMercator(evt.address.location), pictureMarkerSymbol);
-          //this.map.graphics.add(graphic);
           //this.shelter.hide();same her as it is no use using shelter
         }
         var point = new Point(evt.address.location.x, evt.address.location.y);
@@ -350,14 +350,7 @@ define([
           });
           return;
         }
-        // if (this.search.get('value') === "") {
-        //   new Message({
-        //     titleLabel: "Locate and Route Module",
-        //     message: "Please Select Location either by clicking on map or by searching or enable your current location to search EV station"
-        //   });
-        //   return;
 
-        // }
         if (connector_type.item.name.trim() === "Select") {
           connector_type.set("state", "Error");
         }
@@ -373,6 +366,7 @@ define([
           return;
 
         }
+        this.shelter.show();
         this.bufferGraphicsLayer.clear();
         this.mapPoint = this.map.graphics.graphics[0].geometry;
         var bufferDistance = dom.byId("sliderValue").innerText;
@@ -516,35 +510,12 @@ define([
 
               td2 = domConstruct.create('td', null, tr);
 
-              td2.innerHTML = "<span>" + feature.aerialDistance + "</span>";
-
-              // cell = domConstruct.create('tr', null, div);
-              // cell.innerHTML += "<b>Charging Type:</b>" + feature.type_of_station;
-
-              // cell = domConstruct.create('tr', null, div);
-              // cell.innerHTML += "<b>Connector Type:</b>" + feature.connector_type;
-
-              // cell = domConstruct.create('tr', null, div);
-              // cell.innerHTML += "<b>Network/Operator:</b>" + feature.network_operator;
-
-              // cell = domConstruct.create('tr', null, div);
-              // cell.innerHTML += "<b>Usage:</b>" + feature.usage;
-
-              // cell = domConstruct.create('tr', null, div);
-              // cell.innerHTML += "<b>Max voltage:</b>" + feature.max__voltage;
-
-              // cell = domConstruct.create('tr', null, div);
-              // cell.innerHTML += "<b>Max Current:</b>" + feature.max__current;
-
-              // cell = domConstruct.create('tr', null, div);
-              // cell.innerHTML += "<b>Max Power (kw):</b>" + feature.max__power_kw_;
-
-              // cell = domConstruct.create('tr', null, div);
-              // cell.innerHTML += "<b>Aerial Distance (KM):</b>" + feature.aerialDistance;
+              td2.innerHTML = "<span>" + feature.aerialDistance + "</span>";             
 
               domConstruct.create("br", null, this.bufferResultTable);
             }));
             this._switchView(1);
+            this.shelter.hide();
           }
         }));
 
@@ -569,10 +540,7 @@ define([
           this.endPoint = new Graphic(response.features[0].geometry, this.endSymbol);
           this.endPoint.attributes = {
             'name': 'End Point'
-          };
-          // this.map.graphics.clear();
-          // this.map.graphics.add(this.endPoint);
-          // this.map.graphics.add(this.startPoint);
+          };          
           this.routeParams.stops.features = [];
           this.routeParams.stops.features.push(this.startPoint);
           this.routeParams.stops.features.push(this.endPoint);
@@ -1055,7 +1023,18 @@ define([
 
         this.showAllLayer();
         this._switchView(2);
+        var extJson ={"points":[
+                              [this.firstRouteExtent.xmin,this.firstRouteExtent.ymin],
+                              [this.firstRouteExtent.xmax,this.firstRouteExtent.ymax],
+                              [this.secondRouteExtent.xmin,this.secondRouteExtent.ymin],
+                              [this.secondRouteExtent.xmax,this.secondRouteExtent.ymax],
+                              [this.thirdRouteExtent.xmin,this.thirdRouteExtent.ymin],
+                              [this.thirdRouteExtent.xmax,this.thirdRouteExtent.ymax]
+                              ],
+                              "spatialReference":({"wkid":102100 })};
+        var multipoint = new Multipoint(extJson);
         this.initialExtent = this.map.extent;
+        this.map.setExtent(multipoint.getExtent());
         this.map.graphics.clear();
         this.map.graphics.add(this.endPoint);
         this.map.graphics.add(this.startPoint);
@@ -1063,21 +1042,6 @@ define([
         this.shelter.hide();
       },
       showAllLayer: function () {
-        // if (this.startPoint.geometry.x > this.endPoint.geometry.x){
-        //   this.totalDistanceOne > this.totalDistanceThree ? this.totalDistanceOne : this.totalDistanceThree;
-        //    var xmin = null;
-        //    xmin = this.startPoint.geometry.x > this.endPoint.geometry.x ? 
-        //   var x
-        // }
-        // var extent = new Extent(
-        //   {
-        //     "xmin":-122.68,
-        //     "ymin":45.53,
-        //     "xmax":-122.45,
-        //     "ymax":45.6,
-        //     "spatialReference":{"wkid":102100}
-        //   }
-        // );
         var timeDistanceOne;
         var timeDistanceTwo;
         var timeDistanceThree;
