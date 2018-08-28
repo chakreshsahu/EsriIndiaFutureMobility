@@ -63,6 +63,14 @@ Locate and Route module search EV Charging Station based user's charger type and
 | 5 to 8 | 4 |
 | 8 to 12 | 5 |
 
+#### Proimity to Road(In Meters)
+| Value | Weightage |
+| --- | --- | 
+| 100 | 5 |
+| 200 | 4 |
+| 300 | 3 |
+| 500 | 2 |
+| 1000 | 1 |
 
 #### Parking Space (No of Car's Space)
 | Value | Weightage |
@@ -72,6 +80,29 @@ Locate and Route module search EV Charging Station based user's charger type and
 | 200 | 3 |
 | 500 | 4 |
 | 1000 | 5 |
+
+### Economic Condition (GDP measure in lakh)
+| Range | Weightage |
+| --- | --- | 
+| 10 to 30 | 1 |
+| 30 to 50 | 2 |
+| 50 to 100 | 3 |
+| 100 to 150 | 4 |
+| 150 to 200 | 5 |
+
+### Population Density 
+| Range | Weightage |
+| --- | --- | 
+| 10000-100000 | 1 |
+| 100000-200000 | 2 |
+| 200000-1000000 | 3 |
+| 1000000- 4000000 | 4 |
+| 4000000- 6000000 | 5 |
+
+### Vehicle Population Density 
+| Vehicle Population | Density of Bike | Density of Car | Density of Auto | Density of eRiksha | Weightage |
+| --- | --- | --- | --- | --- | --- | --- |
+
 
 ## Existing EV Station 
 
