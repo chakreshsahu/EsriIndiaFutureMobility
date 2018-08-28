@@ -264,7 +264,8 @@ input:checked+.slider:before {
 }
 
 .resulttable > tbody > tr > td {
-    padding: 5px;
+    /*padding: 8px 0px;*/
+     padding: 5px;
     min-width:50%;
 }
 .listlbl{
@@ -283,4 +284,7 @@ input:checked+.slider:before {
 .results table td{
     padding:2px 0px;
     vertical-align:top;
+}
+.formlabel{
+    font-size:12px;
 }
