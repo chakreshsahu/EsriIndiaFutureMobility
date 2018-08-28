@@ -34,8 +34,19 @@
     margin-right:10px;
 }
 .divContent td{
-    vertical-align:bottom;
+    vertical-align: top !important;
 }
+
+.divHeader {
+    font-size: large
+}
+
+.divHeader td {
+    vertical-align: top !important;
+    padding-right: 6px;
+}
+
+
 
 
 /* add additional custom styles */
