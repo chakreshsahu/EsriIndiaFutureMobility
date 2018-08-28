@@ -224,10 +224,10 @@ Gurugram and South Delhi taken as study area for Site Suitability Assessment. Th
 * Landuse Landcover
 * Street Network
 ## Technology Stack
-1. ArcGIS Javascript API Version 3.25(https://developers.arcgis.com/javascript/3/)
-2. ArcGIS Routing Service(https://route.arcgis.com/arcgis/)
-4. ArcGIS Geocoding Service(https://geocode.arcgis.com/arcgis/)
-5. ArcGIS Server(https://enterprise.arcgis.com/en/)
-6. Portal for ArcGIS(https://enterprise.arcgis.com/en/portal/)
-7. Web AppBuilder for ArcGIS(https://developers.arcgis.com/web-appbuilder/)
-8. ArcPy(http://pro.arcgis.com/en/pro-app/arcpy/get-started/what-is-arcpy-.htm)
+1. [ArcGIS Javascript API Version 3.25](https://developers.arcgis.com/javascript/3/)
+2. [ArcGIS Routing Service](https://route.arcgis.com/arcgis/)
+4. [ArcGIS Geocoding Service](https://geocode.arcgis.com/arcgis/)
+5. [ArcGIS Server](https://enterprise.arcgis.com/en/)
+6. [Portal for ArcGIS](https://enterprise.arcgis.com/en/portal/)
+7. [Web AppBuilder for ArcGIS](https://developers.arcgis.com/web-appbuilder/)
+8. [ArcPy](http://pro.arcgis.com/en/pro-app/arcpy/get-started/what-is-arcpy-.htm)
