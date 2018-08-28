@@ -63,6 +63,8 @@ Locate and Route module search EV Charging Station based user's charger type and
 
 1.	Search or Click on map to locate the site around which you want to locate EV Stations.
 
+<img src="https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/Locate.png" alt="score range" style="max-width: 70%;">
+
 2.	Select the distance up to which you want to search EV Station.
 
 3.	Select Charger Type and Connector Type of your vehicle.
