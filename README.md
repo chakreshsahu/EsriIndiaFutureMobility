@@ -73,13 +73,23 @@ Locate and Route module search EV Charging Station based user's charger type and
 
 5.	All the EV Stations fulfilling the requirements will be highlighted and there details will be shown as below:
 
+<img src="https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/buffer.png" alt="score range" style="max-width: 70%;">
+
 6.	Click on the EV Station of your choice to get alternative routes between station and your location.
+
+<img src="https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/routes.png" alt="score range" style="max-width: 70%;">
 
 7.	Click on the Route Directions to get directions of the particular route.
 
+<img src="https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/direction.png" alt="score range" style="max-width: 70%;">
+
 8.	Click on each directions to highlight it on the map.
 
+<img src="https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/highlightedDirection.png" alt="score range" style="max-width: 70%;">
+
 9.	Turn switch on/off of routes to hide or display them on the map.
+
+<img src="https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/routevisibility.png" alt="score range" style="max-width: 70%;">
 
 ## Methodology
 
