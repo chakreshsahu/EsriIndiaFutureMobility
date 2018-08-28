@@ -389,7 +389,8 @@ define([
         var gra = new Graphic(bufferPolygon, fill);
         this.bufferGraphicsLayer.add(gra);
         //this.map.graphics.add(gra);
-        var extent = bufferPolygon.getExtent();
+        //var extent = bufferPolygon.getExtent();
+        var extent = bufferPolygon;
         //this.map.setExtent(extent);
         this.map.centerAndZoom(this.mapPoint, 13);
         var query = new Query();
