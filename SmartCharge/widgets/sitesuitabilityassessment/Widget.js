@@ -59,6 +59,7 @@ define(['dojo/_base/declare',
             evSitePanel: null,
             layer: null,
             mapClickHandler: null,
+            marker: null,
             // this property is set by the framework when widget is loaded.
             // name: 'sitesuitabilityassessment',
             // add additional properties here
@@ -113,7 +114,10 @@ define(['dojo/_base/declare',
                 on(this.search, 'search-results', lang.hitch(this, this.onSearchComplete));
                 this.existingEVlayerURL = "https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/ExistingEVStations/FeatureServer/0";
                 this.potentialEVlayerURL = "https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/PotentialEVSites/MapServer/0";
-
+                this.marker = new PictureMarkerSymbol();
+                this.marker.setHeight(30);
+                this.marker.setWidth(30);
+                this.marker.setUrl("./images/location-01.png");
                 console.log('sitesuitabilityassessment::onOpen');
             },
 
@@ -346,21 +350,17 @@ define(['dojo/_base/declare',
             },
 
             _onMapClick: function(evt) {
+                this.shelter.show();
                 this.map.graphics.clear();
                 var mp = webMercatorUtils.webMercatorToGeographic(evt.mapPoint);
                 this.inputX = mp.x;
                 this.inputY = mp.y;
                 var mapClickPoint = new Point(this.inputX, this.inputY);
-                // var simpleMarkerSymbol = new SimpleMarkerSymbol();
-                var marker = new PictureMarkerSymbol();
-                marker.setHeight(30);
-                marker.setWidth(30);
-                marker.setUrl("./images/location-01.png");
-                // simpleMarkerSymbol.setSize(12);
-                // simpleMarkerSymbol.setColor(new Color([255, 0, 0, 1]));
-                var graphic = new Graphic(mapClickPoint, marker);
+
+                var graphic = new Graphic(mapClickPoint, this.marker);
                 this.map.graphics.add(graphic);
                 this.map.centerAndZoom(mapClickPoint, 12);
+                this.shelter.hide();
             },
 
 

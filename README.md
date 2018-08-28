@@ -11,10 +11,9 @@ An electric vehicle user to locate a nearby suitable charging station and identi
 [View it live](https://esriindia1.centralindia.cloudapp.azure.com/esmartcharge/)
 
 
+<img src="https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/StartScreen.png" alt="score range" style="max-width: 70%;">
 
-![landing page](https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/StartScreen.png)
-
-![starting page](https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/MainScreen.png)
+<img src="https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/MainScreen.png" alt="score range" style="max-width: 70%;">
 
 
 ## How it works
@@ -33,7 +32,7 @@ Site Suitability assessment widget enables the user to search or mark a site on 
 
 Use Explore Map to view the layers on map used for analysing the site suitability.
 
-![explore tab](https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/ExploreTab.png)
+<img src="https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/ExploreTab.png" alt="score range" style="max-width: 70%;">
 
 #### Select Site
 
@@ -43,7 +42,7 @@ Select Site enables user to assess his/her site for EV Station prospects.
 
 2.	Click on Get Suitability button.
 
-![selectsite tab](https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/SelectSitetab%202.png)
+<img src="https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/SelectSitetab%202.png" alt="score range" style="max-width: 70%;">
 
 3.	After successful completion of analysis user is redirected to analysis tab which shows the result of site analysis.
 
@@ -55,7 +54,7 @@ Select Site enables user to assess his/her site for EV Station prospects.
 
 Result of site analysis are displayed under analysis tab
 
-![analysis tab](https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/AnalysisResultGood.PNG)
+<img src="https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/AnalysisResultGood.PNG" alt="score range" style="max-width: 50%;">
 
 
 ## Locate and Route
