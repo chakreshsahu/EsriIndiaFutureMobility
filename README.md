@@ -25,8 +25,6 @@ Features of the application are following
 
 ## Site Suitability Assessment
 
-Site Suitability Assessment module check site suitablity for establishing EV Charging Station. 
-
 Site Suitability assessment widget enables the user to search or mark a site on map and analyse its suitability for planning a future EV station prospects.
 
 Workflow:
@@ -50,6 +48,8 @@ Select Site enables user to assess his/her site for EV Station prospects.
 3.	After successful completion of analysis user is redirected to analysis tab which shows the result of site analysis.
 
 4.	Based on average score of site suitability site is rated as follows:
+
+![score range](https://github.com/chakreshsahu/EsriIndiaFutureMobility/blob/master/SmartCharge/screenshot/score_range.png)
 
 #### Analysis
 
