@@ -21,7 +21,7 @@
   "portalUrl": "https://esriindia1.centralindia.cloudapp.azure.com/portal/",
   "appId": "",
   "authorizedCrossOriginDomains": [],
-  "title": "Smart Charge",
+  "title": "eSmart Charge",
   "subtitle": "",
   "keepAppState": false,
   "logo": "images/app-logo.png",
@@ -358,15 +358,6 @@
         "uri": "widgets/LocateRoute/Widget",
         "index": 7,
         "id": "widgets_LocateRoute_Widget_22"
-      },
-      {
-        "name": "Site Suitability Grid",
-        "version": "0.0.1",
-        "IsController": false,
-        "uri": "widgets/SiteSuitabilityGrid/Widget",
-        "config": "configs/SiteSuitabilityGrid/config_widgets_SiteSuitabilityGrid_Widget_21.json",
-        "index": 8,
-        "id": "widgets_SiteSuitabilityGrid_Widget_21"
       },
       {
         "uri": "widgets/Legend/Widget",
