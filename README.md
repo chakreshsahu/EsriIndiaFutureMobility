@@ -135,13 +135,18 @@ Locate and Route module search EV Charging Station based user's charger type and
 | 4000000- 6000000 | 5 |
 
 ### Vehicle Population Density 
-  | Vehicle Population | Density of Bike | Density of Car | Density of Auto | Density of eRiksha | Weightage |
-  | --- | --- | --- | --- | --- | --- | 
+* Sample Table 
+
+ | Area Name | Vehicle Population | Density of Bike | Density of Car | Density of Auto | Density of eRiksha | Weightage |
+ | --- | --- | --- | --- | --- | --- | --- | 
+ |DEFENCE COLONY| 3500 to 5000 | 4 | 4 | 5 | 4 | 4.25 | 
 
 
 ## Existing EV Station 
 
 Dummy data created for showing existing EV Station. 
+
+* Sample Table 
 
 | Name | Address | Network Operator | Usage | No. of Point | Usage Cost | Type of Station | Connector Type | Max. Voltage | Max. Current | Max. Power (KW) |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
