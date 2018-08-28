@@ -101,7 +101,7 @@ Locate and Route module search EV Charging Station based user's charger type and
 
 ### Vehicle Population Density 
 | Vehicle Population | Density of Bike | Density of Car | Density of Auto | Density of eRiksha | Weightage |
-| --- | --- | --- | --- | --- | --- | --- |
+| --- | --- | --- | --- | --- | --- | 
 
 
 ## Existing EV Station 
