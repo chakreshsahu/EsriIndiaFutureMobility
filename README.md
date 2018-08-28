@@ -59,7 +59,25 @@ Result of site analysis are displayed under analysis tab
 
 ## Locate and Route
 
-Locate and Route module search EV Charging Station based user's charger type and connector type within 3 km buffer. It provide a list of EV charging station with distance. When user select a particular charging station three alternative routes generated for mobility. 
+Locate and Route module search EV Charging Station based user's charger type and connector type within buffer area. It provide a list of EV charging station with distance. When user select a particular charging station three alternative routes generated for mobility. 
+
+1.	Search or Click on map to locate the site around which you want to locate EV Stations.
+
+2.	Select the distance up to which you want to search EV Station.
+
+3.	Select Charger Type and Connector Type of your vehicle.
+
+4.	Click on Locate EV Station to locate stations around.
+
+5.	All the EV Stations fulfilling the requirements will be highlighted and there details will be shown as below:
+
+6.	Click on the EV Station of your choice to get alternative routes between station and your location.
+
+7.	Click on the Route Directions to get directions of the particular route.
+
+8.	Click on each directions to highlight it on the map.
+
+9.	Turn switch on/off of routes to hide or display them on the map.
 
 ## Methodology
 
