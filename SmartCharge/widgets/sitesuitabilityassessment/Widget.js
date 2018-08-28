@@ -171,11 +171,12 @@ define(['dojo/_base/declare',
 
                     var cell = domConstruct.create('tr', null, newdiv);
                     cell = domConstruct.create('td', null, newdiv);
+                    cell.innerHTML = "<label class='expand'><i class='fa fa-plus-circle' aria-hidden='true'></i></label>";
+                    cell = domConstruct.create('td', null, newdiv);
                     cell.innerHTML = "<input type='checkbox' name= '" + this.config.queries[i].Layer[0].name + "' value= '" + this.config.queries[i].Layer[0].url + "' class= 'checkBoxes' title='Show layer'/>";
                     cell = domConstruct.create('td', null, newdiv);
                     cell.innerHTML = this.config.queries[i].Layer[0].name;
-                    cell = domConstruct.create('td', null, newdiv);
-                    cell.innerHTML = "<label class='expand'><i class='fa fa-plus-circle' aria-hidden='true'></i></label>";
+
                     var newdiv1 = domConstruct.create("table", { 'class': 'divContent', 'style': 'display: none' }, this.exploreMapTabNode);
                     if (this.config.queries[i].Layer[0].symboltype === "unique") {
                         for (var j = 0; j < this.config.queries[i].Layer[0].image.length; j++) {
