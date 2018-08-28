@@ -339,6 +339,9 @@ define([
 
       onSearchResult: function (evt) {
         this.map.graphics.clear();
+		var pictureMarkerSymbol = new PictureMarkerSymbol('./widgets/LocateRoute/images/search_pointer.png', 36, 36);
+        var graphic = new Graphic(evt.results[0][0].feature.geometry, pictureMarkerSymbol);
+        this.map.graphics.add(graphic);
         this.startPoint = new Graphic(evt.results[0][0].feature.geometry, this.startSymbol);
         this.startPoint.attributes = {
           'name': 'Start Point'
