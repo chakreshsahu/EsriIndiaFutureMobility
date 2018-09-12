@@ -73,7 +73,7 @@ def deleteIntermediateResults(_garbage, _intermediateResults,_inputConditionValu
 # get buffer of inputPoint with distance of 3KM
 if arcpy.Exists(_intermediateResults+"/bufOut"+_inputConditionValue):
     arcpy.Delete_management(_intermediateResults+"/bufOut"+_inputConditionValue)
-arcpy.Buffer_analysis(_intermediateResults+"/point"+_inputConditionValue, _intermediateResults+"/bufOut"+_inputConditionValue,"1.5 Kilometers", line_side="FULL", line_end_type="ROUND", dissolve_option="NONE", dissolve_field="", method="PLANAR")
+arcpy.Buffer_analysis(_intermediateResults+"/point"+_inputConditionValue, _intermediateResults+"/bufOut"+_inputConditionValue,"0.5 Kilometers", line_side="FULL", line_end_type="ROUND", dissolve_option="NONE", dissolve_field="", method="PLANAR")
 _garbage.append("bufOut")
 arcpy.AddMessage("Buffer Done")
 #Process each layer in layerDetails table
@@ -94,7 +94,7 @@ for _lyrRow in _lyrCsr:
                 _layerName = _lyrRow[0]
                 _aliasname = _lyrRow[3]
                 print "_layerName =  "+str(_layerName)
-                arcpy.AddMessage("_layerName" +str(_layerName))
+                arcpy.AddMessage("_layerName = " +str(_layerName))
                 if arcpy.Exists(_intermediateResults+"/"+_aliasname+_inputConditionValue):
                     arcpy.Delete_management(_intermediateResults+"/"+_aliasname+_inputConditionValue)
                 arcpy.Intersect_analysis([_intermediateResults+"/bufOut"+_inputConditionValue, _sdefileName+"/"+ _dbinfo +_layerName], _intermediateResults+"/"+_aliasname+_inputConditionValue, join_attributes="ALL", cluster_tolerance="-1 Unknown", output_type="INPUT")
@@ -129,7 +129,7 @@ for _lyrRow in _lyrCsr:
                 _layerName = _lyrRow[0]
                 _aliasname = _lyrRow[3]
                 print "_layerName =  "+str(_layerName)
-                arcpy.AddMessage("_layerName" +str(_layerName))
+                arcpy.AddMessage("_layerName = " +str(_layerName))
                 if arcpy.Exists(_intermediateResults+"/"+_aliasname+_inputConditionValue):
                     arcpy.Delete_management(_intermediateResults+"/"+_aliasname+_inputConditionValue)
                 arcpy.Intersect_analysis([ _sdefileName+"/" + _dbinfo +_layerName, _intermediateResults+"/bufOut"+_inputConditionValue], _intermediateResults+"/"+_aliasname+_inputConditionValue, join_attributes="ALL", cluster_tolerance="-1 Unknown", output_type="INPUT")
@@ -154,12 +154,9 @@ for _lyrRow in _lyrCsr:
                 _avgScore = _totalScore * _count
                 arcpy.AddMessage("_avgScore of "+_layerName + "= "+str(_avgScore))
                 _avgScoreList.append(_avgScore)
-                #_percentagescore = (_avgScore/_count)*100
-                #arcpy.AddMessage("_percentagescore "+str(_percentagescore)+"%")
-                #print "AverageTotal "+str(_avgScore)
-                #print "_percentagescore "+str(_percentagescore)+" %"
 
 
+        '''
         elif _layerType == "Raster":
             if _lyerCategory == "2": # it is for those layer that are play as raster
                 _layerName = _lyrRow[0]
@@ -193,22 +190,14 @@ for _lyrRow in _lyrCsr:
 
                     if _value == 3 or _value == 4 or _value == 5 :
                         _pixelValueCount = _pixelValueCount + _count
+                del _rasterCrs
 
                 _avgScore = _pixelValueCount/_pixelCount
                 arcpy.AddMessage("_avgScore of "+_layerName + "= "+str(_avgScore))
                 _avgScoreList.append(_avgScore)
 
-                #_percentagescore = _avgScore*100
 
-                #arcpy.AddMessage("_percentagescore "+str(_percentagescore)+"%")
-                ##arcpy.AddMessage("AverageTotal "+str(_avgScore))
-                #print "AverageTotal "+str(_avgScore)
-                #print "_percentagescore "+str(_percentagescore)+" %"
-
-
-                del _rasterCrs
-
-
+                '''
 
 
     except Exception as e:

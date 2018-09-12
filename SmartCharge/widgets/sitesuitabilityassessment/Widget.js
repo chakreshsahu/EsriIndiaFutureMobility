@@ -375,7 +375,8 @@ define(['dojo/_base/declare',
                 } else {
                     this.createBuffer();
                     //this.gp = new Geoprocessor("https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/SiteSuitabilityEV/GPServer/SiteSuitability");
-                    this.gp = new Geoprocessor("https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/SiteSuitability/GPServer/SiteSuitability");
+                    this.gp = new Geoprocessor("https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/EVSiteSuitability/GPServer/SS");
+                    //--last working this.gp = new Geoprocessor("https://esriindia1.centralindia.cloudapp.azure.com/server/rest/services/SiteSuitability/GPServer/SiteSuitability");
                     this.gp.setOutputSpatialReference({ wkid: 102100 });
                     var params = {
                         "_inputX": this.inputX,
@@ -406,11 +407,11 @@ define(['dojo/_base/declare',
                 var percent = ((score / 5) * 100).toFixed(2);
                 document.getElementById('scorePercent').innerHTML = percent + " %";
 
-                if (percent > 0 && percent < 31) {
+                if (percent > 0 && percent < 30) {
                     document.getElementById('image').classList.add("notfeasible");
-                } else if (percent > 30 && percent < 51) {
+                } else if (percent > 30 && percent < 50) {
                     document.getElementById('image').classList.add("avrg");
-                } else if (percent > 50 && percent < 71) {
+                } else if (percent > 50 && percent < 70) {
                     document.getElementById('image').classList.add("good");
                 } else {
                     document.getElementById('image').classList.add("excellent");
